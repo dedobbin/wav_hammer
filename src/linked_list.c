@@ -42,8 +42,7 @@ Linked_list * llist_create()
     fprintf(stderr, "Not enough memory to create linked list\n");
     exit(1);
   }
-  list->head = NULL;
-  list->tail = NULL;
+  memset(list, 0, sizeof(list));
   return list;
 }
 
@@ -60,6 +59,7 @@ void llist_push(Linked_list ** list, int key, long data)
     new->prev = (*list)->head;
     (*list)->head = (*list)->head->next;
   }
+  ++(*list)->size;
 }
 
 //Gives compiler warnings because returns NULL instead of integer when nothing is found
@@ -67,7 +67,7 @@ long llist_pop(Linked_list ** list)
 {
   long result;
   if ((*list)->head == NULL)
-    result =  NULL;
+    return NULL;
   else if ((*list)->head == (*list)->tail){
     result = (*list)->head->data;
     free((*list)->head);
@@ -80,6 +80,7 @@ long llist_pop(Linked_list ** list)
     (*list)->head = (*list)->head->prev;
     (*list)->head->next = NULL;
   }
+  --(*list)->size;
   return result;
 }
 
@@ -99,14 +100,21 @@ void llist_insert(Linked_list ** list, int key, int newKey, long newData)
   else{ 
     llist_push(list, newKey, newData);
   }
+  ++(*list)->size;
 }
 
 void llist_prepend(Linked_list ** list, int key, long data)
 { 
-  Node * new = create_node(key, data);
-  new->next = (*list)->tail;
-  (*list)->tail->prev = new;
-  (*list)->tail = new; 
+  if ((*list)->tail == NULL){
+    llist_push(list, key, data);
+  }
+  else{
+    Node * new = create_node(key, data);
+    new->next = (*list)->tail;
+    (*list)->tail->prev = new;
+    (*list)->tail = new;
+    ++(*list)->size;
+  } 
 }
 
 //Gives compiler warnings because returns NULL instead of integer when nothing is found
@@ -131,18 +139,18 @@ void llist_remove(Linked_list ** list, int key)
     (*list)->tail = NULL;
   }
   else{
-  printf("2\n");
-  Node * target = get_node(list, key);
-  if (target == NULL)
-    return;
-  Node * tmp = target;
-  if (target == (*list)->tail)
-    (*list)->tail = (*list)->tail->next;
-  else
-    target = tmp->prev;
-  target->next = tmp->next;
-  free(tmp); 
+    Node * target = get_node(list, key);
+    if (target == NULL)
+      return;
+    Node * tmp = target;
+    if (target == (*list)->tail)
+      (*list)->tail = (*list)->tail->next;
+    else
+      target = tmp->prev;
+    target->next = tmp->next;
+    free(tmp); 
   }
+  ++(*list)->size;
 }
 
 void llist_destroy(Linked_list ** list)
@@ -160,6 +168,7 @@ void llist_destroy(Linked_list ** list)
 
 void llist_print(Linked_list ** list)
 {
+  printf("size: %d\nsamples:\n", (*list)->size);
   Node * node = (*list)->tail;
   while(node){
     printf("%d : %ld \n", node->key, node->data);

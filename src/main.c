@@ -3,11 +3,13 @@
 #include <string.h>
 #include "raw_wave.h"
 #include "hamming.h"
+#include "linked_list.h"
 
 int main(int argc, char* argv[])
 {
   int i;
   
+ 
   char ifile[100];
   char ofile[100];
   if (argc < 3){
@@ -62,6 +64,11 @@ int main(int argc, char* argv[])
   printf("main.c: number of samples: %d\n", num_samples(w));
   printf("\nmain.c: First 2 samples: %08lx %08lx \n", get_sample(w, 0), get_sample(w, 1));
 
+
+  Linked_list * list = extract_samples(w);
+  insert_samples(&w, list);
+  llist_destroy(&list);
+  write_wave(ofile, w);
   destroy_wave(&w); 
   return 0;
 }

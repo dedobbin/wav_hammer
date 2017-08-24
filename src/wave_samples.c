@@ -32,3 +32,19 @@ Linked_list * extract_samples(Raw_wave * wave)
   }
   return list;
 }
+
+//TODO: now overwrites existing samples, should have options to append etc
+void insert_samples(Raw_wave ** wave, Linked_list * src)
+{
+  free((*wave)->data->audiodata); 
+  int blockAlign = block_align(*wave);
+  (*wave)->data->audiodata = malloc(src->size * blockAlign);
+  Node * node = src->tail; 
+  int numSamples = num_samples(*wave);
+  int i;
+  for (i = 0; i< numSamples; ++i){
+    memcpy((*wave)->data->audiodata + i * blockAlign, &(node->data), blockAlign);
+    node = node->next;
+  }  
+  return;
+}

@@ -25,4 +25,3 @@ void pointless_gain(Raw_wave * wave)
     wave->data->audiodata[i]*=2;
   }
 }
-
