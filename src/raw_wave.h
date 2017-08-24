@@ -50,5 +50,5 @@ unsigned num_samples(const Raw_wave * const wave);
 
 void set_num_channels(Raw_wave * wave, int numChannels);
 void set_block_align(Raw_wave * wave, int blockAlign);
-
+void set_datasize(Raw_wave * wave, int dataSize);
 #endif

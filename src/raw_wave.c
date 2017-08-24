@@ -221,3 +221,8 @@ void set_block_align(Raw_wave * wave, int blockAlign)
 {
   memcpy(wave->fmt->raw_data + 20, &blockAlign, 2);
 }
+
+void set_datasize(Raw_wave * wave, int dataSize)
+{
+  memcpy(wave->data->raw_header_data + 4, &dataSize, 4);
+}
