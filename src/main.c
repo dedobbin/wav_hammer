@@ -9,7 +9,6 @@ int main(int argc, char* argv[])
 {
   int i;
   
- 
   char ifile[100];
   char ofile[100];
   if (argc < 3){
@@ -68,7 +67,7 @@ int main(int argc, char* argv[])
   Linked_list * list = extract_samples(w);
   insert_samples(&w, list);
   llist_destroy(&list);
-  write_wave(ofile, w);
+  write_wave(w, ofile);
   destroy_wave(&w); 
   return 0;
 }

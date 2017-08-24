@@ -91,7 +91,7 @@ int load_wave(Raw_wave ** wave, const char* const path)
   return 1;
 }
 
-int write_wave(const char* const path, Raw_wave * wave)
+int write_wave(Raw_wave * wave, const char * const path)
 {
   FILE * f;
   f = fopen(path, "wb");

@@ -36,7 +36,7 @@ typedef struct Raw_wave{
 }Raw_wave;
 
 int load_wave(Raw_wave ** wave, const char* const path);
-int write_wave(const char* const path, Raw_wave * wave);
+int write_wave(Raw_wave * wave, const char* const path);
 void destroy_wave(Raw_wave ** wave);
 
 unsigned audio_format(const Raw_wave * const wave);
