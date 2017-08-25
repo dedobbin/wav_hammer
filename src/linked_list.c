@@ -42,7 +42,9 @@ Linked_list * llist_create()
     fprintf(stderr, "Not enough memory to create linked list\n");
     exit(1);
   }
-  memset(list, 0, sizeof(list));
+  list->head = NULL;
+  list->tail = NULL;
+  list->size = 0;
   return list;
 }
 
