@@ -172,7 +172,7 @@ void print_wave(Raw_wave * wave)
       printf("%X ", wave->data->raw_header_data[i] & 0xFF);
   }
   if (wave->info != NULL){
-    printf("\ninfo chunk size %d\nl ast four bytes: ", wave->info->size);
+    printf("\ninfo chunk size %d\nlast four bytes: ", wave->info->size);
     for (i = wave->info->size-4; i < wave->info->size; ++i){
       printf("%x ", wave->info->raw_data[i]);
     }
