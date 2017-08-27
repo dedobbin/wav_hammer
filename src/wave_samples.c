@@ -51,7 +51,7 @@ void insert_samples(Raw_wave ** dst, Linked_list * src)
   return;
 }
 
-//TODO: finish, very messed up now
+//TODO: finish
 void insert_samples_compl(Raw_wave ** dst, Linked_list * src, 
   int index, int n, bool overwrite)
 {
@@ -62,7 +62,7 @@ void insert_samples_compl(Raw_wave ** dst, Linked_list * src,
     if (newNumSamples > num_samples(*dst)){
       printf("debug: it will not fit\n");
       //It won't fit, so realloc
-      realloc((*dst)->data->audiodata, newNumSamples * blockAlign);
+      (*dst)->data->audiodata = realloc((*dst)->data->audiodata, newNumSamples * blockAlign);
       set_datasize(*dst, newNumSamples * blockAlign);
     }
     else{
@@ -70,9 +70,15 @@ void insert_samples_compl(Raw_wave ** dst, Linked_list * src,
       printf("debug: it will fit\n");
       }
     printf("setting samples..\n");
-    int i = 0;
+    Node * node = src->tail;
+    int i;
     for (i = 0; i < n; ++i){
-     set_sample(*dst, index + i, llist_get(&src, i));
+      set_sample(*dst, index + i, node->data);
+      node = node->next;
     }
+  }
+  else{
+    //TODO
+    printf("todo\n");
   }
 } 

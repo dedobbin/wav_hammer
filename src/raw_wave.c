@@ -176,10 +176,10 @@ void print_wave(Raw_wave * wave)
     for (i = wave->info->size-4; i < wave->info->size; ++i){
       printf("%x ", wave->info->raw_data[i]);
     }
-   printf("\n");
   }
+  printf("\n");
 
-  printf("datasize: %db\n", datasize(wave));
+  printf("datasize: %dB\n", datasize(wave));
   printf("format: %d\n", audio_format(wave));
   printf("numChannels: %d\n", num_channels(wave));
   printf("samplerate: %d\n", samplerate(wave));
