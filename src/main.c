@@ -4,6 +4,7 @@
 #include "raw_wave.h"
 #include "hamming.h"
 #include "linked_list.h"
+#include "datatypes.h"
 
 int main(int argc, char* argv[])
 {
@@ -13,7 +14,7 @@ int main(int argc, char* argv[])
   char ofile[100];
   if (argc < 3){
     printf("No input/output provided, using default testing values\n");
-    strcpy(ifile, "audio/coconut.wav");
+    strcpy(ifile, "audio/stereo.wav");
     strcpy(ofile, "audio/output.wav");
     //printf("Please provide input and output\n");
     //return 0;
@@ -32,7 +33,7 @@ int main(int argc, char* argv[])
   print_wave(w);
 
   Linked_list * list = extract_samples(w);
-  insert_samples(&w, list);
+  insert_samples_compl(&w, list, num_samples(w), true, list->size);
   llist_destroy(&list);
 
   printf("\nnew wave: \n");

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "linked_list.h"
 
-//TODO: test more thoroughly
+//TODO: sort
 
 //private functions
 

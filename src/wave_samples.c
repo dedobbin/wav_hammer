@@ -34,24 +34,45 @@ Linked_list * extract_samples(Raw_wave * wave)
 }
 
 //TODO: now overwrites existing samples, should have options to append etc
-void insert_samples(Raw_wave ** wave, Linked_list * src)
+void insert_samples(Raw_wave ** dst, Linked_list * src)
 {
-  free((*wave)->data->audiodata); 
-  int blockAlign = block_align(*wave);
-  (*wave)->data->audiodata = malloc(src->size * blockAlign);
+  free((*dst)->data->audiodata); 
+  int blockAlign = block_align(*dst);
+  (*dst)->data->audiodata = malloc(src->size * blockAlign);
   Node * node = src->tail; 
-  int numSamples = num_samples(*wave);
+  int numSamples = num_samples(*dst);
   int i;
   for (i = 0; i< src->size; ++i){
-    memcpy((*wave)->data->audiodata + i * blockAlign, &(node->data), blockAlign);
+    memcpy((*dst)->data->audiodata + i * blockAlign, &(node->data), blockAlign);
     node = node->next;
   }  
   int newSize = src->size;
-  set_datasize(*wave, src->size * blockAlign); 
+  set_datasize(*dst, src->size * blockAlign); 
   return;
 }
 
-//void insert_samples_compl(Raw_wave ** dst, Linked_list * src, int index, int n,  overwrite)
-//{
-  
-//}
+//TODO: finish, very messed up now
+void insert_samples_compl(Raw_wave ** dst, Linked_list * src, 
+  int index, int n, bool overwrite)
+{
+  int blockAlign = block_align(*dst);
+  //Check if will fit
+  if (overwrite){
+    int newNumSamples = index + num_samples(*dst); //aka if index == 0
+    if (newNumSamples > num_samples(*dst)){
+      printf("debug: it will not fit\n");
+      //It won't fit, so realloc
+      realloc((*dst)->data->audiodata, newNumSamples * blockAlign);
+      set_datasize(*dst, newNumSamples * blockAlign);
+    }
+    else{
+      //It will fit
+      printf("debug: it will fit\n");
+      }
+    printf("setting samples..\n");
+    int i = 0;
+    for (i = 0; i < n; ++i){
+     set_sample(*dst, index + i, llist_get(&src, i));
+    }
+  }
+} 
