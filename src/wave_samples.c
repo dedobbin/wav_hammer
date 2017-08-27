@@ -34,6 +34,7 @@ Linked_list * extract_samples(Raw_wave * wave)
 }
 
 //TODO: now overwrites existing samples, should have options to append etc
+// using inser_samples_compl for that now, can probably replace this function
 void insert_samples(Raw_wave ** dst, Linked_list * src)
 {
   free((*dst)->data->audiodata); 
@@ -60,16 +61,13 @@ void insert_samples_compl(Raw_wave ** dst, Linked_list * src,
   if (overwrite){
     int newNumSamples = index + num_samples(*dst); //aka if index == 0
     if (newNumSamples > num_samples(*dst)){
-      printf("debug: it will not fit\n");
       //It won't fit, so realloc
       (*dst)->data->audiodata = realloc((*dst)->data->audiodata, newNumSamples * blockAlign);
       set_datasize(*dst, newNumSamples * blockAlign);
     }
     else{
       //It will fit
-      printf("debug: it will fit\n");
       }
-    printf("setting samples..\n");
     Node * node = src->tail;
     int i;
     for (i = 0; i < n; ++i){
