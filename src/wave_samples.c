@@ -46,7 +46,8 @@ void insert_samples(Raw_wave ** wave, Linked_list * src)
     memcpy((*wave)->data->audiodata + i * blockAlign, &(node->data), blockAlign);
     node = node->next;
   }  
-  //set_datasize(*wave, src->size); 
+  int newSize = src->size;
+  set_datasize(*wave, src->size * blockAlign); 
   return;
 }
 
