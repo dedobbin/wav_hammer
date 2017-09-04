@@ -10,6 +10,31 @@ int main(int argc, char* argv[])
 {
   int i;
   
+  Linked_list * list = llist_create();
+  for (i = 0; i < 5; ++i){
+    llist_push(&list, 1 ,1);
+  }
+  
+  Linked_list * list2 = llist_create();
+  for (i = 0; i < 3; ++i){
+    llist_push(&list2, 2,  2);
+  }
+  printf("List one: \n");
+  //llist_print(&list);
+  printf("\nList Two: \n");
+  //llist_print(&list2);
+
+  llist_merge(&list, &list2, 1);
+
+  printf("\nMerged: \n");
+  llist_print(&list);
+
+  llist_print_backwards(&list);
+
+  llist_destroy(&list);
+  llist_destroy(&list2);
+  
+  /**
   char ifile[100];
   char ofile[100];
   if (argc < 3){
@@ -19,7 +44,7 @@ int main(int argc, char* argv[])
     //printf("Please provide input and output\n");
     //return 0;
   } 
-  else{
+  else{0
     strcpy(ifile, argv[1]);
     strcpy(ofile, argv[2]);
   }
@@ -40,6 +65,7 @@ int main(int argc, char* argv[])
   print_wave(w);
   write_wave(w, ofile);
   destroy_wave(&w); 
+  **/
   return 0;
 }
 

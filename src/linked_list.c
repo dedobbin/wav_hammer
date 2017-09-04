@@ -21,7 +21,7 @@ Node * create_node(int key, long data)
   return new;
 }
 
-Node * get_node(Linked_list ** list, int key)
+Node * get_node_by_key(Linked_list ** list, int key)
 {
   Node * ptr = (*list)->tail;
   while(ptr != NULL){
@@ -31,6 +31,18 @@ Node * get_node(Linked_list ** list, int key)
     ptr = ptr->next;
   }
   return NULL;
+}
+
+
+//Returns nth node
+Node * get_node(Linked_list ** list, int n)
+{
+  Node * node = (*list)->tail;
+  int i;
+  for (i = 0; i < n; ++i){
+    node = node->next;
+  }
+  return node;
 }
 
 //public functions
@@ -88,7 +100,7 @@ long llist_pop(Linked_list ** list)
 
 void llist_insert(Linked_list ** list, int key, int newKey, long newData)
 {
-  Node * target = get_node(list, key);
+  Node * target = get_node_by_key(list, key);
   if (target == NULL)
     return;
   Node * new = create_node(newKey, newData);
@@ -122,7 +134,7 @@ void llist_prepend(Linked_list ** list, int key, long data)
 //Gives compiler warnings because returns NULL instead of integer when nothing is found
 long llist_get(Linked_list ** list, int key)
 {
-  Node * node = get_node(list, key);
+  Node * node = get_node_by_key(list, key);
   if (node == NULL)
     return NULL;
   return node->data;
@@ -141,7 +153,7 @@ void llist_remove(Linked_list ** list, int key)
     (*list)->tail = NULL;
   }
   else{
-    Node * target = get_node(list, key);
+    Node * target = get_node_by_key(list, key);
     if (target == NULL)
       return;
     Node * tmp = target;
@@ -153,6 +165,50 @@ void llist_remove(Linked_list ** list, int key)
     free(tmp); 
   }
   ++(*list)->size;
+}
+
+void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
+{
+  if (n >= (*listOne)->size){
+    //listOne has no nth element
+    return;
+  }
+
+  Node * connectionNode = get_node(listOne, n);
+  
+  if (connectionNode->next){
+    Node * connectionEnd = get_node(listOne, n + 1);
+   
+    /**
+    connectionNode->next = (*listTwo)->tail;
+    (*listTwo)->head->prev = connectionNode;
+
+    connectionEnd->prev = (*listTwo)->head;
+    (*listTwo)->head->prev = connectionEnd;
+    (*listTwo)->head->next = connectionEnd;
+  
+    (*listOne)->size = (*listOne)->size + (*listTwo)->size;
+  }
+  **/
+  else{
+    llist_push_list(listOne, listTwo); 
+  }
+}
+
+void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo)
+{
+  (*listOne)->head->next = (*listTwo)->tail;
+  (*listOne)->head->next->prev = (*listOne)->head;
+  (*listOne)->head = (*listTwo)->head;
+  (*listOne)->size = (*listOne)->size + (*listTwo)->size;
+}
+
+void llist_prepend_list(Linked_list ** listOne, Linked_list ** listTwo)
+{
+  (*listOne)->tail->prev = (*listTwo)->head;
+  (*listOne)->tail->prev->next = (*listOne)->tail;
+  (*listOne)->tail = (*listTwo)->tail;
+  (*listOne)->size = (*listOne)->size + (*listTwo)->size;
 }
 
 void llist_destroy(Linked_list ** list)
@@ -170,10 +226,24 @@ void llist_destroy(Linked_list ** list)
 
 void llist_print(Linked_list ** list)
 {
-  printf("size: %d\nsamples:\n", (*list)->size);
+  printf("size: %d\n", (*list)->size);
   Node * node = (*list)->tail;
   while(node){
-    printf("%d : %ld \n", node->key, node->data);
+    printf("\[%d:%ld\] ", node->key, node->data);
     node = node->next;
   }
+  printf("\n");
 }
+
+void llist_print_backwards(Linked_list ** list)
+{
+  printf("size %d\n", (*list)->size);
+  Node * node = (*list)->head;
+  while(node){ 
+    printf("\[%d:%ld\] ", node->key, node->data);
+    node = node->prev;
+  }
+  printf("\n");
+}
+
+
