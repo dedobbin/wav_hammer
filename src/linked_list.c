@@ -169,30 +169,34 @@ void llist_remove(Linked_list ** list, int key)
 
 void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
 {
-  if (n >= (*listOne)->size){
-    //listOne has no nth element
+  if (n == 0){
+    llist_prepend_list(listOne, listTwo);
+    return;
+  }else if (n == (*listOne)->size){
+    llist_push_list(listOne, listTwo);
+    return;
+  }else if (n > (*listOne)->size){
+    int extraElements = n - (*listOne)->size;
+    printf("size: %d, n: %d, should add %d extra\n", (*listOne)->size, n, extraElements);
+    int i;
+    for (i = 0; i < n - extraElements; ++i){
+      llist_push(listOne, 0, 0);
+    }
+    llist_push_list(listOne, listTwo);
     return;
   }
-
-  Node * connectionNode = get_node(listOne, n);
-  
-  if (connectionNode->next){
-    Node * connectionEnd = get_node(listOne, n + 1);
    
-    /**
-    connectionNode->next = (*listTwo)->tail;
-    (*listTwo)->head->prev = connectionNode;
-
-    connectionEnd->prev = (*listTwo)->head;
-    (*listTwo)->head->prev = connectionEnd;
-    (*listTwo)->head->next = connectionEnd;
+  Node * connectionNode = get_node(listOne, n-1);
+  Node * connectionEnd = get_node(listOne, n);
   
-    (*listOne)->size = (*listOne)->size + (*listTwo)->size;
-  }
-  **/
-  else{
-    llist_push_list(listOne, listTwo); 
-  }
+  connectionNode->next = (*listTwo)->tail;
+  connectionNode->next->prev = connectionNode;
+
+  connectionEnd->prev = (*listTwo)->head;
+  connectionEnd->prev->next = connectionEnd;
+
+  (*listOne)->size = (*listOne)->size + (*listTwo)->size;
+ 
 }
 
 void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo)
