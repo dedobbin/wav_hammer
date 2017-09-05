@@ -169,19 +169,22 @@ void llist_remove(Linked_list ** list, int key)
 
 void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
 {
+  if (n > (*listOne)->size){
+    int extraElements = n - (*listOne)->size;
+    printf("size: %d, n: %d, should add %d extra\n", (*listOne)->size, n, extraElements);
+    int i;
+    for (i = 0; i < extraElements; ++i){
+      llist_push(listOne, 0, 0);
+    }
+    llist_push_list(listOne, listTwo);
+    return; 
+  } else if ( !(*listOne)->head || !(*listTwo)->head )
+    return;
+  
   if (n == 0){
     llist_prepend_list(listOne, listTwo);
     return;
   }else if (n == (*listOne)->size){
-    llist_push_list(listOne, listTwo);
-    return;
-  }else if (n > (*listOne)->size){
-    int extraElements = n - (*listOne)->size;
-    printf("size: %d, n: %d, should add %d extra\n", (*listOne)->size, n, extraElements);
-    int i;
-    for (i = 0; i < n - extraElements; ++i){
-      llist_push(listOne, 0, 0);
-    }
     llist_push_list(listOne, listTwo);
     return;
   }
@@ -201,14 +204,21 @@ void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
 
 void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo)
 {
+  if ( !(*listOne)->head || !(*listTwo)->head )
+    return;
+  
   (*listOne)->head->next = (*listTwo)->tail;
   (*listOne)->head->next->prev = (*listOne)->head;
   (*listOne)->head = (*listTwo)->head;
   (*listOne)->size = (*listOne)->size + (*listTwo)->size;
+  return;
 }
 
 void llist_prepend_list(Linked_list ** listOne, Linked_list ** listTwo)
 {
+  if ( !(*listOne)->head || !(*listTwo)->head )
+    return;
+  
   (*listOne)->tail->prev = (*listTwo)->head;
   (*listOne)->tail->prev->next = (*listOne)->tail;
   (*listOne)->tail = (*listTwo)->tail;
