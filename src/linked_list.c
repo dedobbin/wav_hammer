@@ -169,9 +169,9 @@ void llist_remove(Linked_list ** list, int key)
 
 void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
 {
+  /**
   if (n > (*listOne)->size){
     int extraElements = n - (*listOne)->size;
-    printf("size: %d, n: %d, should add %d extra\n", (*listOne)->size, n, extraElements);
     int i;
     for (i = 0; i < extraElements; ++i){
       llist_push(listOne, 0, 0);
@@ -199,7 +199,7 @@ void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
   connectionEnd->prev->next = connectionEnd;
 
   (*listOne)->size = (*listOne)->size + (*listTwo)->size;
- 
+ **/
 }
 
 void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo)
