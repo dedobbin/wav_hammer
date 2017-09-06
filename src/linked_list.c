@@ -60,6 +60,19 @@ Linked_list * llist_create()
   return list;
 }
 
+void llist_destroy(Linked_list ** list)
+{
+  if ((*list) == NULL)
+    return;
+  Node * node = (*list)->tail; 
+  while (node){
+      free(node);
+      node = node->next;
+    }
+   free(*list);
+   *list = NULL;
+}
+
 void llist_push(Linked_list ** list, int key, long data)
 {
   Node * new = create_node(key, data);
@@ -169,7 +182,6 @@ void llist_remove(Linked_list ** list, int key)
 
 void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
 {
-  /**
   if (n > (*listOne)->size){
     int extraElements = n - (*listOne)->size;
     int i;
@@ -199,7 +211,6 @@ void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
   connectionEnd->prev->next = connectionEnd;
 
   (*listOne)->size = (*listOne)->size + (*listTwo)->size;
- **/
 }
 
 void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo)
@@ -211,7 +222,6 @@ void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo)
   (*listOne)->head->next->prev = (*listOne)->head;
   (*listOne)->head = (*listTwo)->head;
   (*listOne)->size = (*listOne)->size + (*listTwo)->size;
-  return;
 }
 
 void llist_prepend_list(Linked_list ** listOne, Linked_list ** listTwo)
@@ -225,19 +235,21 @@ void llist_prepend_list(Linked_list ** listOne, Linked_list ** listTwo)
   (*listOne)->size = (*listOne)->size + (*listTwo)->size;
 }
 
-void llist_destroy(Linked_list ** list)
+//Can also be implemented with normal ptr argument instead of double, but this is more consistent
+Linked_list * llist_copy(Linked_list ** src)
 {
-  if ((*list) == NULL)
+  //Check if src is something
+  if (!src || !(*src) || !(*src)->head)
     return;
-  Node * node = (*list)->tail; 
-  while (node){
-      free(node);
-      node = node->next;
-    }
-   free(*list);
-   *list = NULL;
-}
 
+  Linked_list * dst = llist_create();
+  Node * node = (*src)->tail;
+  while(node){  
+    llist_push(&dst, node->key, node->data);
+    node = node->next;
+  }
+  return dst;
+}
 void llist_print(Linked_list ** list)
 {
   printf("size: %d\n", (*list)->size);
@@ -249,6 +261,7 @@ void llist_print(Linked_list ** list)
   printf("\n");
 }
 
+//Can also be implemented with normal ptr argument instead of double, but this is more consistent
 void llist_print_backwards(Linked_list ** list)
 {
   printf("size %d\n", (*list)->size);

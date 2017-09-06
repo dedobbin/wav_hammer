@@ -14,7 +14,10 @@ typedef struct Linked_list{
   int size;
 }Linked_list;
 
+//Most functions take double pointer param because they need to alter where pointers are pointing to, llist_copy and print functions do so for consistency
+
 Linked_list * llist_create();
+void llist_destroy(Linked_list ** list);
 void llist_push(Linked_list ** list, int key, long data);
 long llist_pop(Linked_list ** list);
 //Looks for node with requested key value, inserts a new node after that
@@ -26,7 +29,7 @@ void llist_remove(Linked_list ** list, int key);
 void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n);
 void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo);
 void llist_prepend_list(Linked_list ** listOne, Linked_list ** listTwo);
-void llist_destroy(Linked_list ** list);
+Linked_list * llist_copy(Linked_list ** src);
 void llist_print(Linked_list ** list);
 void llist_print_backwards(Linked_list ** list);
 

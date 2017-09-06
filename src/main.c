@@ -11,18 +11,9 @@ int main(int argc, char* argv[])
   int i;
   
   Linked_list * list = llist_create();
-  llist_push(&list, 1, 1);
+  
 
-  Linked_list * list2 = llist_create();
-  llist_push(&list2, 0, 0); 
- 
-  llist_push_list(&list, &list2);
-
-  llist_print(&list);
-  llist_print_backwards(&list); 
- 
-  llist_destroy(&list);
-  //llist_destroy(&list2);
+  Linked_list * cpy = llist_copy(NULL);
   
   /**
   char ifile[100];
