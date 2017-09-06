@@ -23,8 +23,8 @@ int main(int argc, char* argv[])
  
   llist_merge(&list, &list2, 1); 
 
-  llist_print(&list2);
-  llist_print_backwards(&list2);
+  llist_print(&list);
+  llist_print_backwards(&list);
 
   llist_destroy(&list);
   llist_destroy(&list2);

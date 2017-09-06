@@ -23,6 +23,9 @@ Node * create_node(int key, long data)
 
 Node * get_node_by_key(Linked_list ** list, int key)
 {
+  if ( !list || !(*list) || !(*list)->head )
+    return;
+
   Node * ptr = (*list)->tail;
   while(ptr != NULL){
     if (ptr->key == key){
@@ -37,6 +40,9 @@ Node * get_node_by_key(Linked_list ** list, int key)
 //Returns nth node
 Node * get_node(Linked_list ** list, int n)
 {
+   if ( !list || !(*list) || !(*list)->head )
+    return NULL;
+ 
   Node * node = (*list)->tail;
   int i;
   for (i = 0; i < n; ++i){
@@ -75,6 +81,9 @@ void llist_destroy(Linked_list ** list)
 
 void llist_push(Linked_list ** list, int key, long data)
 {
+ if ( !list || !(*list) )
+   return;
+  
   Node * new = create_node(key, data);
   if ((*list)->head == NULL)  {
     (*list)->head = new;
@@ -92,6 +101,9 @@ void llist_push(Linked_list ** list, int key, long data)
 //Gives compiler warnings because returns NULL instead of integer when nothing is found
 long llist_pop(Linked_list ** list)
 {
+ if ( !list || !(*list) || !(*list)->head )
+   return NULL;
+
   long result;
   if ((*list)->head == NULL)
     return NULL;
@@ -131,7 +143,10 @@ void llist_insert(Linked_list ** list, int key, int newKey, long newData)
 }
 
 void llist_prepend(Linked_list ** list, int key, long data)
-{ 
+{
+  if (! list || !(*list) )
+    return;
+   
   if ((*list)->tail == NULL){
     llist_push(list, key, data);
   }
@@ -147,17 +162,21 @@ void llist_prepend(Linked_list ** list, int key, long data)
 //Gives compiler warnings because returns NULL instead of integer when nothing is found
 long llist_get(Linked_list ** list, int key)
 {
+  if (!list || !(*list))
+    return;
+
   Node * node = get_node_by_key(list, key);
   if (node == NULL)
     return NULL;
   return node->data;
 } 
 
+//TODO: rewrite (with comments)
 void llist_remove(Linked_list ** list, int key)
 {
-  //TODO: rewrite (with comments)
-  if ((*list)->head == NULL)
+  if ((!list || !(*list) || !(*list)->head))
     return;
+  
   else if ((*list)->head->prev == NULL){
     if ((*list)->head->key != key)
       return; 
@@ -228,7 +247,7 @@ void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
 
 void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo)
 {
-  if ( !(*listOne)->head || !(*listTwo)->head )
+  if ( (*listOne)->head || !(*listTwo)->head )
     return;
   
   //Shallow copy listTwo, point listTwo here when everything is done
