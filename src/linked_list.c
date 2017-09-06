@@ -182,6 +182,8 @@ void llist_remove(Linked_list ** list, int key)
 
 void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
 {
+  //If n is larger than listOne, pad with extra elements
+  //This is the only operation using such logic, perhaps should be removed?
   if (n > (*listOne)->size){
     int extraElements = n - (*listOne)->size;
     int i;
@@ -190,9 +192,13 @@ void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
     }
     llist_push_list(listOne, listTwo);
     return; 
-  } else if ( !(*listOne)->head || !(*listTwo)->head )
+  }
+  //Check if listOne is anything
+  //TODO: fix 
+  else if ( !(*listOne)->head || !(*listTwo)->head )
     return;
   
+  //Check if prepend or push can be used
   if (n == 0){
     llist_prepend_list(listOne, listTwo);
     return;
@@ -200,7 +206,12 @@ void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
     llist_push_list(listOne, listTwo);
     return;
   }
-   
+  
+  //Can't use prepend  or push, insert inbetween nodes 
+  //But first sShallow copy listTwo, point listTwo here when everything is done
+  //otherwise it shares memory with listOne
+  Linked_list * cpy = llist_copy(listTwo);
+ 
   Node * connectionNode = get_node(listOne, n-1);
   Node * connectionEnd = get_node(listOne, n);
   
@@ -211,6 +222,8 @@ void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
   connectionEnd->prev->next = connectionEnd;
 
   (*listOne)->size = (*listOne)->size + (*listTwo)->size;
+
+  *listTwo = cpy;
 }
 
 void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo)
@@ -218,10 +231,16 @@ void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo)
   if ( !(*listOne)->head || !(*listTwo)->head )
     return;
   
+  //Shallow copy listTwo, point listTwo here when everything is done
+  //otherwise it shares memory with listOne
+  Linked_list * cpy = llist_copy(listTwo);
+  
   (*listOne)->head->next = (*listTwo)->tail;
   (*listOne)->head->next->prev = (*listOne)->head;
   (*listOne)->head = (*listTwo)->head;
   (*listOne)->size = (*listOne)->size + (*listTwo)->size;
+  
+  *listTwo = cpy;
 }
 
 void llist_prepend_list(Linked_list ** listOne, Linked_list ** listTwo)
@@ -229,10 +248,16 @@ void llist_prepend_list(Linked_list ** listOne, Linked_list ** listTwo)
   if ( !(*listOne)->head || !(*listTwo)->head )
     return;
   
+  //Shallow copy listTwo, point listTwo here when everything is done
+  //otherwise it shares memory with listOne
+  Linked_list * cpy = llist_copy(listTwo);
+  
   (*listOne)->tail->prev = (*listTwo)->head;
   (*listOne)->tail->prev->next = (*listOne)->tail;
   (*listOne)->tail = (*listTwo)->tail;
   (*listOne)->size = (*listOne)->size + (*listTwo)->size;
+
+  *listTwo = cpy;
 }
 
 //Can also be implemented with normal ptr argument instead of double, but this is more consistent
