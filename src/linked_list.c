@@ -323,6 +323,7 @@ void llist_print(Linked_list ** list)
       printf("\[%d:%ld\] ", node->key, node->data);
       node = node->next;
     }
+    printf("\n");
   }
 }
 
@@ -340,6 +341,7 @@ void llist_print_backwards(Linked_list ** list)
       printf("\[%d:%ld\] ", node->key, node->data);
       node = node->prev;
     }
+  printf("\n");
   }
 }
 
