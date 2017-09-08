@@ -124,10 +124,25 @@ long llist_pop(Linked_list ** list)
 
 void llist_insert(Linked_list ** list, int key, int newKey, long newData)
 {
-  Node * target = get_node_by_key(list, key);
-  if (target == NULL)
+  if (!list || !(*list))
     return;
-  Node * new = create_node(newKey, newData);
+
+  Node * target = get_node_by_key(list, key);
+  
+  if (target && !target->prev){
+    printf("prepend\n");
+    llist_prepend(list, newKey, newData);
+  }
+  else if (target){
+    Node * new = create_node(newKey, newData);
+    new->next = target;
+    new->prev = target->prev;
+    new->next->prev = new;
+    new->prev->next = new;
+    ++(*list)->size;
+  }   
+   
+  /**
   if (target->next != NULL){
     target->next->prev = new;
     Node * tmp = target->next;
@@ -135,10 +150,7 @@ void llist_insert(Linked_list ** list, int key, int newKey, long newData)
     new->prev = target;
     target->next = new;
   }
-  else{ 
-    llist_push(list, newKey, newData);
-  }
-  ++(*list)->size;
+**/
 }
 
 void llist_prepend(Linked_list ** list, int key, long data)

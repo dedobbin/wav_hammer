@@ -11,21 +11,17 @@ int main(int argc, char* argv[])
   int i;
   
   Linked_list * list = llist_create();
-  for (i = 0; i < 2; ++i){
-    //llist_prepend(&list, 1, 1);
+  for (i = 0; i < 3; ++i){
+    llist_push(&list, i, i);
   }  
-  
-  Linked_list * list2 = llist_create();
-  for (i = 0; i < 2; ++i){
-    //llist_prepend(&list2, 2, 2);
-  }  
-
-  Linked_list * list3 = llist_create(); 
-  llist_print(&list3);
-  llist_print_backwards(NULL);
+ 
+  llist_print(&list); 
+  llist_insert(&list,0 , 100, 100);
+  printf("\n");
+  llist_print(&list); 
+  llist_print_backwards(&list);
 
   llist_destroy(&list);
-  llist_destroy(&list2);
   /**
   char ifile[100];
   char ofile[100];
