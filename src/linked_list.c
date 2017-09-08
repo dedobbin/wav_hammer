@@ -36,7 +36,6 @@ Node * get_node_by_key(Linked_list ** list, int key)
   return NULL;
 }
 
-
 //Returns nth node
 Node * get_node(Linked_list ** list, int n)
 {
@@ -227,62 +226,78 @@ void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
   }
   
   //Can't use prepend  or push, insert inbetween nodes 
-  //But first sShallow copy listTwo, point listTwo here when everything is done
+  //But first shallow copy listTwo, point listTwo here when everything is done
   //otherwise it shares memory with listOne
   Linked_list * cpy = llist_copy(listTwo);
- 
-  Node * connectionNode = get_node(listOne, n-1);
-  Node * connectionEnd = get_node(listOne, n);
+
+  if ( ! (*listOne)->head){   
+    (*listOne)->head = (*listTwo)->head;
+    (*listOne)->tail = (*listTwo)->tail;
+    (*listOne)->size = (*listTwo)->size;
+  } else { 
+    Node * connectionNode = get_node(listOne, n-1);
+    Node * connectionEnd = get_node(listOne, n);
   
-  connectionNode->next = (*listTwo)->tail;
-  connectionNode->next->prev = connectionNode;
+    connectionNode->next = (*listTwo)->tail;
+    connectionNode->next->prev = connectionNode;
 
-  connectionEnd->prev = (*listTwo)->head;
-  connectionEnd->prev->next = connectionEnd;
+    connectionEnd->prev = (*listTwo)->head;
+    connectionEnd->prev->next = connectionEnd;
 
-  (*listOne)->size = (*listOne)->size + (*listTwo)->size;
-
+    (*listOne)->size = (*listOne)->size + (*listTwo)->size;
+  }
+ 
   *listTwo = cpy;
 }
 
 void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo)
 {
-  if ( (*listOne)->head || !(*listTwo)->head )
+  if ( !listOne || !(*listOne) || !listTwo || !(*listTwo) || !(*listTwo)->head )
     return;
   
   //Shallow copy listTwo, point listTwo here when everything is done
   //otherwise it shares memory with listOne
-  Linked_list * cpy = llist_copy(listTwo);
-  
-  (*listOne)->head->next = (*listTwo)->tail;
-  (*listOne)->head->next->prev = (*listOne)->head;
-  (*listOne)->head = (*listTwo)->head;
-  (*listOne)->size = (*listOne)->size + (*listTwo)->size;
+  Linked_list * cpy = llist_copy(listTwo);  
+
+  if ( ! (*listOne)->head){   
+    (*listOne)->head = (*listTwo)->head;
+    (*listOne)->tail = (*listTwo)->tail;
+    (*listOne)->size = (*listTwo)->size;
+  } else {
+    (*listOne)->head->next = (*listTwo)->tail;
+    (*listOne)->head->next->prev = (*listOne)->head;
+    (*listOne)->head = (*listTwo)->head;
+    (*listOne)->size = (*listOne)->size + (*listTwo)->size;
+  }
   
   *listTwo = cpy;
 }
 
 void llist_prepend_list(Linked_list ** listOne, Linked_list ** listTwo)
 {
-  if ( !(*listOne)->head || !(*listTwo)->head )
+  if ( !listOne || !(*listOne) || !listTwo || !(*listTwo) || !(*listTwo)->head )
     return;
   
   //Shallow copy listTwo, point listTwo here when everything is done
   //otherwise it shares memory with listOne
   Linked_list * cpy = llist_copy(listTwo);
   
-  (*listOne)->tail->prev = (*listTwo)->head;
-  (*listOne)->tail->prev->next = (*listOne)->tail;
-  (*listOne)->tail = (*listTwo)->tail;
-  (*listOne)->size = (*listOne)->size + (*listTwo)->size;
-
+  if ( ! (*listOne)->head){   
+    (*listOne)->head = (*listTwo)->head;
+    (*listOne)->tail = (*listTwo)->tail;
+    (*listOne)->size = (*listTwo)->size;
+  } else { 
+    (*listOne)->tail->prev = (*listTwo)->head;
+    (*listOne)->tail->prev->next = (*listOne)->tail;
+    (*listOne)->tail = (*listTwo)->tail;
+    (*listOne)->size = (*listOne)->size + (*listTwo)->size;
+  }
   *listTwo = cpy;
 }
 
 //Can also be implemented with normal ptr argument instead of double, but this is more consistent
 Linked_list * llist_copy(Linked_list ** src)
 {
-  //Check if src is something
   if (!src || !(*src) || !(*src)->head)
     return;
 
@@ -294,27 +309,37 @@ Linked_list * llist_copy(Linked_list ** src)
   }
   return dst;
 }
+
 void llist_print(Linked_list ** list)
 {
-  printf("size: %d\n", (*list)->size);
-  Node * node = (*list)->tail;
-  while(node){
-    printf("\[%d:%ld\] ", node->key, node->data);
-    node = node->next;
+  if (!list || !(*list)){
+    printf("List is not initialized\n");
+  } else if (!(*list)->tail){
+    printf("size: 0\n");
+  } else {
+    printf("size: %d\n", (*list)->size);
+    Node * node = (*list)->tail;
+    while (node){
+      printf("\[%d:%ld\] ", node->key, node->data);
+      node = node->next;
+    }
   }
-  printf("\n");
 }
 
 //Can also be implemented with normal ptr argument instead of double, but this is more consistent
 void llist_print_backwards(Linked_list ** list)
 {
-  printf("size %d\n", (*list)->size);
-  Node * node = (*list)->head;
-  while(node){ 
-    printf("\[%d:%ld\] ", node->key, node->data);
-    node = node->prev;
+  if (!list || !(*list)){
+    printf("List is not initialized\n");
+  } else if (!(*list)->head){
+    printf("size: 0\n");
+  } else {
+    printf("size: %d\n", (*list)->size);
+    Node * node = (*list)->head;
+    while(node){ 
+      printf("\[%d:%ld\] ", node->key, node->data);
+      node = node->prev;
+    }
   }
-  printf("\n");
 }
-
 
