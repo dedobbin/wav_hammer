@@ -50,6 +50,16 @@ Node * get_node(Linked_list ** list, int n)
   return node;
 }
 
+void connect_node(Node * target, Node * new)
+{
+  if ( !target || !new)
+    return;
+  new->next = target;
+  new->prev = target->prev;
+  new->next->prev = new;
+  new->prev->next = new;
+}
+
 //public functions
 
 Linked_list * llist_create()
@@ -132,12 +142,8 @@ void llist_insert_by_key(Linked_list ** list, int key, int newKey, long newData)
     printf("prepend\n");
     llist_prepend(list, newKey, newData);
   }
-  else if (target){
-    Node * new = create_node(newKey, newData);
-    new->next = target;
-    new->prev = target->prev;
-    new->next->prev = new;
-    new->prev->next = new;
+  else if (target){ 
+   connect_node(target, create_node(newKey, newData));
     ++(*list)->size;
   }   
 }

@@ -12,12 +12,14 @@ int main(int argc, char* argv[])
   
   Linked_list * list = llist_create();
   for (i = 0; i < 3; ++i){
-    llist_push(&list, i, i + 100);
+    llist_push(&list, i, 0);
   }  
-  int req =  -1;
-  printf("requested %d, found: %d\n",req ,llist_get(&list, req));
-  llist_print(&list); 
-
+  //int req =  -1;
+  //printf("requested %d, found: %d\n",req ,llist_get(&list, req));
+  llist_insert_by_key(&list, 0, 1, 100);
+ 
+  llist_print(&list);
+  llist_print_backwards(&list); 
   llist_destroy(&list);
   /**
   char ifile[100];
