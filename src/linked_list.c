@@ -2,8 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "linked_list.h"
-
-//TODO: sort
+#include "datatypes.h"
 
 //private functions
 
@@ -50,14 +49,41 @@ Node * get_node(Linked_list ** list, int n)
   return node;
 }
 
-void connect_node(Node * target, Node * new)
+void remove_node(Node * node)
+{
+  if (!node)
+    return;
+  if (node->next)
+    node->next->prev = node->prev;
+  if (node->prev)
+    node->prev->next = node->next;
+  free(node);
+  node = NULL;
+}
+
+void connect_node(Node * target, Node * new, bool after)
 {
   if ( !target || !new)
     return;
-  new->next = target;
-  new->prev = target->prev;
-  new->next->prev = new;
-  new->prev->next = new;
+
+  //insert after target
+  if (after){
+    new->next = target->next;
+    new->prev = target;
+    if (new->next)
+      new->next->prev = new;
+    if (new->prev)
+      new->prev->next = new;
+  
+  //insert before target
+  } else {
+    new->next = target;
+    new->prev = target->prev;
+    if (new->next)
+      new->next->prev = new;
+    if (new->prev)
+      new->prev->next = new;
+  }
 }
 
 //public functions
@@ -90,43 +116,33 @@ void llist_destroy(Linked_list ** list)
 
 void llist_push(Linked_list ** list, int key, long data)
 {
- if ( !list || !(*list) )
-   return;
-  
+  if ( !list || !(*list) )
+    return;
   Node * new = create_node(key, data);
-  if ((*list)->head == NULL)  {
-    (*list)->head = new;
+  connect_node((*list)->head, new, true);
+  
+  (*list)->head = new;
+  //Check if was pushed into empy list, if also point tail
+  if (!(*list)->tail)
     (*list)->tail = new;
-  }
-  else{
-    (*list)->head->next = new;
-    new->next = NULL;
-    new->prev = (*list)->head;
-    (*list)->head = (*list)->head->next;
-  }
-  ++(*list)->size;
+  
+  (*list)->size ++;
 }
 
 long llist_pop(Linked_list ** list)
 {
- if ( !list || !(*list) || !(*list)->head )
-   return 0;
-
-  long result;
-  if ((*list)->head == NULL)
-    return NULL;
-  else if ((*list)->head == (*list)->tail){
-    result = (*list)->head->data;
-    free((*list)->head);
-    (*list)->head =  NULL;
+  if (!list || !*list || !(*list)->head)
+    return 0;
+  Node * newHead = (*list)->head->prev;
+  long result = (*list)->head->data;
+  remove_node((*list)->head);
+  
+  (*list)->head = newHead;
+  if (!(*list)->head){
+    //list is empty, point tail to NULL
     (*list)->tail = NULL;
-  }
-  else {
-    long result = (*list)->head->data;
-    free((*list)->head);
-    (*list)->head = (*list)->head->prev;
-    (*list)->head->next = NULL;
-  }
+    (*list)->head = NULL;
+  }  
   --(*list)->size;
   return result;
 }
@@ -137,32 +153,15 @@ void llist_insert_by_key(Linked_list ** list, int key, int newKey, long newData)
     return;
 
   Node * target = get_node_by_key(list, key);
-  
-  if (target && !target->prev){
-    printf("prepend\n");
-    llist_prepend(list, newKey, newData);
-  }
-  else if (target){ 
-   connect_node(target, create_node(newKey, newData));
+  if (target){
+    Node * new = create_node(newKey, newData);
+    connect_node(target, new, false);
     ++(*list)->size;
-  }   
-}
-
-void llist_prepend(Linked_list ** list, int key, long data)
-{
-  if (! list || !(*list) )
-    return;
    
-  if ((*list)->tail == NULL){
-    llist_push(list, key, data);
+    //Check if list was prepended, if so set tail
+    if (!new->prev)
+       (*list)->tail = new;
   }
-  else{
-    Node * new = create_node(key, data);
-    new->next = (*list)->tail;
-    (*list)->tail->prev = new;
-    (*list)->tail = new;
-    ++(*list)->size;
-  } 
 }
 
 long llist_get(Linked_list ** list, int n)
@@ -185,32 +184,39 @@ long llist_get_by_key(Linked_list ** list, int key)
   return node->data;
 } 
 
-//TODO: rewrite (with comments)
-void llist_remove(Linked_list ** list, int key)
+void llist_remove(Linked_list ** list, int n)
 {
-  if ((!list || !(*list) || !(*list)->head))
-    return;
-  
-  else if ((*list)->head->prev == NULL){
-    if ((*list)->head->key != key)
-      return; 
-    free((*list)->head);
-    (*list)->head = NULL;
-    (*list)->tail = NULL;
+  if (n < 0 || n > (*list)->size || !list || !*list || !(*list)->head)
+   return;
+ 
+  Node * target = get_node(list, n);
+  if (target == (*list)->head)
+    (*list)->head = target->prev;
+  if (target == (*list)->tail)
+    (*list)->tail = target->next;
+     
+  if (target){
+   remove_node(target);
+   --(*list)->size;
   }
-  else{
-    Node * target = get_node_by_key(list, key);
-    if (target == NULL)
-      return;
-    Node * tmp = target;
-    if (target == (*list)->tail)
-      (*list)->tail = (*list)->tail->next;
-    else
-      target = tmp->prev;
-    target->next = tmp->next;
-    free(tmp); 
+
+}
+
+void llist_remove_by_key(Linked_list ** list, int key)
+{
+ if (!list || !*list || !(*list)->head)
+   return;
+ 
+  Node * target = get_node_by_key(list, key);
+  if (target == (*list)->head)
+    (*list)->head = target->prev;
+  if (target == (*list)->tail)
+    (*list)->tail = target->next;
+     
+  if (target){
+   remove_node(target);
+   --(*list)->size;
   }
-  ++(*list)->size;
 }
 
 void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)

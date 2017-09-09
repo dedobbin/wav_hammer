@@ -10,14 +10,28 @@ int main(int argc, char* argv[])
 {
   int i;
   
-  Linked_list * list = llist_create();
+  Linked_list * list = llist_create(); 
   for (i = 0; i < 3; ++i){
-    llist_push(&list, i, 0);
+    llist_push(&list, i, i);
+  }
+  printf("\n");
+  llist_print(&list);
+
+  for (i = 0; i < 0; ++i){
+    llist_pop(&list);
   }  
+  llist_remove(&list, 2);
+  llist_remove(&list, 1);
+  llist_remove(&list, 0);
+  llist_remove(&list, 3);
+  
+  printf("\n\n");
+
   //int req =  -1;
   //printf("requested %d, found: %d\n",req ,llist_get(&list, req));
-  llist_insert_by_key(&list, 0, 1, 100);
- 
+  //llist_insert_by_key(&list, 0, 1, 100);
+  
+  
   llist_print(&list);
   llist_print_backwards(&list); 
   llist_destroy(&list);
