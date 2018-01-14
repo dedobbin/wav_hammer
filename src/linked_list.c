@@ -131,6 +131,21 @@ long llist_pop(Linked_list ** list)
   return result;
 }
 
+void llist_insert(Linked_list ** list, int n, long data)
+{
+
+  if (!list || !(*list) || n > *list->size)
+    return;
+  
+  int i;
+  Node * node = *list->head;
+  for (i = 0; i < n; ++i)
+  {
+    node = node->next;
+  }
+  
+}
+
 long llist_get(Linked_list ** list, int n)
 {
   int result = 0;

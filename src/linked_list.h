@@ -21,7 +21,7 @@ void llist_destroy(Linked_list ** list);
 void llist_push(Linked_list ** list, long data);
 //Returns data from element on top and removes it. If not possible to pop, returns 0
 long llist_pop(Linked_list ** list);
-long llist_insert(Linked_list ** list, int n, long data);
+void llist_insert(Linked_list ** list, int n, long data);
 long llist_get(Linked_list ** list, int n);
 void llist_remove(Linked_list ** list, int n);
 //Places nodes of listTwo in listOne after node n of listOne, if listOne is too small, it will be padded with [0,0] nodes
