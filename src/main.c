@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
   
   Linked_list * list = llist_create(); 
   for (i = 0; i < 3; ++i){
-    llist_push(&list, i, i);
+    llist_push(&list, i);
   }
   printf("\n");
   llist_print(&list);

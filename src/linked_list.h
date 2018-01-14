@@ -4,7 +4,6 @@
 
 typedef struct Node {
   long data;
-  int key;
   struct Node * next;
   struct Node * prev;
 }Node;
@@ -19,18 +18,12 @@ typedef struct Linked_list{
 
 Linked_list * llist_create();
 void llist_destroy(Linked_list ** list);
-void llist_push(Linked_list ** list, int key, long data);
+void llist_push(Linked_list ** list, long data);
 //Returns data from element on top and removes it. If not possible to pop, returns 0
 long llist_pop(Linked_list ** list);
-long llist_insert(Linked_list ** list, int n, int key, long data);
-//Checks every node starting at tail until node with newKey value is found. Insert new node after it
-void llist_insert_by_key(Linked_list ** list, int key, int newKey, long newData);
+long llist_insert(Linked_list ** list, int n, long data);
 long llist_get(Linked_list ** list, int n);
-//Checks every node starting at tail until node with key value is found. Returns data from node. If key value is not found returns 0
-long llist_get_by_key(Linked_list ** list, int key);
 void llist_remove(Linked_list ** list, int n);
-//Checks every node starting at tail until node with key value is found. Returns tata from node. If key value is not found returns 0
-void llist_remove_by_key(Linked_list ** list, int key);
 //Places nodes of listTwo in listOne after node n of listOne, if listOne is too small, it will be padded with [0,0] nodes
 void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n);
 void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo);
