@@ -4,11 +4,39 @@
 #include "raw_wave.h"
 #include "hamming.h"
 #include "linked_list.h"
+#include "datatypes.h"
 
 int main(int argc, char* argv[])
 {
   int i;
   
+  Linked_list * list = llist_create(); 
+  for (i = 0; i < 3; ++i){
+    llist_push(&list, i);
+  }
+  printf("\n");
+  llist_print(&list);
+
+  int to_pop = list->size;
+  for (i = 0; i < to_pop; ++i){
+    llist_pop(&list);
+  }  
+  //llist_remove(&list, 2);
+  //llist_remove(&list, 1);
+  //llist_remove(&list, 0);
+  //llist_remove(&list, 3);
+  
+  printf("\n\n");
+
+  //int req =  -1;
+  //printf("requested %d, found: %d\n",req ,llist_get(&list, req));
+  //llist_insert_by_key(&list, 0, 1, 100);
+  
+  
+  llist_print(&list);
+  llist_print_backwards(&list); 
+  llist_destroy(&list);
+  /**
   char ifile[100];
   char ofile[100];
   if (argc < 3){
@@ -18,7 +46,7 @@ int main(int argc, char* argv[])
     //printf("Please provide input and output\n");
     //return 0;
   } 
-  else{
+  else{0
     strcpy(ifile, argv[1]);
     strcpy(ofile, argv[2]);
   }
@@ -28,47 +56,18 @@ int main(int argc, char* argv[])
     printf("Could not initialize Raw_wave struct, exiting\n");
     return 0;
   }
-   
-  printf("\n");
-  printf("main.c: riff data: ");
-  for (i = 0; i <RIFF_CHUNK_SIZE;++i){
-      printf("%X ", w->riff->raw_data[i] & 0xFF);
-  }
-  printf("\n");
-  
-  printf("main.c: fmt data: ");
-  for (i = 0; i <FMT_CHUNK_SIZE;++i){
-      printf("%X ", w->fmt->raw_data[i] & 0xFF);
-  }
-  printf("\nmain.c: data header: ");
-  for (i = 0; i <DATA_CHUNK_HEADER_SIZE;++i){
-      printf("%X ", w->data->raw_header_data[i] & 0xFF);
-  }
-  if (w->info != NULL){
-    printf("\nwave:c Info chunk of size %d\n  last four bytes:", w->info->size);
-    for (i = w->info->size-4; i < w->info->size; ++i){
-      printf("%x ", w->info->raw_data[i]);
-    }
-   printf("\n"); 
-  }
-
-  printf("\n");
-  printf("main.c: datasize: %db\n", datasize(w));
-  printf("main.c: format: %d\n", audio_format(w));
-  printf("main.c: numChannels: %d\n", num_channels(w));
-  printf("main.c: samplerate: %d\n", samplerate(w));
-  printf("main.c: block_align: %d\n", block_align(w));
-  printf("main.c: byterate: %d\n", byterate(w));
-  printf("main.c: bits per sample: %d\n", bits_per_sample(w));
-  printf("main.c: number of samples: %d\n", num_samples(w));
-  printf("\nmain.c: First 2 samples: %08lx %08lx \n", get_sample(w, 0), get_sample(w, 1));
-
+  printf("\noriginal wave:\n");
+  print_wave(w);
 
   Linked_list * list = extract_samples(w);
-  insert_samples(&w, list);
+  insert_samples_compl(&w, list, num_samples(w), list->size, true);
   llist_destroy(&list);
+
+  printf("\nnew wave: \n");
+  print_wave(w);
   write_wave(w, ofile);
   destroy_wave(&w); 
+  **/
   return 0;
 }
 
