@@ -17,13 +17,14 @@ int main(int argc, char* argv[])
   printf("\n");
   llist_print(&list);
 
-  for (i = 0; i < 0; ++i){
+  int to_pop = list->size;
+  for (i = 0; i < to_pop; ++i){
     llist_pop(&list);
   }  
-  llist_remove(&list, 2);
-  llist_remove(&list, 1);
-  llist_remove(&list, 0);
-  llist_remove(&list, 3);
+  //llist_remove(&list, 2);
+  //llist_remove(&list, 1);
+  //llist_remove(&list, 0);
+  //llist_remove(&list, 3);
   
   printf("\n\n");
 
