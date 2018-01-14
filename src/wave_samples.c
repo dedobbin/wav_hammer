@@ -28,7 +28,7 @@ Linked_list * extract_samples(Raw_wave * wave)
   Linked_list * list = llist_create();
   int i;
   for (i = 0; i < num_samples(wave); ++i){
-    llist_push(&list, i, get_sample(wave, i));
+    llist_push(&list, get_sample(wave, i));
   }
   return list;
 }

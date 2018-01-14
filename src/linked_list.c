@@ -6,7 +6,7 @@
 
 //private functions
 
-Node * create_node(int key, long data)
+Node * create_node(long data)
 {
   Node * new = NULL;
   if ( (new = malloc(sizeof(Node))) == NULL){
@@ -15,24 +15,8 @@ Node * create_node(int key, long data)
   }
   new->next = NULL;
   new->prev = NULL;
-  new->key = key;
   new->data = data;
   return new;
-}
-
-Node * get_node_by_key(Linked_list ** list, int key)
-{
-  if ( !list || !(*list) || !(*list)->head )
-    return;
-
-  Node * ptr = (*list)->tail;
-  while(ptr != NULL){
-    if (ptr->key == key){
-      return ptr;
-    }
-    ptr = ptr->next;
-  }
-  return NULL;
 }
 
 //Returns nth node
@@ -114,11 +98,11 @@ void llist_destroy(Linked_list ** list)
    *list = NULL;
 }
 
-void llist_push(Linked_list ** list, int key, long data)
+void llist_push(Linked_list ** list, long data)
 {
   if ( !list || !(*list) )
     return;
-  Node * new = create_node(key, data);
+  Node * new = create_node(data);
   connect_node((*list)->head, new, true);
   
   (*list)->head = new;
@@ -147,23 +131,6 @@ long llist_pop(Linked_list ** list)
   return result;
 }
 
-void llist_insert_by_key(Linked_list ** list, int key, int newKey, long newData)
-{
-  if (!list || !(*list))
-    return;
-
-  Node * target = get_node_by_key(list, key);
-  if (target){
-    Node * new = create_node(newKey, newData);
-    connect_node(target, new, false);
-    ++(*list)->size;
-   
-    //Check if list was prepended, if so set tail
-    if (!new->prev)
-       (*list)->tail = new;
-  }
-}
-
 long llist_get(Linked_list ** list, int n)
 {
   int result = 0;
@@ -171,18 +138,6 @@ long llist_get(Linked_list ** list, int n)
     result = (get_node(list, n))->data;
   return result;
 }
-
-long llist_get_by_key(Linked_list ** list, int key)
-{
-  if (!list || !(*list))
-    return;
-
-  Node * node = get_node_by_key(list, key);
-  if (node == NULL)
-    return 0;
-  
-  return node->data;
-} 
 
 void llist_remove(Linked_list ** list, int n)
 {
@@ -202,23 +157,6 @@ void llist_remove(Linked_list ** list, int n)
 
 }
 
-void llist_remove_by_key(Linked_list ** list, int key)
-{
- if (!list || !*list || !(*list)->head)
-   return;
- 
-  Node * target = get_node_by_key(list, key);
-  if (target == (*list)->head)
-    (*list)->head = target->prev;
-  if (target == (*list)->tail)
-    (*list)->tail = target->next;
-     
-  if (target){
-   remove_node(target);
-   --(*list)->size;
-  }
-}
-
 void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
 {
   //If n is larger than listOne, pad with extra elements
@@ -227,7 +165,7 @@ void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
     int extraElements = n - (*listOne)->size;
     int i;
     for (i = 0; i < extraElements; ++i){
-      llist_push(listOne, 0, 0);
+      llist_push(listOne, 0);
     }
     llist_push_list(listOne, listTwo);
     return; 
@@ -325,7 +263,7 @@ Linked_list * llist_copy(Linked_list ** src)
   Linked_list * dst = llist_create();
   Node * node = (*src)->tail;
   while(node){  
-    llist_push(&dst, node->key, node->data);
+    llist_push(&dst, node->data);
     node = node->next;
   }
   return dst;
@@ -341,7 +279,7 @@ void llist_print(Linked_list ** list)
     printf("size: %d\n", (*list)->size);
     Node * node = (*list)->tail;
     while (node){
-      printf("\[%d:%ld\] ", node->key, node->data);
+      printf("\[%ld\] ", node->data);
       node = node->next;
     }
     printf("\n");
@@ -359,7 +297,7 @@ void llist_print_backwards(Linked_list ** list)
     printf("size: %d\n", (*list)->size);
     Node * node = (*list)->head;
     while(node){ 
-      printf("\[%d:%ld\] ", node->key, node->data);
+      printf("\[%ld\] ", node->data);
       node = node->prev;
     }
   printf("\n");
