@@ -136,16 +136,25 @@ void llist_insert(Linked_list ** list, int n, long data)
 
   if (!list || !(*list) || n > (*list)->size)
     return;
-  
-  Node * newNode = create_node(1000);
-  Node * target = get_node(list, n);
-  connect_node(target, newNode, false);
-  ++(*list)->size;
 
-  if (n == 0)
-    (*list)->tail = newNode;
-  else if (n == (*list)->size-1)
+
+  Node * newNode = create_node(1000);
+
+  if (!n == (*list)->size)
+  {
+    connect_node(target, newNode, false);
+  }
+  else 
+  {
+    (*list)->prev = (*list)->head;
     (*list)->head = newNode;
+  }
+  if (n == 0)
+    (*list)->tail = newNode; 
+  
+  Node * target = get_node(list, n);
+  
+  ++(*list)->size;
 }
 
 long llist_get(Linked_list ** list, int n)
