@@ -17,16 +17,10 @@ int main(int argc, char* argv[])
   printf("\n");
   llist_print(&list);
 
-  int to_pop = list->size;
-  for (i = 0; i < to_pop; ++i){
-    llist_pop(&list);
-  }  
-  //llist_remove(&list, 2);
-  //llist_remove(&list, 1);
-  //llist_remove(&list, 0);
-  //llist_remove(&list, 3);
-  
+   
   printf("\n\n");
+
+  llist_insert(&list,0,100);  
 
   //int req =  -1;
   //printf("requested %d, found: %d\n",req ,llist_get(&list, req));

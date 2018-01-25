@@ -131,6 +131,24 @@ long llist_pop(Linked_list ** list)
   return result;
 }
 
+void llist_insert(Linked_list ** list, int n, long data)
+{
+  Node * newNode = create_node(data);
+  Node * target = (*list)->tail;
+  int i;
+  for (i = 0; i < n;++i)
+  {
+    target = target->next;
+  }
+
+  connect_node(target, newNode, false);
+
+  if (n == (*list)->size)
+    (*list)->head = newNode;
+  if (n == 0)
+    (*list)->tail = newNode;
+}
+
 long llist_get(Linked_list ** list, int n)
 {
   int result = 0;
