@@ -49,7 +49,7 @@ void connect_node(Node * target, Node * new, bool after)
 {
   if ( !target || !new)
     return;
-
+  
   //insert after target
   if (after){
     new->next = target->next;
@@ -133,28 +133,32 @@ long llist_pop(Linked_list ** list)
 
 void llist_insert(Linked_list ** list, int n, long data)
 {
-
-  if (!list || !(*list) || n > (*list)->size)
+  if (!list || !(*list) || n > (*list)->size || n < 0)
     return;
 
-
-  Node * newNode = create_node(1000);
-
-  if (!n == (*list)->size)
-  {
-    connect_node(target, newNode, false);
-  }
-  else 
-  {
-    (*list)->prev = (*list)->head;
+  Node * newNode = create_node(data);
+  
+  //Use this path if list needs to be appended
+  if (n == (*list)->size){
+    connect_node((*list)->head, newNode, true);
     (*list)->head = newNode;
+    ++(*list)->size;
+    return;
   }
+  
+  //Move to target node, to insert new node before it
+  Node * target = (*list)->tail;
+  int i;
+  for (i = 0; i < n;++i) {
+    target = target->next;
+  }
+  connect_node(target, newNode, false);
+  ++(*list)->size; 
+
+  //Set new tail if new node was inserted at index 0 
   if (n == 0)
-    (*list)->tail = newNode; 
+    (*list)->tail = newNode;
   
-  Node * target = get_node(list, n);
-  
-  ++(*list)->size;
 }
 
 long llist_get(Linked_list ** list, int n)

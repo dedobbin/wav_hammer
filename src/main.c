@@ -17,11 +17,8 @@ int main(int argc, char* argv[])
   printf("\n");
   llist_print(&list);
 
+  llist_insert(&list,1,100);  
 
-  llist_insert(&list, 3, 100);
-  printf("\n\n");
-
-  
   
   llist_print(&list);
   llist_print_backwards(&list); 
