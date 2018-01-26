@@ -14,12 +14,17 @@ int main(int argc, char* argv[])
   for (i = 0; i < 3; ++i){
     llist_push(&list, i);
   }
-  printf("\n");
   llist_print(&list);
 
-  llist_insert(&list,1,100);  
+  Linked_list * list2 = llist_create(); 
+  for (i = 0; i < 3; ++i){
+    llist_push(&list2, i+3);
+  }
+  llist_print(&list2);
 
-  
+
+  llist_merge(&list, &list2, 3);
+  printf("\n"); 
   llist_print(&list);
   llist_print_backwards(&list); 
   llist_destroy(&list);

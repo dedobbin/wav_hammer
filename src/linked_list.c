@@ -4,7 +4,7 @@
 #include "linked_list.h"
 #include "datatypes.h"
 
-//private functions
+/////////////////// private functions /////////////////////////////////
 
 Node * create_node(long data)
 {
@@ -70,7 +70,52 @@ void connect_node(Node * target, Node * new, bool after)
   }
 }
 
-//public functions
+void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo)
+{
+  if ( !listOne || !(*listOne) || !listTwo || !(*listTwo) || !(*listTwo)->head )
+    return;
+  
+  //Shallow copy listTwo, point listTwo here when everything is done
+  //otherwise it shares memory with listOne
+  Linked_list * cpy = llist_copy(listTwo);  
+
+  if ( ! (*listOne)->head){   
+    (*listOne)->head = (*listTwo)->head;
+    (*listOne)->tail = (*listTwo)->tail;
+    (*listOne)->size = (*listTwo)->size;
+  } else {
+    (*listOne)->head->next = (*listTwo)->tail;
+    (*listOne)->head->next->prev = (*listOne)->head;
+    (*listOne)->head = (*listTwo)->head;
+    (*listOne)->size = (*listOne)->size + (*listTwo)->size;
+  }
+  
+  *listTwo = cpy;
+}
+
+void llist_prepend_list(Linked_list ** listOne, Linked_list ** listTwo)
+{
+  if ( !listOne || !(*listOne) || !listTwo || !(*listTwo) || !(*listTwo)->head )
+    return;
+  
+  //Shallow copy listTwo, point listTwo here when everything is done
+  //otherwise it shares memory with listOne
+  Linked_list * cpy = llist_copy(listTwo);
+  
+  if ( ! (*listOne)->head){   
+    (*listOne)->head = (*listTwo)->head;
+    (*listOne)->tail = (*listTwo)->tail;
+    (*listOne)->size = (*listTwo)->size;
+  } else { 
+    (*listOne)->tail->prev = (*listTwo)->head;
+    (*listOne)->tail->prev->next = (*listOne)->tail;
+    (*listOne)->tail = (*listTwo)->tail;
+    (*listOne)->size = (*listOne)->size + (*listTwo)->size;
+  }
+  *listTwo = cpy;
+}
+
+/////////////////// public functions /////////////////////////////////
 
 Linked_list * llist_create()
 {
@@ -239,50 +284,7 @@ void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
   *listTwo = cpy;
 }
 
-void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo)
-{
-  if ( !listOne || !(*listOne) || !listTwo || !(*listTwo) || !(*listTwo)->head )
-    return;
-  
-  //Shallow copy listTwo, point listTwo here when everything is done
-  //otherwise it shares memory with listOne
-  Linked_list * cpy = llist_copy(listTwo);  
 
-  if ( ! (*listOne)->head){   
-    (*listOne)->head = (*listTwo)->head;
-    (*listOne)->tail = (*listTwo)->tail;
-    (*listOne)->size = (*listTwo)->size;
-  } else {
-    (*listOne)->head->next = (*listTwo)->tail;
-    (*listOne)->head->next->prev = (*listOne)->head;
-    (*listOne)->head = (*listTwo)->head;
-    (*listOne)->size = (*listOne)->size + (*listTwo)->size;
-  }
-  
-  *listTwo = cpy;
-}
-
-void llist_prepend_list(Linked_list ** listOne, Linked_list ** listTwo)
-{
-  if ( !listOne || !(*listOne) || !listTwo || !(*listTwo) || !(*listTwo)->head )
-    return;
-  
-  //Shallow copy listTwo, point listTwo here when everything is done
-  //otherwise it shares memory with listOne
-  Linked_list * cpy = llist_copy(listTwo);
-  
-  if ( ! (*listOne)->head){   
-    (*listOne)->head = (*listTwo)->head;
-    (*listOne)->tail = (*listTwo)->tail;
-    (*listOne)->size = (*listTwo)->size;
-  } else { 
-    (*listOne)->tail->prev = (*listTwo)->head;
-    (*listOne)->tail->prev->next = (*listOne)->tail;
-    (*listOne)->tail = (*listTwo)->tail;
-    (*listOne)->size = (*listOne)->size + (*listTwo)->size;
-  }
-  *listTwo = cpy;
-}
 
 //Can also be implemented with normal ptr argument instead of double, but this is more consistent
 Linked_list * llist_copy(Linked_list ** src)

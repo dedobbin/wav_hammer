@@ -26,8 +26,6 @@ long llist_get(Linked_list ** list, int n);
 void llist_remove(Linked_list ** list, int n);
 //Places nodes of listTwo in listOne after node n of listOne, if listOne is too small, it will be padded with [0,0] nodes
 void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n);
-void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo);
-void llist_prepend_list(Linked_list ** listOne, Linked_list ** listTwo);
 Linked_list * llist_copy(Linked_list ** src);
 void llist_print(Linked_list ** list);
 void llist_print_backwards(Linked_list ** list);
