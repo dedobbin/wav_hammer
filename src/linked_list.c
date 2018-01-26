@@ -70,7 +70,7 @@ void connect_node(Node * target, Node * new, bool after)
   }
 }
 
-void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo)
+void push_list(Linked_list ** listOne, Linked_list ** listTwo)
 {
   if ( !listOne || !(*listOne) || !listTwo || !(*listTwo) || !(*listTwo)->head )
     return;
@@ -93,7 +93,7 @@ void llist_push_list(Linked_list ** listOne, Linked_list ** listTwo)
   *listTwo = cpy;
 }
 
-void llist_prepend_list(Linked_list ** listOne, Linked_list ** listTwo)
+void prepend_list(Linked_list ** listOne, Linked_list ** listTwo)
 {
   if ( !listOne || !(*listOne) || !listTwo || !(*listTwo) || !(*listTwo)->head )
     return;
@@ -242,7 +242,7 @@ void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
     for (i = 0; i < extraElements; ++i){
       llist_push(listOne, 0);
     }
-    llist_push_list(listOne, listTwo);
+    push_list(listOne, listTwo);
     return; 
   }
   //Check if listOne is anything
@@ -252,10 +252,10 @@ void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
   
   //Check if prepend or push can be used
   if (n == 0){
-    llist_prepend_list(listOne, listTwo);
+    prepend_list(listOne, listTwo);
     return;
   }else if (n == (*listOne)->size){
-    llist_push_list(listOne, listTwo);
+    push_list(listOne, listTwo);
     return;
   }
   
