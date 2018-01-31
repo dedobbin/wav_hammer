@@ -8,27 +8,6 @@
 
 int main(int argc, char* argv[])
 {
-  int i;
-  
-  Linked_list * list = llist_create(); 
-  for (i = 0; i < 3; ++i){
-    llist_push(&list, i);
-  }
-  llist_print(&list);
-
-  Linked_list * list2 = llist_create(); 
-  for (i = 0; i < 3; ++i){
-    llist_push(&list2, i+3);
-  }
-  llist_print(&list2);
-
-
-  llist_merge(&list, &list2, 3);
-  printf("\n"); 
-  llist_print(&list);
-  llist_print_backwards(&list); 
-  llist_destroy(&list);
-  /**
   char ifile[100];
   char ofile[100];
   if (argc < 3){
@@ -38,7 +17,7 @@ int main(int argc, char* argv[])
     //printf("Please provide input and output\n");
     //return 0;
   } 
-  else{0
+  else{
     strcpy(ifile, argv[1]);
     strcpy(ofile, argv[2]);
   }
@@ -59,7 +38,6 @@ int main(int argc, char* argv[])
   print_wave(w);
   write_wave(w, ofile);
   destroy_wave(&w); 
-  **/
   return 0;
 }
 
