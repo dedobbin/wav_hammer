@@ -34,6 +34,6 @@ void extract_samples(Linked_list * result, Raw_wave * wave)
 }
 
 void insert_samples(Linked_list * list)
-{
+{ 
   return;
 }
