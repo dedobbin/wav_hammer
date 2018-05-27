@@ -23,14 +23,12 @@ void set_sample(Raw_wave * wave, int nSample, long value)
   }
 }
 
-Linked_list * extract_samples(Raw_wave * wave)
+void extract_samples(Linked_list * result, Raw_wave * wave)
 {
-  Linked_list * list = llist_create();
   int i;
   for (i = 0; i < num_samples(wave); ++i){
-    llist_push(&list, get_sample(wave, i));
+    llist_push(&result, get_sample(wave, i));
   }
-  return list;
 }
 
 //TODO: now overwrites existing samples, should have options to append etc
