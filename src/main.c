@@ -30,10 +30,9 @@ int main(int argc, char* argv[])
   printf("\noriginal wave:\n");
   print_wave(w);
 
-  Linked_list * list;
-  extract_samples(&list, w);
-  insert_samples_compl(&w, list, num_samples(w), list->size, true);
+  Linked_list * list = llist_create();
   llist_destroy(&list);
+  extract_samples(&list, w);
 
   printf("\nnew wave: \n");
   print_wave(w);
