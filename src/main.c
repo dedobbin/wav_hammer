@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
   char ofile[100];
   if (argc < 3){
     printf("No input/output provided, using default testing values\n");
-    strcpy(ifile, "../audio/stereo.wav");
+    strcpy(ifile, "../audio/short.wav");
     strcpy(ofile, "../audio/output.wav");
     //printf("Please provide input and output\n");
     //return 0;
@@ -31,9 +31,10 @@ int main(int argc, char* argv[])
   print_wave(w);
 
   Linked_list * list = llist_create();
-  llist_destroy(&list);
   extract_samples(&list, w);
-
+  insert_samples(&list);
+  llist_destroy(&list);
+  
   printf("\nnew wave: \n");
   print_wave(w);
   write_wave(w, ofile);
