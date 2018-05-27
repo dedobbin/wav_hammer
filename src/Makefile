@@ -19,4 +19,4 @@ clean:
 		rm *.o
 
 stfu:		
-		gcc *.c -o ../wavhammer.exe -lm -w
+		gcc *.c -o ../wavhammer.exe -lm -w -g
