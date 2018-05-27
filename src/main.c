@@ -8,18 +8,6 @@
 
 int main(int argc, char* argv[])
 {
-  
-  Linked_list * dummylist = llist_create();
-
-  llist_push(&dummylist, 0);
-  llist_push(&dummylist, 1);
-  llist_push(&dummylist, 2);
- 
-  llist_print(&dummylist);
-  llist_print_backwards(&dummylist);
-//  llist_destroy(&dummylist);
-
- 
   char ifile[100];
   char ofile[100];
   if (argc < 3){
