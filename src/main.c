@@ -9,14 +9,15 @@
 #include "linked_list.h"
 #include "datatypes.h"
 
+
 int main(int argc, char* argv[])
 {
   char ifile[100];
   char ofile[100];
   if (argc < 3){
     printf("No input/output provided, using default testing values\n");
-    strcpy(ifile, "../audio/short.wav");
-    strcpy(ofile, "../audio/output.wav");
+    strcpy(ifile, "../../audio/short.wav");
+    strcpy(ofile, "../../audio/output.wav");
     //printf("Please provide input and output\n");
     //return 0;
   } 
@@ -42,7 +43,7 @@ int main(int argc, char* argv[])
   print_wave(w);
   write_wave(w, ofile);
   destroy_wave(&w); 
-   
+  getchar();
   return 0;
 }
 

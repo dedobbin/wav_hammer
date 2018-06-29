@@ -8,6 +8,7 @@
 #include <assert.h>
 #include "raw_wave.h"
 
+
 static const DATA_CHUNK_OFFSET = 36;
 static const DATA_OFFSET = 44;
 
@@ -21,11 +22,7 @@ int load_wave(Raw_wave ** wave, const char* const path)
     fprintf(stderr, "Could not open file '%s' for reading\n", path);
     return -2;
   }
-  #elif _WIN32
-  if (!f || access(path)) {
-	  fprintf(stderr, "Could not open file '%s' for reading\n", path);
-	  return -2;
-  }
+
   #endif
   
   fseek(f, 0L, SEEK_END);
