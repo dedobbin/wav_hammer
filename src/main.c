@@ -1,5 +1,8 @@
 #include <stdio.h>
+#ifdef __linux__ 
 #include <unistd.h>
+#elif _WIN32
+#endif
 #include <string.h>
 #include "raw_wave.h"
 #include "hamming.h"

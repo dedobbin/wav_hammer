@@ -1,4 +1,7 @@
+#ifdef __linux__ 
 #include <unistd.h>
+#elif _WIN32
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,10 +16,17 @@ int load_wave(Raw_wave ** wave, const char* const path)
 {
   FILE * f;
   f = fopen(path, "rb");
+  #ifdef __linux__ 
   if (!f || access(path, R_OK)){
     fprintf(stderr, "Could not open file '%s' for reading\n", path);
     return -2;
   }
+  #elif _WIN32
+  if (!f || access(path)) {
+	  fprintf(stderr, "Could not open file '%s' for reading\n", path);
+	  return -2;
+  }
+  #endif
   
   fseek(f, 0L, SEEK_END);
   long filesize = ftell(f);
@@ -95,10 +105,17 @@ int write_wave(Raw_wave * wave, const char * const path)
 {
   FILE * f;
   f = fopen(path, "wb");
+  #ifdef __linux__ 
   if (!f || access (path, W_OK)){
     fprintf(stderr, "Could not open file '%s' for writing\n", path);
     return -1;
   }
+  #elif _WIN32
+  if (!f || access(path)) {
+	  fprintf(stderr, "Could not open file '%s' for writing\n", path);
+	  return -1;
+  }
+  #endif
   fwrite(wave->riff->raw_data, 1, RIFF_CHUNK_SIZE, f);
   fwrite(wave->fmt->raw_data, 1, FMT_CHUNK_SIZE, f);
   fwrite(wave->data->raw_header_data, 1, DATA_CHUNK_HEADER_SIZE, f);
