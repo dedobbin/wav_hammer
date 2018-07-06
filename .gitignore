@@ -5,3 +5,5 @@ audio/*
 *~
 *.wav
 *.swp
+.vs
+Debug

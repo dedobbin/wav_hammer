@@ -1,9 +1,13 @@
+#ifdef __linux__ 
 #include <unistd.h>
+#elif _WIN32
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 #include "raw_wave.h"
+
 
 static const DATA_CHUNK_OFFSET = 36;
 static const DATA_OFFSET = 44;
@@ -13,10 +17,13 @@ int load_wave(Raw_wave ** wave, const char* const path)
 {
   FILE * f;
   f = fopen(path, "rb");
+  #ifdef __linux__ 
   if (!f || access(path, R_OK)){
     fprintf(stderr, "Could not open file '%s' for reading\n", path);
     return -2;
   }
+
+  #endif
   
   fseek(f, 0L, SEEK_END);
   long filesize = ftell(f);
@@ -33,7 +40,6 @@ int load_wave(Raw_wave ** wave, const char* const path)
      fprintf(stderr, "No valid RIFF\n");
      return -3;
   }
-  (*wave) = malloc(sizeof(Raw_wave));
 
   //Check if is wave
   memcpy(strbuffer, buffer+8, 4);
@@ -45,7 +51,11 @@ int load_wave(Raw_wave ** wave, const char* const path)
   //Valid wave file, so it's time to start getting data
   if ( ((*wave) = malloc(sizeof(Raw_wave))) == NULL )
     return -1;
-  
+  (*wave)->riff = NULL;
+  (*wave)->fmt = NULL;
+  (*wave)->data = NULL;
+  (*wave)->info = NULL;
+
   //teh RIFF chunk 
   if ( ((*wave)->riff = malloc(sizeof(RIFF_chunk))) == NULL )
     return -1;
@@ -95,10 +105,12 @@ int write_wave(Raw_wave * wave, const char * const path)
 {
   FILE * f;
   f = fopen(path, "wb");
+  #ifdef __linux__ 
   if (!f || access (path, W_OK)){
     fprintf(stderr, "Could not open file '%s' for writing\n", path);
     return -1;
   }
+  #endif
   fwrite(wave->riff->raw_data, 1, RIFF_CHUNK_SIZE, f);
   fwrite(wave->fmt->raw_data, 1, FMT_CHUNK_SIZE, f);
   fwrite(wave->data->raw_header_data, 1, DATA_CHUNK_HEADER_SIZE, f);

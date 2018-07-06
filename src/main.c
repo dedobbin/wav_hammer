@@ -1,10 +1,14 @@
 #include <stdio.h>
+#ifdef __linux__ 
 #include <unistd.h>
+#elif _WIN32
+#endif
 #include <string.h>
 #include "raw_wave.h"
 #include "hamming.h"
 #include "linked_list.h"
 #include "datatypes.h"
+
 
 int main(int argc, char* argv[])
 {
@@ -12,8 +16,8 @@ int main(int argc, char* argv[])
   char ofile[100];
   if (argc < 3){
     printf("No input/output provided, using default testing values\n");
-    strcpy(ifile, "../audio/short.wav");
-    strcpy(ofile, "../audio/output.wav");
+    strcpy(ifile, "../../audio/short.wav");
+    strcpy(ofile, "../../audio/output.wav");
     //printf("Please provide input and output\n");
     //return 0;
   } 
@@ -31,7 +35,7 @@ int main(int argc, char* argv[])
   print_wave(w);
 
   Linked_list * list = llist_create();
-  extract_samples(&list, w);
+  extract_samples(list, w);
   insert_samples(&list);
   llist_destroy(&list);
   
@@ -39,7 +43,7 @@ int main(int argc, char* argv[])
   print_wave(w);
   write_wave(w, ofile);
   destroy_wave(&w); 
-   
+  getchar();
   return 0;
 }
 
