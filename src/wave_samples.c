@@ -33,7 +33,21 @@ void extract_samples(Linked_list * result, Raw_wave * wave)
   }
 }
 
-void insert_samples(Linked_list * list)
+void insert_samples(Raw_wave * wave, int offset, Linked_list * list, bool overwrite)
 { 
+  if (overwrite) {
+	  if (offset + list->size <= num_samples(wave)) {
+		  int i = 0;
+		  Node * node = list->tail;
+		  while (node) {
+			  set_sample(wave, i++ + offset, node->data);
+			  node = node->next;
+		  }
+	  }
+  }
+  else {
+	  printf("zoinks, insert_samples without overwrite not implemented yet");
+	  //TODO
+  }
   return;
 }
