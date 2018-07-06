@@ -136,8 +136,9 @@ void llist_destroy(Linked_list ** list)
     return;
   Node * node = (*list)->tail; 
   while (node){
-      free(node);
+	  Node * free_me = node;
       node = node->next;
+	  free(free_me);
     }
    free(*list);
    *list = NULL;
@@ -149,8 +150,8 @@ void llist_push(Linked_list ** list, long data)
     return;
   Node * new = create_node(data);
   connect_node((*list)->head, new, true);
-  
   (*list)->head = new;
+ 
   //Check if was pushed into empy list, if also point tail
   if (!(*list)->tail)
     (*list)->tail = new;
@@ -182,7 +183,9 @@ void llist_insert(Linked_list ** list, int n, long data)
     return;
 
   Node * newNode = create_node(data);
-  
+  newNode->next = NULL;
+  newNode->prev = NULL;
+
   //Use this path if list needs to be appended
   if (n == (*list)->size){
     connect_node((*list)->head, newNode, true);
@@ -203,7 +206,6 @@ void llist_insert(Linked_list ** list, int n, long data)
   //Set new tail if new node was inserted at index 0 
   if (n == 0)
     (*list)->tail = newNode;
-  
 }
 
 long llist_get(Linked_list ** list, int n)

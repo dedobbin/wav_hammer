@@ -40,7 +40,6 @@ int load_wave(Raw_wave ** wave, const char* const path)
      fprintf(stderr, "No valid RIFF\n");
      return -3;
   }
-  (*wave) = malloc(sizeof(Raw_wave));
 
   //Check if is wave
   memcpy(strbuffer, buffer+8, 4);
@@ -52,7 +51,11 @@ int load_wave(Raw_wave ** wave, const char* const path)
   //Valid wave file, so it's time to start getting data
   if ( ((*wave) = malloc(sizeof(Raw_wave))) == NULL )
     return -1;
-  
+  (*wave)->riff = NULL;
+  (*wave)->fmt = NULL;
+  (*wave)->data = NULL;
+  (*wave)->info = NULL;
+
   //teh RIFF chunk 
   if ( ((*wave)->riff = malloc(sizeof(RIFF_chunk))) == NULL )
     return -1;
@@ -106,11 +109,6 @@ int write_wave(Raw_wave * wave, const char * const path)
   if (!f || access (path, W_OK)){
     fprintf(stderr, "Could not open file '%s' for writing\n", path);
     return -1;
-  }
-  #elif _WIN32
-  if (!f || access(path)) {
-	  fprintf(stderr, "Could not open file '%s' for writing\n", path);
-	  return -1;
   }
   #endif
   fwrite(wave->riff->raw_data, 1, RIFF_CHUNK_SIZE, f);
