@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
   print_wave(w);
 
   Linked_list * list = llist_create();
-  extract_samples_llist(list, w);
+  extract_samples_llist(list, w, 2);
   insert_samples_llist(w, 0, list, true);
   llist_destroy(&list);
 

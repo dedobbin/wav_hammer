@@ -7,7 +7,7 @@
 
 long get_sample(Raw_wave * wave, int nSample);
 void set_sample(Raw_wave * wave, int nSample, long value);
-void extract_samples_llist(Linked_list * result, Raw_wave * wave);
+void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num);
 void insert_samples_llist(Raw_wave * wave, int offset, Linked_list * list, bool overwrite);
 
 #endif

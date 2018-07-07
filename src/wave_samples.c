@@ -23,12 +23,18 @@ void set_sample(Raw_wave * wave, int nSample, long value)
   }
 }
 
-void extract_samples_llist(Linked_list * result, Raw_wave * wave)
+void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num)
 {
   if (!result || !wave)
     return -1;
   
-  int limit = num_samples(wave);
+  int limit = 0;
+  if (num >= num_samples(wave))
+    limit = num_samples(wave);
+  else {
+    limit = num;
+  }
+
   int i;
 
   for (i = 0; i < limit; ++i){
