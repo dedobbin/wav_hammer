@@ -34,9 +34,7 @@ void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num)
   else {
     limit = num;
   }
-
   int i;
-
   for (i = 0; i < limit; ++i){
     llist_push(&result, get_sample(wave, i));
   }
