@@ -23,7 +23,7 @@ void set_sample(Raw_wave * wave, int nSample, long value)
   }
 }
 
-void extract_samples(Linked_list * result, Raw_wave * wave)
+void extract_samples_llist(Linked_list * result, Raw_wave * wave)
 {
   if (!result || !wave)
     return -1;
@@ -33,7 +33,23 @@ void extract_samples(Linked_list * result, Raw_wave * wave)
   }
 }
 
-void insert_samples(Raw_wave * wave, int offset, Linked_list * list, bool overwrite)
+void extract_samples(uint8_t * samples, Raw_wave * wave)
+{
+  int nSamples = num_samples(wave);
+  if (!wave || nSamples <= 0)
+    return -1;
+
+  int buffer_size = nSamples * bits_per_sample(wave) * 8;
+  samples = malloc(buffer_size);
+  int i = 0;
+  int offset = 0;
+  for (i = 0; i < buffer_size; i++) {
+	  samples[offset] = get_sample(wave, i);
+    offset += buffer_size;    
+  }
+}
+
+void insert_samples_llist(Raw_wave * wave, int offset, Linked_list * list, bool overwrite)
 { 
   if (overwrite) {
 	  if (offset + list->size <= num_samples(wave)) {
