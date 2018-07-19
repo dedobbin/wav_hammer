@@ -50,17 +50,17 @@ int main(int argc, char* argv[])
 
   printf("loading .wavs..\n");
   Raw_wave * waveOne;
-  if (!load_wave(&waveOne, "../../audio/low_tone.wav")) {
+  if (!load_wave(&waveOne, "../../audio/input.wav")) {
       printf("Could not init wave one");
   }
 
   Raw_wave * waveTwo;
-  if (!load_wave(&waveTwo, "../../audio/input.wav")) {
+  if (!load_wave(&waveTwo, "../../audio/low_tone.wav")) {
       printf("Could not init wave two");
   }
 
   printf("merging .wavs..\n");
-  merge_waves(waveOne, waveTwo, num_samples(waveTwo));
+  merge_waves(waveOne, waveTwo, num_samples(waveTwo), num_samples(waveOne) / 2);
 
 
   printf("Writing .wav to disk..\n");

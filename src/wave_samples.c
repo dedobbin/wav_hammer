@@ -40,7 +40,7 @@ void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num)
   }
 }
 
-void merge_waves(Raw_wave * dest, Raw_wave * src, long amount)
+void merge_waves(Raw_wave * dest, Raw_wave * src, long amount, long dst_offset)
 {
     bool overwrite = true;
     if (!overwrite) {
@@ -49,13 +49,13 @@ void merge_waves(Raw_wave * dest, Raw_wave * src, long amount)
     }
     else {
 
-        if (amount > num_samples(dest)) {
+        if (amount + dst_offset > num_samples(dest)) {
             printf("merge_waves: too much samples to insert in destination wave, aborting merge\n");
             return -1;
         }
         long i;
         for (i = 0; i < amount; i++) {
-            set_sample(dest, i, get_sample(src, i));
+            set_sample(dest, i + dst_offset, get_sample(src, i));
         }
         return 1;
     }
