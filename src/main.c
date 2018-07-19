@@ -50,12 +50,12 @@ int main(int argc, char* argv[])
 
   printf("loading .wavs..\n");
   Raw_wave * waveOne;
-  if (!load_wave(&waveOne, "../../audio/input.wav")) {
+  if (!load_wave(&waveOne, "../../audio/low_tone.wav")) {
       printf("Could not init wave one");
   }
 
   Raw_wave * waveTwo;
-  if (!load_wave(&waveTwo, "../../audio/low_tone.wav")) {
+  if (!load_wave(&waveTwo, "../../audio/input.wav")) {
       printf("Could not init wave two");
   }
 

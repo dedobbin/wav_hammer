@@ -48,9 +48,15 @@ void merge_waves(Raw_wave * dest, Raw_wave * src, long amount)
         printf("Zoinks, merge_waves with overwrite disabled not implemented yet\n");
     }
     else {
+
+        if (amount > num_samples(dest)) {
+            printf("merge_waves: too much samples to insert in destination wave, aborting merge\n");
+            return -1;
+        }
         long i;
         for (i = 0; i < amount; i++) {
             set_sample(dest, i, get_sample(src, i));
         }
+        return 1;
     }
 }
