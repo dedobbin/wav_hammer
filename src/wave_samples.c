@@ -23,34 +23,35 @@ void set_sample(Raw_wave * wave, int nSample, long value)
   }
 }
 
-void extract_samples_llist(Linked_list * result, Raw_wave * wave)
+void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num)
 {
   if (!result || !wave)
     return -1;
   
-  int limit = num_samples(wave);
+  int limit = 0;
+  if (num >= num_samples(wave))
+    limit = num_samples(wave);
+  else {
+    limit = num;
+  }
   int i;
-
   for (i = 0; i < limit; ++i){
     llist_push(&result, get_sample(wave, i));
   }
 }
 
-void insert_samples_llist(Raw_wave * wave, int offset, Linked_list * list, bool overwrite)
-{ 
-  if (overwrite) {
-	  if (offset + list->size <= num_samples(wave)) {
-		  int i = 0;
-		  Node * node = list->tail;
-		  while (node) {
-			  set_sample(wave, i++ + offset, node->data);
-			  node = node->next;
-		  }
-	  }
-  }
-  else {
-	  printf("zoinks, insert_samples without overwrite not implemented yet");
-	  //TODO
-  }
-  return;
+void merge_waves(Raw_wave * dest, Raw_wave * src, long amount)
+{
+    bool overwrite = true;
+    if (!overwrite) {
+        //TODO
+        printf("Zoinks, merge_waves with overwrite disabled not implemented yet\n");
+    }
+    else {
+        long i;
+        for (i = 0; i < amount; i++) {
+            //set_sample(dest, i, 0);
+            set_sample(dest, i, get_sample(src, i));
+        }
+    }
 }
