@@ -12,6 +12,7 @@
 
 int main(int argc, char* argv[])
 {
+   /**
   char ifile[100];
   char ofile[100];
   if (argc < 3){
@@ -45,5 +46,29 @@ int main(int argc, char* argv[])
   destroy_wave(&w); 
   getchar();
   return 0;
+  **/
+
+  printf("loading .wavs..\n");
+  Raw_wave * waveOne;
+  if (!load_wave(&waveOne, "../../audio/input.wav")) {
+      printf("Could not init wave one");
+  }
+
+  Raw_wave * waveTwo;
+  if (!load_wave(&waveTwo, "../../audio/tone.wav")) {
+      printf("Could not init wave two");
+  }
+
+  printf("merging .wavs..\n");
+  merge_waves(waveOne, waveTwo, num_samples(waveTwo));
+
+
+  printf("Writing .wav to disk..\n");
+  write_wave(waveOne, "../../audio/output.wav");
+
+  printf("Done\n");
+  getchar();
+  return 0;
+
 }
 
