@@ -50,7 +50,6 @@ void merge_waves(Raw_wave * dest, Raw_wave * src, long amount)
     else {
         long i;
         for (i = 0; i < amount; i++) {
-            //set_sample(dest, i, 0);
             set_sample(dest, i, get_sample(src, i));
         }
     }

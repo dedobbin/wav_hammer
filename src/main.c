@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
   }
 
   Raw_wave * waveTwo;
-  if (!load_wave(&waveTwo, "../../audio/tone.wav")) {
+  if (!load_wave(&waveTwo, "../../audio/low_tone.wav")) {
       printf("Could not init wave two");
   }
 
