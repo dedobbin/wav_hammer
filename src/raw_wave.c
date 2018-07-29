@@ -19,15 +19,15 @@ int load_wave(Raw_wave ** wave, const char* const path)
   f = fopen(path, "rb");
   #ifdef __linux__ 
   if (!f || access(path, R_OK)){
-    fprintf(stderr, "Could not open file '%s' for reading\n", path);
+    fprintf(stderr, "load_wave: Could not open file '%s' for reading\n", path);
     return -2;
   }
-  #endif
-
+  #elif _WIN32
   if ((_access(path, 0) == -1)){
 	  fprintf(stderr, "load_wave: File '%s' does not exist\n", path);
 	  return -2;
   }
+  #endif
   
   fseek(f, 0L, SEEK_END);
   long filesize = ftell(f);

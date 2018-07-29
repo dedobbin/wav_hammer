@@ -7,18 +7,17 @@
 #include "raw_wave.h"
 #include "hamming.h"
 #include "datatypes.h"
-
+#include "merge_waves.h"
 
 int main(int argc, char* argv[])
 {
+	merge_waves();
+	/**
 	Linked_list * list = llist_create();
 	llist_push(&list, 0);
 	llist_push(&list, 1);
 	llist_push(&list, 2);
-
 	llist_print(&list);
-
-
 
 	printf("loading .wavs..\n");
 	Raw_wave * waveOne;
@@ -46,6 +45,7 @@ int main(int argc, char* argv[])
 	write_wave(waveOne, "../../audio/output.wav");
 
 	printf("Done\n");
+	**/
 	getchar();
 	return 0;
 
