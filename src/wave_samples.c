@@ -42,17 +42,15 @@ void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num)
 
 void merge_waves(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset)
 {
-    bool overwrite = true;
+    bool overwrite = false;
     if (!overwrite) {
-        //long newSize = num_samples(src) + num_samples(dst);
-        int bytesPerSample = bits_per_sample(src) / 8;
+        int bytesPerSample = bits_per_sample(src) /8;
         long newSize = bytesPerSample * num_channels(src) * amount;
-        
-        //uint8_t * newData = malloc(bytesPerSamples * numChannels * num_samples(src));
-        //memcpy(newData, src->data->audiodata, bytesPerSamples * numChannels * num_samples(src));
-        uint8_t * newData = malloc(newSize);
+
+		uint8_t * newData = malloc(newSize);
         memcpy(newData, src->data->audiodata, newSize);
-        set_datasize(src, newSize);
+        
+		set_datasize(src, newSize);
 
         free(dst->data->audiodata);
         dst->data->audiodata = newData;
