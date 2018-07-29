@@ -44,16 +44,32 @@ void merge_waves(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset)
 {
     bool overwrite = false;
     if (!overwrite) {
+		//datsize = bytes per samples * number of channels * n samples
         int bytesPerSample = bits_per_sample(src) /8;
-        long newSize = bytesPerSample * num_channels(src) * amount;
+		int numChannels = num_channels(src);
 
-		uint8_t * newData = malloc(newSize);
-        memcpy(newData, src->data->audiodata, newSize);
+		//get samples of dst wave before dst_offset, they should be left intact
+		long dataChunkOneSize = bytesPerSample * numChannels * dst_offset;
+		uint8_t * dataChunkOne = malloc(dataChunkOneSize);
+        memcpy(dataChunkOne, dst->data->audiodata, dataChunkOneSize);
         
-		set_datasize(src, newSize);
+		//get amount of samples from src to insert
+		long dataChunkTwoSize = bytesPerSample * numChannels * amount;
+		uint8_t * dataChunkTwo = malloc(dataChunkTwoSize);
+		memcpy(dataChunkTwo, src->data->audiodata, dataChunkTwoSize);
+
+		//get tail part of original dst wave, they should stay intact
+		long dataChunkThreeSize = bytesPerSample * numChannels * (num_samples(dst) - dst_offset);
+		uint8_t * dataChunkThree = malloc(dataChunkThreeSize);
+		long offsetInBytes = dst->data->audiodata + bits_per_sample(dst) / 8 * num_channels(dst) * dst_offset;
+		memcpy(dataChunkThree, offsetInBytes, dataChunkThreeSize);
+
+		//TODO combine three data chunks
+
+		set_datasize(src, dataChunkThreeSize);
 
         free(dst->data->audiodata);
-        dst->data->audiodata = newData;
+        dst->data->audiodata = dataChunkThree;
 
     } else {
         if (amount + dst_offset > num_samples(dst)) {

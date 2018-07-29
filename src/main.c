@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
   printf("===================\n");
 
   printf("merging .wavs..\n");
-  merge_waves(waveOne, waveOne, num_samples(waveOne) /2 , 0);
+  merge_waves(waveOne, waveOne, num_samples(waveOne) /2 , num_samples(waveOne) / 2);
 
   printf("===================\n");
   print_wave(waveOne);
