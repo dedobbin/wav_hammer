@@ -234,9 +234,9 @@ unsigned byterate(const Raw_wave * const wave)
 
 unsigned block_align(const Raw_wave * const wave)
 {
-  unsigned result = 0;
-  memcpy(&result, wave->fmt->raw_data+20, 2);
-  return result;
+    unsigned result = *((wave->fmt->raw_data) + 20);
+    result &= 0xFFFF;   //2 bytes value
+    return result;
 }
 
 unsigned bits_per_sample(const Raw_wave * const wave)

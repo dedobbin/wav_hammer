@@ -28,7 +28,6 @@ typedef struct Info_chunk{
 }Info_chunk;
 
 typedef struct Raw_wave{
-  uint8_t* debugPtr;
   RIFF_chunk * riff;
   Fmt_chunk * fmt;
   Data_chunk * data;

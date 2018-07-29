@@ -40,22 +40,31 @@ void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num)
   }
 }
 
-void merge_waves(Raw_wave * dest, Raw_wave * src, long amount, long dst_offset)
+void merge_waves(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset)
 {
     bool overwrite = true;
     if (!overwrite) {
-        //TODO
-        printf("Zoinks, merge_waves with overwrite disabled not implemented yet\n");
-    }
-    else {
+        //long newSize = num_samples(src) + num_samples(dst);
+        int bytesPerSample = bits_per_sample(src) / 8;
+        long newSize = bytesPerSample * num_channels(src) * amount;
+        
+        //uint8_t * newData = malloc(bytesPerSamples * numChannels * num_samples(src));
+        //memcpy(newData, src->data->audiodata, bytesPerSamples * numChannels * num_samples(src));
+        uint8_t * newData = malloc(newSize);
+        memcpy(newData, src->data->audiodata, newSize);
+        set_datasize(src, newSize);
 
-        if (amount + dst_offset > num_samples(dest)) {
+        free(dst->data->audiodata);
+        dst->data->audiodata = newData;
+
+    } else {
+        if (amount + dst_offset > num_samples(dst)) {
             printf("merge_waves: too much samples to insert in destination wave, aborting merge\n");
             return -1;
         }
         long i;
         for (i = 0; i < amount; i++) {
-            set_sample(dest, i + dst_offset, get_sample(src, i));
+            set_sample(dst, i + dst_offset, get_sample(src, i));
         }
         return 1;
     }
