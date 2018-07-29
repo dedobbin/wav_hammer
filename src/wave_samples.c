@@ -64,12 +64,17 @@ void merge_waves(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset)
 		long offsetInBytes = dst->data->audiodata + bits_per_sample(dst) / 8 * num_channels(dst) * dst_offset;
 		memcpy(dataChunkThree, offsetInBytes, dataChunkThreeSize);
 
-		//TODO combine three data chunks
+		//combine three data chunks
+		long combinedDataChunksize = dataChunkOneSize + dataChunkTwoSize + dataChunkThreeSize;
+		uint8_t *  combinedDataChunk = malloc(combinedDataChunksize);
+		memcpy(combinedDataChunk,dataChunkOne, dataChunkOneSize);
+		memcpy(combinedDataChunk + dataChunkOneSize,dataChunkTwo, dataChunkTwoSize);
+		memcpy(combinedDataChunk + dataChunkOneSize + dataChunkTwoSize ,dataChunkThree, dataChunkThreeSize);
 
-		set_datasize(src, dataChunkThreeSize);
+		set_datasize(src, combinedDataChunksize);
 
         free(dst->data->audiodata);
-        dst->data->audiodata = dataChunkThree;
+        dst->data->audiodata = combinedDataChunk;
 
     } else {
         if (amount + dst_offset > num_samples(dst)) {
