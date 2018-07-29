@@ -1,5 +1,6 @@
 #ifndef DATATYPES_H_
 #define DATATYPES_H_
+
 /********** bool **********************/
 typedef int bool;
 #define true 1
