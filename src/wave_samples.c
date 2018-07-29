@@ -67,11 +67,15 @@ void merge_waves(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset)
 		//combine three data chunks
 		long combinedDataChunksize = dataChunkOneSize + dataChunkTwoSize + dataChunkThreeSize;
 		uint8_t *  combinedDataChunk = malloc(combinedDataChunksize);
-		memcpy(combinedDataChunk,dataChunkOne, dataChunkOneSize);
+		memcpy(combinedDataChunk, dataChunkOne, dataChunkOneSize);
 		memcpy(combinedDataChunk + dataChunkOneSize,dataChunkTwo, dataChunkTwoSize);
-		memcpy(combinedDataChunk + dataChunkOneSize + dataChunkTwoSize ,dataChunkThree, dataChunkThreeSize);
+		memcpy(combinedDataChunk + dataChunkOneSize + dataChunkTwoSize, dataChunkThree, dataChunkThreeSize);
 
 		set_datasize(src, combinedDataChunksize);
+
+		free(dataChunkOne);
+		free(dataChunkTwo);
+		free(dataChunkThree);
 
         free(dst->data->audiodata);
         dst->data->audiodata = combinedDataChunk;
