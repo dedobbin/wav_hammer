@@ -50,36 +50,25 @@ void merge_waves(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset)
 
 		//get samples of dst wave before dst_offset, they should be left intact
 		long dataChunkOneSize = bytesPerSample * numChannels * dst_offset;
-		uint8_t * dataChunkOne = malloc(dataChunkOneSize);
-        memcpy(dataChunkOne, dst->data->audiodata, dataChunkOneSize);
-        
-		//get amount of samples from src to insert
 		long dataChunkTwoSize = bytesPerSample * numChannels * amount;
-		uint8_t * dataChunkTwo = malloc(dataChunkTwoSize);
-		memcpy(dataChunkTwo, src->data->audiodata, dataChunkTwoSize);
-
-		//get tail part of original dst wave, they should stay intact
 		long dataChunkThreeSize = bytesPerSample * numChannels * (num_samples(dst) - dst_offset);
-		uint8_t * dataChunkThree = malloc(dataChunkThreeSize);
-		long offsetInBytes = dst->data->audiodata + bits_per_sample(dst) / 8 * num_channels(dst) * dst_offset;
-		memcpy(dataChunkThree, offsetInBytes, dataChunkThreeSize);
-
-		//combine three data chunks
 		long combinedDataChunksize = dataChunkOneSize + dataChunkTwoSize + dataChunkThreeSize;
 		uint8_t *  combinedDataChunk = malloc(combinedDataChunksize);
-		memcpy(combinedDataChunk, dataChunkOne, dataChunkOneSize);
-		memcpy(combinedDataChunk + dataChunkOneSize,dataChunkTwo, dataChunkTwoSize);
-		memcpy(combinedDataChunk + dataChunkOneSize + dataChunkTwoSize, dataChunkThree, dataChunkThreeSize);
+
+		//samples from src before dst_offset should be left intact
+        memcpy(combinedDataChunk, dst->data->audiodata, dataChunkOneSize);
+        
+		//get amount of samples from src to insert
+		memcpy(combinedDataChunk + dataChunkOneSize, src->data->audiodata, dataChunkTwoSize);
+
+		//get tail part of original dst wave, they should stay intact
+		long offsetInBytes = dst->data->audiodata + bits_per_sample(dst) / 8 * num_channels(dst) * dst_offset;
+		memcpy(combinedDataChunk + dataChunkOneSize + dataChunkTwoSize, offsetInBytes, dataChunkThreeSize);
 
 		set_datasize(src, combinedDataChunksize);
 
-		free(dataChunkOne);
-		free(dataChunkTwo);
-		free(dataChunkThree);
-
         free(dst->data->audiodata);
         dst->data->audiodata = combinedDataChunk;
-
     } else {
         if (amount + dst_offset > num_samples(dst)) {
             printf("merge_waves: too much samples to insert in destination wave, aborting merge\n");
