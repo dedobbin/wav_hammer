@@ -44,6 +44,14 @@ void insert_samples(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset
 {
     bool overwrite = false;
     if (!overwrite) {
+		if (num_channels(src) != num_channels(dst)) {
+			printf("insert_samples: Trying to insert %d-channel data to %d-channel data, aborting\n", num_channels(src), num_channels(dst));
+			return -2;
+		}
+		
+		if (amount > num_samples(src))
+			amount = num_samples(src);
+
 		//datasize = bytes per samples * number of channels * n samples
         int bytesPerSample = bits_per_sample(src) /8;
 		int numChannels = num_channels(src);
@@ -68,7 +76,7 @@ void insert_samples(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset
         dst->data->audiodata = combinedDataChunk;
     } else {
         if (amount + dst_offset > num_samples(dst)) {
-            printf("merge_waves: too much samples to insert in destination wave, aborting merge\n");
+            printf("insert_samples: too much samples to insert in destination wave, aborting\n");
             return -1;
         }
         long i;

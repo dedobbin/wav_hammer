@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
   }
 
   Raw_wave * waveTwo;
-  if (!load_wave(&waveTwo, "../../audio/ashlee.wav")) {
+  if (!load_wave(&waveTwo, "../../audio/tone.wav")) {
       printf("Could not init wave two");
   }
 
@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
   printf("===================\n");
 
   printf("merging .wavs..\n");
-  insert_samples(waveOne, waveTwo, num_samples(waveTwo) , num_samples(waveOne)/4);
+  insert_samples(waveOne, waveTwo, num_samples(waveTwo) * 2, num_samples(waveOne)/4);
 
   printf("===================\n");
   print_wave(waveOne);
