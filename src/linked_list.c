@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "linked_list.h"
 #include "datatypes.h"
 
 /////////////////// private functions /////////////////////////////////

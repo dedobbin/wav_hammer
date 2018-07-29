@@ -6,40 +6,48 @@
 #include <string.h>
 #include "raw_wave.h"
 #include "hamming.h"
-#include "linked_list.h"
 #include "datatypes.h"
 
 
 int main(int argc, char* argv[])
 {
-  printf("loading .wavs..\n");
-  Raw_wave * waveOne;
-  if (!load_wave(&waveOne, "../../audio/fdgfdg.wav")) {
-      printf("Could not init wave one");
-  }
+	Linked_list * list = llist_create();
+	llist_push(&list, 0);
+	llist_push(&list, 1);
+	llist_push(&list, 2);
 
-  Raw_wave * waveTwo;
-  if (!load_wave(&waveTwo, "../../audio/tone.wav")) {
-      printf("Could not init wave two");
-  }
+	llist_print(&list);
 
-  printf("===================\n");
-  print_wave(waveTwo);
-  printf("===================\n");
 
-  printf("merging .wavs..\n");
-  insert_samples(waveOne, waveTwo, num_samples(waveTwo) * 2, num_samples(waveOne)/4);
 
-  printf("===================\n");
-  print_wave(waveOne);
-  printf("===================\n");
+	printf("loading .wavs..\n");
+	Raw_wave * waveOne;
+	if (!load_wave(&waveOne, "../../audio/input.wav")) {
+		printf("Could not init wave one");
+	}
 
-  printf("Writing .wav to disk..\n");
-  write_wave(waveOne, "../../audio/output.wav");
+	Raw_wave * waveTwo;
+	if (!load_wave(&waveTwo, "../../audio/ashlee.wav")) {
+		printf("Could not init wave two");
+	}
 
-  printf("Done\n");
-  getchar();
-  return 0;
+	printf("===================\n");
+	print_wave(waveTwo);
+	printf("===================\n");
+
+	printf("merging .wavs..\n");
+	insert_samples(waveOne, waveTwo, num_samples(waveTwo) * 2, 0);
+
+	printf("===================\n");
+	print_wave(waveOne);
+	printf("===================\n");
+
+	printf("Writing .wav to disk..\n");
+	write_wave(waveOne, "../../audio/output.wav");
+
+	printf("Done\n");
+	getchar();
+	return 0;
 
 }
 

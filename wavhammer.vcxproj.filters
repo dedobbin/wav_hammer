@@ -38,9 +38,6 @@
     <ClInclude Include="src\hamming.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\linked_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\raw_wave.h">
       <Filter>Header Files</Filter>
     </ClInclude>
