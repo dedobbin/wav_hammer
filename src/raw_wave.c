@@ -1,13 +1,13 @@
 #ifdef __linux__ 
 #include <unistd.h>
 #elif _WIN32
+#include <io.h>
 #endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 #include "raw_wave.h"
-
 
 static const DATA_CHUNK_OFFSET = 36;
 static const DATA_OFFSET = 44;
@@ -22,8 +22,12 @@ int load_wave(Raw_wave ** wave, const char* const path)
     fprintf(stderr, "Could not open file '%s' for reading\n", path);
     return -2;
   }
-
   #endif
+
+  if ((_access(path, 0))){
+	  fprintf(stderr, "Could not open file '%s'\n", path);
+	  return -2;
+  }
   
   fseek(f, 0L, SEEK_END);
   long filesize = ftell(f);
