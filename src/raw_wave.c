@@ -24,8 +24,8 @@ int load_wave(Raw_wave ** wave, const char* const path)
   }
   #endif
 
-  if ((_access(path, 0))){
-	  fprintf(stderr, "Could not open file '%s'\n", path);
+  if ((_access(path, 0) == -1)){
+	  fprintf(stderr, "load_wave: File '%s' does not exist\n", path);
 	  return -2;
   }
   
