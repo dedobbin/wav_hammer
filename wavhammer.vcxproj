@@ -108,7 +108,6 @@
   <ItemGroup>
     <ClInclude Include="src\datatypes.h" />
     <ClInclude Include="src\hamming.h" />
-    <ClInclude Include="src\linked_list.h" />
     <ClInclude Include="src\raw_wave.h" />
     <ClInclude Include="src\wave_samples.h" />
   </ItemGroup>

@@ -1,7 +1,6 @@
 #ifndef WAVE_SAMPLES_H
 #define WAVE_SAMPLES_H
 
-#include "linked_list.h"
 #include "raw_wave.h"
 #include "datatypes.h"
 
