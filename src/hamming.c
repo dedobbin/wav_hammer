@@ -22,6 +22,6 @@ void pointless_gain(Raw_wave * wave)
 {
   int i = 0;
   for (i=0; i < datasize(wave); i++){
-    wave->data->audiodata[i]*=2;
+    wave->data_chunk->audiodata[i]*=2;
   }
 }

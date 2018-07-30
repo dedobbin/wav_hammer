@@ -9,7 +9,7 @@ long get_sample(Raw_wave * wave, int nSample)
   if (nSample <= num_samples(wave)){
     assert(sizeof(long) >= 4);
     int blockAlign = block_align(wave);
-    char * ptr = wave->data->audiodata + nSample * blockAlign;
+    char * ptr = wave->data_chunk->audiodata + nSample * blockAlign;
     memcpy(&result, ptr, blockAlign); 
   }
   return result;
@@ -19,7 +19,7 @@ void set_sample(Raw_wave * wave, int nSample, long value)
 {
   if (nSample <= num_samples(wave)){
     int blockAlign = block_align(wave);
-    memcpy(wave->data->audiodata + nSample * blockAlign, &value, blockAlign);
+    memcpy(wave->data_chunk->audiodata + nSample * blockAlign, &value, blockAlign);
   }
 }
 
@@ -64,16 +64,16 @@ void insert_samples(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset
 		uint8_t *  combinedDataChunk = malloc(combinedDataChunksize);
 
 		//samples from src before dst_offset should be left intact
-        memcpy(combinedDataChunk, dst->data->audiodata, dataChunkOneSize);
+        memcpy(combinedDataChunk, dst->data_chunk->audiodata, dataChunkOneSize);
 		//get amount of samples from src to insert
-		memcpy(combinedDataChunk + dataChunkOneSize, src->data->audiodata, dataChunkTwoSize);
+		memcpy(combinedDataChunk + dataChunkOneSize, src->data_chunk->audiodata, dataChunkTwoSize);
 		//get tail part of original dst wave, they should stay intact
-		long offsetInBytes = dst->data->audiodata + bits_per_sample(dst) / 8 * num_channels(dst) * dst_offset;
+		long offsetInBytes = dst->data_chunk->audiodata + bits_per_sample(dst) / 8 * num_channels(dst) * dst_offset;
 		memcpy(combinedDataChunk + dataChunkOneSize + dataChunkTwoSize, offsetInBytes, dataChunkThreeSize);
 
 		set_datasize(src, combinedDataChunksize);
-        free(dst->data->audiodata);
-        dst->data->audiodata = combinedDataChunk;
+        free(dst->data_chunk->audiodata);
+        dst->data_chunk->audiodata = combinedDataChunk;
     } else {
         if (amount + dst_offset > num_samples(dst)) {
             printf("insert_samples: too much samples to insert in destination wave, aborting\n");

@@ -9,13 +9,6 @@ static const FMT_CHUNK_SIZE = 24;
 //Size of data chunk is dynamic, header size is static
 static const DATA_CHUNK_HEADER_SIZE = 8;
 
-typedef struct RIFF_chunk{
-  uint8_t * raw_data;
-}RIFF_chunk;
-
-typedef struct Fmt_chunk{
- uint8_t * raw_data;
-}Fmt_chunk;
 
 typedef struct Data_chunk{
   uint8_t * raw_header_data;
@@ -28,10 +21,10 @@ typedef struct Info_chunk{
 }Info_chunk;
 
 typedef struct Raw_wave{
-  RIFF_chunk * riff;
-  Fmt_chunk * fmt;
-  Data_chunk * data;
-  Info_chunk * info;  //Optional
+  uint8_t * riff_chunk;
+  uint8_t * fmt_chunk;
+  Data_chunk * data_chunk;
+  Info_chunk * info_chunk;  //Optional
 }Raw_wave;
 
 int load_wave(Raw_wave ** wave, const char* const path);
