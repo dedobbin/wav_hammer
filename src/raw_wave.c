@@ -162,6 +162,10 @@ void destroy_wave(Raw_wave ** wave)
 Raw_wave * create_header()
 {
 	int subchunk1Size = 16;	//16 for pcm
+	//ChunkSize is part of riff chunk: 4 + (8 + SubChunk1Size) + (8 + actual datasize)
+	//AKA entire file in bytes minus 8 bytes for thetwo fields not included in this count:ChunkID and ChunkSize.
+	//So should be 36 for pcm if there is no data.
+	int ChunkSize = 36;
 	int audioFormat = 1;	//1 for pcm 
 	int numChannels = 2;
 	int samplerate = 44100;
@@ -174,12 +178,12 @@ Raw_wave * create_header()
 		if (wave->riff_chunk = malloc(RIFF_CHUNK_SIZE)) {
 			char riffStr[] = "RIFF";
 			memcpy(wave->riff_chunk, riffStr, 4);
-			memcpy(wave->riff_chunk + 4, &RIFF_CHUNK_SIZE, 4);
+			memcpy(wave->riff_chunk + 4, &ChunkSize, 4);
 			char waveStr[] = "WAVE";
 			memcpy(wave->riff_chunk + 8, waveStr, 4);
 		}
 		if (wave->fmt_chunk = malloc(FMT_CHUNK_SIZE)) {
-			char fmtStr[] = "fmt";
+			char fmtStr[] = "fmt ";
 			memcpy(wave->fmt_chunk, fmtStr, 4);
 			memcpy(wave->fmt_chunk + 4, &subchunk1Size, 4);
 			memcpy(wave->fmt_chunk + 8, &audioFormat, 2);
@@ -197,6 +201,8 @@ Raw_wave * create_header()
 				memcpy(wave->data_chunk->raw_header_data + 4, &dataSize, 4);
 			}
 		}
+		wave->data_chunk->audiodata = NULL;
+		wave->info_chunk = NULL;
 	}
 	return wave;
 }
@@ -236,6 +242,13 @@ void print_wave(Raw_wave * wave)
   printf("number of samples: %d\n", num_samples(wave));
   printf("First 2 samples: %08lx %08lx \n", 
     get_sample(wave, 0), get_sample(wave, 1));
+}
+
+unsigned chunk_size(const Raw_wave * wave)
+{
+	unsigned result = 0;
+	memcpy(&result, wave->riff_chunk + 4, 4);
+	return result;
 }
 
 unsigned audio_format(const Raw_wave * wave)
@@ -310,3 +323,4 @@ void set_datasize(Raw_wave * wave, int dataSize)
 {
   memcpy(wave->data_chunk->raw_header_data + 4, &dataSize, 4);
 }
+

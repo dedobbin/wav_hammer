@@ -11,8 +11,9 @@
 
 int main(int argc, char* argv[])
 {
-	merge_waves();	
-	
+	Raw_wave * wave = merge_waves();	
+	write_wave(wave, "../../audio/output.wav");
+
 	/**
 	Linked_list * list = llist_create();
 	llist_push(&list, 0);

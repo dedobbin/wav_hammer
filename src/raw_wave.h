@@ -33,6 +33,11 @@ void destroy_wave(Raw_wave ** wave);
 Raw_wave * create_header();
 void print_wave(Raw_wave * wave);
 
+//Seems to be ignored most of the time
+//ChunkSize is part of riff chunk: 4 + (8 + SubChunk1Size) + (8 + actual datasize)
+//AKA entire file in bytes minus 8 bytes for thetwo fields not included in this count:ChunkID and ChunkSize.
+//So should be 36 for pcm if there is no data.
+unsigned chunk_size(const Raw_wave * wave);
 unsigned audio_format(const Raw_wave * const wave);
 unsigned num_channels(const Raw_wave * const wave);
 unsigned samplerate(const Raw_wave * const wave);
@@ -42,6 +47,7 @@ unsigned bits_per_sample(const Raw_wave * const wave);
 unsigned datasize(const Raw_wave * const wave);
 unsigned num_samples(const Raw_wave * const wave);
 
+void set_chunk_size(Raw_wave * wave, int numChannels);
 void set_num_channels(Raw_wave * wave, int numChannels);
 void set_block_align(Raw_wave * wave, int blockAlign);
 void set_datasize(Raw_wave * wave, int dataSize);

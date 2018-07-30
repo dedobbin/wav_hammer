@@ -40,9 +40,8 @@ void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num)
   }
 }
 
-void insert_samples(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset)
+void insert_samples(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset, bool overwrite)
 {
-    bool overwrite = false;
     if (!overwrite) {
 		if (num_channels(src) != num_channels(dst)) {
 			printf("insert_samples: Trying to insert %d-channel data to %d-channel data, aborting\n", num_channels(src), num_channels(dst));
@@ -71,9 +70,14 @@ void insert_samples(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset
 		long offsetInBytes = dst->data_chunk->audiodata + bits_per_sample(dst) / 8 * num_channels(dst) * dst_offset;
 		memcpy(combinedDataChunk + dataChunkOneSize + dataChunkTwoSize, offsetInBytes, dataChunkThreeSize);
 
-		set_datasize(src, combinedDataChunksize);
-        free(dst->data_chunk->audiodata);
+        if (dst->data_chunk->audiodata)
+			free(dst->data_chunk->audiodata);
         dst->data_chunk->audiodata = combinedDataChunk;
+
+		set_datasize(dst, combinedDataChunksize);
+		//chunk size is entire filesize in bytes - 8
+		set_chunk_size(dst, chunk_size(dst) + combinedDataChunksize);
+
     } else {
         if (amount + dst_offset > num_samples(dst)) {
             printf("insert_samples: too much samples to insert in destination wave, aborting\n");

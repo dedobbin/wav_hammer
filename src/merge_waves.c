@@ -1,32 +1,19 @@
 #include "merge_waves.h"
+#include "wave_samples.h"
 #include <dirent.h>
 
-void create_file_list(FILE * dstList[], int n, char * path)
+void create_file_list(char * dstList[], int n, char * path)
 {
 	DIR *dir;
 	struct dirent *ent;
 	int i = 0;
 	if ((dir = opendir(path)) != NULL) {
 		while ((ent = readdir(dir)) != NULL) {
-			printf("%s\n", ent->d_name);
 			//+1 because need extra /
-			char * filepath = malloc(strlen(path) + strlen(ent->d_name)+1);
-			strcpy(filepath, path);
-			strcat(filepath, "/");
-			strcat(filepath, ent->d_name);
-			FILE * f = fopen(filepath, "rb");
-#ifdef __linux__ 
-			if (!f || access(path, R_OK)) {
-				fprintf(stderr, "create_file_list: Could not open file '%s' for reading\n", path);
-				continue;
-			}
-#elif _WIN32
-			if ((_access(path, 0) == -1)) {
-				fprintf(stderr, "create_file_list: File '%s' does not exist\n", path);
-				continue;
-			}
-#endif
-			dstList[i++] = f;
+			dstList[i] = malloc(strlen(path) + strlen(ent->d_name) + 1);
+			strcpy(dstList[i], path);
+			strcat(dstList[i], "/");
+			strcat(dstList[i], ent->d_name);
 		}
 		closedir(dir);
 	}
@@ -37,9 +24,17 @@ void create_file_list(FILE * dstList[], int n, char * path)
 
 Raw_wave * merge_waves()
 {
-	FILE * list[5];
+	char * list[5];
 	create_file_list(list, 5, "../../audio");
-	Raw_wave * header = create_header();
-	int tmp = bits_per_sample(header);
-	return;
+	Raw_wave * container = create_header();
+	//void insert_samples(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset, bool overwrite);
+	Raw_wave * fileOne;
+	load_wave(&fileOne, list[0]);
+	insert_samples(container, fileOne, num_samples(fileOne), 0, false);
+	printf("%s\n", list[0]);
+	print_wave(container);
+	printf("---------------------\n");
+	print_wave(fileOne);
+	printf("---------------------\n");
+	return container;
 }
