@@ -75,8 +75,6 @@ int load_wave(Raw_wave ** wave, const char* const path)
   
   //Teh data chunk ( = dynamic size)
   (*wave)->data = malloc(sizeof(Data_chunk));
-
-
   (*wave)->data->raw_header_data = malloc(DATA_CHUNK_HEADER_SIZE);
   memcpy((*wave)->data->raw_header_data, buffer+DATA_CHUNK_OFFSET, DATA_CHUNK_HEADER_SIZE);
   
@@ -168,6 +166,47 @@ void destroy_wave(Raw_wave ** wave)
   }
   free(*wave);
   *wave = NULL;
+}
+
+Raw_wave * create_header()
+{
+	/**
+	int subchunk1Size = 16;	//16 for pcm
+	int audioFormat = 1;	//1 for pcm 
+	int numChannels = 2;
+	int samplerate = 44100;
+	int bitsPerSample = 16;
+	int blockAlign = numChannels * bitsPerSample / 8;
+	int byteRate = samplerate * numChannels * bitsPerSample / 8;
+
+	Raw_wave * wave = NULL;
+	if (wave = malloc(sizeof(Raw_wave))) {
+		if (wave->riff = malloc(RIFF_CHUNK_SIZE)) {
+			strcpy(wave->riff, 4, "RIFF");
+			memcpy(wave->riff + 4, &RIFF_CHUNK_SIZE, 4);
+			strcpy(wave->riff + 8, 4, "RIFF");
+		}
+		if (wave->fmt = malloc(FMT_CHUNK_SIZE)) {
+			strcpy(wave->fmt, 'fmt', 4);
+			memcpy(wave->fmt + 4, &subchunk1Size, 4);
+			memcpy(wave->fmt + 8, &audioFormat, 2);
+			memcpy(wave->fmt + 10, &num_channels, 2);
+			memcpy(wave->fmt + 12, &samplerate, 4);
+			memcpy(wave->fmt + 16, &byteRate, 4);
+			memcpy(wave->fmt + 20, &blockAlign, 2);
+			memcpy(wave->fmt + 22, &bitsPerSample, 2);
+		}
+		if (wave->data->raw_header_data = malloc(DATA_CHUNK_HEADER_SIZE) != NULL) {
+			strcpy(wave->data->raw_header_data, "data", 4);
+			int dataSize = 0;
+			memcpy(wave->data->raw_header_data, &dataSize, 4);
+		}
+
+	}
+
+
+	return wave;
+	**/
 }
 
 void print_wave(Raw_wave * wave)

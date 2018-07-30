@@ -35,9 +35,10 @@ void create_file_list(FILE * dstList[], int n, char * path)
 	}
 }
 
-void merge_waves()
+Raw_wave * merge_waves()
 {
 	FILE * list[5];
 	create_file_list(list, 5, "../../audio");
+	Raw_wave * header = create_header();
 	return;
 }
