@@ -30,11 +30,7 @@ Raw_wave * merge_waves()
 	//void insert_samples(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset, bool overwrite);
 	Raw_wave * fileOne;
 	load_wave(&fileOne, list[0]);
-	insert_samples(container, fileOne, num_samples(fileOne), 0, false);
-	printf("%s\n", list[0]);
-	print_wave(container);
-	printf("---------------------\n");
-	print_wave(fileOne);
-	printf("---------------------\n");
+	insert_samples(container, fileOne,num_samples(fileOne), 0, false);
+	
 	return container;
 }

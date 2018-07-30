@@ -51,6 +51,9 @@ void insert_samples(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset
 		if (amount > num_samples(src))
 			amount = num_samples(src);
 
+		if (dst_offset > num_samples(dst))
+			dst_offset = num_samples(dst);
+
 		//datasize = bytes per samples * number of channels * n samples
         int bytesPerSample = bits_per_sample(src) /8;
 		int numChannels = num_channels(src);
@@ -75,8 +78,6 @@ void insert_samples(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset
         dst->data_chunk->audiodata = combinedDataChunk;
 
 		set_datasize(dst, combinedDataChunksize);
-		//chunk size is entire filesize in bytes - 8
-		set_chunk_size(dst, chunk_size(dst) + combinedDataChunksize);
 
     } else {
         if (amount + dst_offset > num_samples(dst)) {
