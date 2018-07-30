@@ -47,8 +47,8 @@ unsigned bits_per_sample(const Raw_wave * const wave);
 unsigned datasize(const Raw_wave * const wave);
 unsigned num_samples(const Raw_wave * const wave);
 
-void set_chunk_size(Raw_wave * wave, int numChannels);
 void set_num_channels(Raw_wave * wave, int numChannels);
 void set_block_align(Raw_wave * wave, int blockAlign);
 void set_datasize(Raw_wave * wave, int dataSize);
+void set_info_chunk(Raw_wave * const wave, const uint8_t * const new_info_chunk_data, int new_info_chunk_size);
 #endif

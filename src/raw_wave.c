@@ -352,16 +352,25 @@ unsigned num_samples(const Raw_wave * const wave)
 
 void set_num_channels(Raw_wave * wave, int numChannels)
 {
-  memcpy(wave->fmt_chunk + 10, &numChannels, 2);
+	memcpy(wave->fmt_chunk + 10, &numChannels, 2);
 }
 
 void set_block_align(Raw_wave * wave, int blockAlign)
 {
-  memcpy(wave->fmt_chunk + 20, &blockAlign, 2);
+	memcpy(wave->fmt_chunk + 20, &blockAlign, 2);
 }
 
 void set_datasize(Raw_wave * wave, int dataSize)
 {
-  memcpy(wave->data_chunk->raw_header_data + 4, &dataSize, 4);
+	memcpy(wave->data_chunk->raw_header_data + 4, &dataSize, 4);
 }
 
+void set_info_chunk(Raw_wave * const wave, const uint8_t * const new_info_chunk_data, int new_info_chunk_size)
+{
+	if (wave->info_chunk->raw_data == NULL)
+		free(wave->info_chunk->raw_data);
+
+	wave->info_chunk->raw_data = malloc(new_info_chunk_size);
+	memcpy(wave->info_chunk->raw_data, new_info_chunk_data, new_info_chunk_size);
+	wave->info_chunk->size = new_info_chunk_size;
+}

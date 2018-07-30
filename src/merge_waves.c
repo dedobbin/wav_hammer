@@ -30,7 +30,12 @@ Raw_wave * merge_waves()
 	//void insert_samples(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset, bool overwrite);
 	Raw_wave * fileOne;
 	load_wave(&fileOne, list[0]);
-	insert_samples(container, fileOne,num_samples(fileOne), 0, false);
 	
+	srand(time(NULL));
+	// (rand()%(max-min))+min;
+	int amount = (rand() % (num_samples(fileOne) - 0) + 0);
+	insert_samples(container, fileOne, num_samples(fileOne)/2, 0, false);
+	if(fileOne->info_chunk)
+		set_info_chunk(container, fileOne->info_chunk->raw_data, fileOne->info_chunk->size);
 	return container;
 }
