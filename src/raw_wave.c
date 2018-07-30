@@ -237,6 +237,7 @@ void print_wave(Raw_wave * wave)
   printf("numChannels: %d\n", num_channels(wave));
   printf("samplerate: %d\n", samplerate(wave));
   printf("block_align: %d\n", block_align(wave));
+  printf("chunk_size: %d\n", chunk_size(wave));
   printf("byterate: %d\n", byterate(wave));
   printf("bits per sample: %d\n", bits_per_sample(wave));
   printf("number of samples: %d\n", num_samples(wave));
@@ -246,59 +247,99 @@ void print_wave(Raw_wave * wave)
 
 unsigned chunk_size(const Raw_wave * wave)
 {
-	unsigned result = 0;
-	memcpy(&result, wave->riff_chunk + 4, 4);
+	//4 byte value from riff_chunk, offset 4
+	uint32_t result = 0;
+	int i;
+	for (i = 0; i < 4; i++) {
+		int value = *(wave->riff_chunk + 4 + i);
+		result |= value << 8 * i;
+	}
 	return result;
 }
 
 unsigned audio_format(const Raw_wave * wave)
 {
-  unsigned result = 0;
-  memcpy(&result, wave->fmt_chunk+8, 2);
-  return result;
+	//2 byte value from fmt_chunk, offset 8
+	uint16_t result = 0;
+	int i;
+	for (i = 0; i < 2; i++) {
+		int value = *(wave->fmt_chunk + 8 + i);
+		result |= value << 8 * i;
+	}
+	return result;
 }
 
 
 unsigned num_channels(const Raw_wave * const wave)
 {
-  unsigned result = 0;
-  memcpy(&result, wave->fmt_chunk+10, 2);
-  return result;
+	//2 byte value from fmt_chunk, offset 10
+	uint16_t result = 0;
+	int i;
+	for (i = 0; i < 2; i++) {
+		int value = *(wave->fmt_chunk + 10 + i);
+		result |= value << 8 * i;
+	}
+	return result;
 }
 
 unsigned samplerate(const Raw_wave * const wave)
 {
-  unsigned result = 0;
-  memcpy(&result, wave->fmt_chunk+12, 4);
-  return result;
+	//4 byte value from fmt_chunk, offset 12
+	uint32_t result = 0;
+	int i;
+	for (i = 0; i < 4; i++) {
+		int value = *(wave->fmt_chunk + 12 + i);
+		result |= value << 8 * i;
+	}
+	return result;
 }
 
 unsigned byterate(const Raw_wave * const wave)
 {
-  unsigned result = 0;
-  memcpy(&result, wave->fmt_chunk+16, 4);
-  return result;
+	//4 byte value from fmt_chunk, offset 16
+	uint32_t result = 0;
+	int i;
+	for (i = 0; i < 4; i++) {
+		int value = *(wave->fmt_chunk + 16 + i);
+		result |= value << 8 * i;
+	}
+	return result;
 }
 
 unsigned block_align(const Raw_wave * const wave)
 {
-    unsigned result = *((wave->fmt_chunk) + 20);
-    result &= 0xFFFF;   //2 bytes value
-    return result;
+	//2 byte value from fmt_chunk, offset 20
+	uint16_t result = 0;
+	int i;
+	for (i = 0; i < 2; i++) {
+		int value = *(wave->fmt_chunk + 20 + i);
+		result |= value << 8 * i;
+	}
+	return result;
 }
 
 unsigned bits_per_sample(const Raw_wave * const wave)
 {
-  unsigned result = 0;
-  memcpy(&result, wave->fmt_chunk + 22, 2);
-  return result;
+	//2 byte value from fmt_chunk, offset 22
+	uint16_t result = 0;
+	int i;
+	for (i = 0; i < 2; i++) {
+		int value = *(wave->fmt_chunk + 22 + i);
+		result |= value << 8 * i;
+	}
+	return result;
 }
 
 unsigned datasize(const Raw_wave * const wave)
 {
-   unsigned result = 0;
-   memcpy(&result, wave->data_chunk->raw_header_data + 4, 4);
-   return result;
+	//4 byte value from data_chunk, offset 4
+	uint32_t result = 0;
+	int i;
+	for (i = 0; i < 4; i++) {
+		int value = *(wave->data_chunk->raw_header_data + 4 + i);
+		result |= value << 8 * i;
+	}
+	return result;
 }
 
 unsigned num_samples(const Raw_wave * const wave)

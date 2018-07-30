@@ -11,8 +11,17 @@
 
 int main(int argc, char* argv[])
 {
+	Raw_wave * wave;
+	if (!load_wave(&wave, "../../audio/input.wav")) {
+		printf("Could not init wave one");
+	}
+	print_wave(wave);
+	write_wave(wave, "../../audio/output.wav");
+	destroy_wave(&wave);
+	/**
 	Raw_wave * wave = merge_waves();	
 	write_wave(wave, "../../audio/output.wav");
+	**/
 
 	/**
 	Linked_list * list = llist_create();
