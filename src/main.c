@@ -11,10 +11,9 @@
 
 int main(int argc, char* argv[])
 {
-	/**
-	merge_waves();
-	**/
+	merge_waves();	
 	
+	/**
 	Linked_list * list = llist_create();
 	llist_push(&list, 0);
 	llist_push(&list, 1);
@@ -47,7 +46,7 @@ int main(int argc, char* argv[])
 	write_wave(waveOne, "../../audio/output.wav");
 
 	printf("Done\n");
-	
+	**/
 	getchar();
 	return 0;
 

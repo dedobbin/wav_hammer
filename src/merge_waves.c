@@ -40,5 +40,6 @@ Raw_wave * merge_waves()
 	FILE * list[5];
 	create_file_list(list, 5, "../../audio");
 	Raw_wave * header = create_header();
+	int tmp = bits_per_sample(header);
 	return;
 }

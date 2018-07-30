@@ -161,7 +161,6 @@ void destroy_wave(Raw_wave ** wave)
 
 Raw_wave * create_header()
 {
-	/**
 	int subchunk1Size = 16;	//16 for pcm
 	int audioFormat = 1;	//1 for pcm 
 	int numChannels = 2;
@@ -172,32 +171,34 @@ Raw_wave * create_header()
 
 	Raw_wave * wave = NULL;
 	if (wave = malloc(sizeof(Raw_wave))) {
-		if (wave->riff = malloc(RIFF_CHUNK_SIZE)) {
-			strcpy(wave->riff, 4, "RIFF");
-			memcpy(wave->riff + 4, &RIFF_CHUNK_SIZE, 4);
-			strcpy(wave->riff + 8, 4, "RIFF");
+		if (wave->riff_chunk = malloc(RIFF_CHUNK_SIZE)) {
+			char riffStr[] = "RIFF";
+			memcpy(wave->riff_chunk, riffStr, 4);
+			memcpy(wave->riff_chunk + 4, &RIFF_CHUNK_SIZE, 4);
+			char waveStr[] = "WAVE";
+			memcpy(wave->riff_chunk + 8, waveStr, 4);
 		}
-		if (wave->fmt = malloc(FMT_CHUNK_SIZE)) {
-			strcpy(wave->fmt, 'fmt', 4);
-			memcpy(wave->fmt + 4, &subchunk1Size, 4);
-			memcpy(wave->fmt + 8, &audioFormat, 2);
-			memcpy(wave->fmt + 10, &num_channels, 2);
-			memcpy(wave->fmt + 12, &samplerate, 4);
-			memcpy(wave->fmt + 16, &byteRate, 4);
-			memcpy(wave->fmt + 20, &blockAlign, 2);
-			memcpy(wave->fmt + 22, &bitsPerSample, 2);
+		if (wave->fmt_chunk = malloc(FMT_CHUNK_SIZE)) {
+			char fmtStr[] = "fmt";
+			memcpy(wave->fmt_chunk, fmtStr, 4);
+			memcpy(wave->fmt_chunk + 4, &subchunk1Size, 4);
+			memcpy(wave->fmt_chunk + 8, &audioFormat, 2);
+			memcpy(wave->fmt_chunk + 10, &numChannels, 2);
+			memcpy(wave->fmt_chunk + 12, &samplerate, 4);
+			memcpy(wave->fmt_chunk + 16, &byteRate, 4);
+			memcpy(wave->fmt_chunk + 20, &blockAlign, 2);
+			memcpy(wave->fmt_chunk + 22, &bitsPerSample, 2);
 		}
-		if (wave->data->raw_header_data = malloc(DATA_CHUNK_HEADER_SIZE) != NULL) {
-			strcpy(wave->data->raw_header_data, "data", 4);
-			int dataSize = 0;
-			memcpy(wave->data->raw_header_data, &dataSize, 4);
+		if (wave->data_chunk = malloc(sizeof(Data_chunk))) {
+			if (wave->data_chunk->raw_header_data = malloc(DATA_CHUNK_HEADER_SIZE)) {
+				char dataStr[] = "data";
+				memcpy(wave->data_chunk->raw_header_data, dataStr, 4);
+				int dataSize = 0;
+				memcpy(wave->data_chunk->raw_header_data + 4, &dataSize, 4);
+			}
 		}
-
 	}
-
-
 	return wave;
-	**/
 }
 
 void print_wave(Raw_wave * wave)
