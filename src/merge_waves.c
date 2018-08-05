@@ -42,22 +42,18 @@ int create_file_list(char * dstList[], const int n, char * path)
 
 Raw_wave * merge_waves()
 {
-	int listSize = 100;
-	char * list[100];
+	int listSize = MAX_INPUT_FILES;
+	char * list[MAX_INPUT_FILES];
 	listSize = create_file_list(list, listSize, "../../audio");
 	Raw_wave * container = create_header();
 	
 	srand(time(NULL));
-
 	int i = 0;
-	//for (i = 0; i < listSize -1 ; i++) {
-	for (i = 0; i < 2 ; i++) {
+	for (i = 0; i < listSize; i++) {
 		Raw_wave * wave = NULL;
 		load_wave(&wave, list[i]);
-		//int srcAmount = random(10000, 60000);
-		int srcAmount = 60000;
-		//int srcOffset = random(10000, 60000);
-		int srcOffset = num_samples(wave) / 2;
+		int srcAmount = random(10000, 60000);
+		int srcOffset = random(10000, num_samples(wave));
 		insert_samples(container, wave, srcAmount, srcOffset, num_samples(container), false);
 		destroy_wave(&wave);
 	}

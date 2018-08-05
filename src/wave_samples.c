@@ -43,7 +43,6 @@ void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num)
 void insert_samples(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite)
 {
     if (!overwrite) {
-
 		//conversion from n_samples to n_bytes: datasize = bytes per samples * number of channels * n samples
 		int bytesPerSample = bits_per_sample(src) / 8;
 		int numChannels = num_channels(src);

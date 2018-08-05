@@ -11,11 +11,11 @@
 
 int main(int argc, char* argv[])
 {
-	/**
+
 	Raw_wave * wave = merge_waves();	
 	write_wave(wave, "../../audio/output.wav");
-	**/
 
+	/**
 	Raw_wave * container = create_header();
 	Raw_wave * wave;
 	load_wave(&wave, "../../audio/1.wav");
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 
 
 	print_wave(containerTwo);
-
+	**/
 
 	/**
 	Linked_list * list = llist_create();
