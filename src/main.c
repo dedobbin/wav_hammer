@@ -11,8 +11,34 @@
 
 int main(int argc, char* argv[])
 {
+	/**
 	Raw_wave * wave = merge_waves();	
 	write_wave(wave, "../../audio/output.wav");
+	**/
+
+	Raw_wave * container = create_header();
+	Raw_wave * wave;
+	load_wave(&wave, "../../audio/1.wav");
+	int srcAmount = 60000;
+	//int srcOffset = random(10000, 60000);
+	insert_samples(container, wave, srcAmount, 0, 0, false);
+	print_wave(container);
+
+	destroy_wave(&wave);
+	destroy_wave(&container);
+	printf("------------------------------------------------------------------------\n");
+	Raw_wave * containerTwo = create_header();
+	load_wave(&wave, "../../audio/1.wav");
+	srcAmount = 240000;
+	//int srcOffset = random(10000, 60000);
+	int srcOffset = num_samples(wave) /2;
+	insert_samples(containerTwo, wave, srcAmount, srcOffset, 0, false);
+
+	write_wave(containerTwo, "../../audio/output.wav");
+
+
+	print_wave(containerTwo);
+
 
 	/**
 	Linked_list * list = llist_create();
@@ -23,12 +49,12 @@ int main(int argc, char* argv[])
 
 	printf("loading .wavs..\n");
 	Raw_wave * waveOne;
-	if (!load_wave(&waveOne, "../../audio/input.wav")) {
+	if (!load_wave(&waveOne, "../../audio/4.wav")) {
 		printf("Could not init wave one");
 	}
 
 	Raw_wave * waveTwo;
-	if (!load_wave(&waveTwo, "../../audio/ashlee.wav")) {
+	if (!load_wave(&waveTwo, "../../audio/5.wav")) {
 		printf("Could not init wave two");
 	}
 
@@ -37,7 +63,11 @@ int main(int argc, char* argv[])
 	printf("===================\n");
 
 	printf("merging .wavs..\n");
-	insert_samples(waveOne, waveTwo, num_samples(waveTwo) * 2, 0);
+	//insert_samples(waveOne, waveTwo, num_samples(waveTwo), num_samples(waveTwo)/2, num_samples(waveOne) /2, false);
+	int srcAmount = 60000;
+	//int srcOffset = random(10000, 60000);
+	int srcOffset = num_samples(waveOne) / 2;
+	insert_samples(waveOne, waveTwo, srcAmount, srcOffset, num_samples(waveOne), false);
 
 	printf("===================\n");
 	print_wave(waveOne);
@@ -48,7 +78,8 @@ int main(int argc, char* argv[])
 
 	printf("Done\n");
 	**/
-	getchar();
+	getchar();	
+
 	return 0;
 
 }

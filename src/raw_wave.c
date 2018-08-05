@@ -241,8 +241,8 @@ void print_wave(Raw_wave * wave)
   printf("byterate: %d\n", byterate(wave));
   printf("bits per sample: %d\n", bits_per_sample(wave));
   printf("number of samples: %d\n", num_samples(wave));
-  printf("First 2 samples: %08lx %08lx \n", 
-    get_sample(wave, 0), get_sample(wave, 1));
+  printf("First 4 samples: %08lx %08lx %08lx %08lx\n", 
+    get_sample(wave, 0), get_sample(wave, 1), get_sample(wave, 2), get_sample(wave, 3));
 }
 
 unsigned chunk_size(const Raw_wave * wave)

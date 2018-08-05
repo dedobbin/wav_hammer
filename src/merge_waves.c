@@ -50,12 +50,15 @@ Raw_wave * merge_waves()
 	srand(time(NULL));
 
 	int i = 0;
-	for (i = 0; i < listSize -1 ; i++) {
+	//for (i = 0; i < listSize -1 ; i++) {
+	for (i = 0; i < 2 ; i++) {
 		Raw_wave * wave = NULL;
 		load_wave(&wave, list[i]);
-		int srcAmount = random(10000, 60000);
-		int dstOffset = random(10000, 60000);
-		insert_samples(container, wave, srcAmount, dstOffset, false);
+		//int srcAmount = random(10000, 60000);
+		int srcAmount = 60000;
+		//int srcOffset = random(10000, 60000);
+		int srcOffset = num_samples(wave) / 2;
+		insert_samples(container, wave, srcAmount, srcOffset, num_samples(container), false);
 		destroy_wave(&wave);
 	}
 	return container;
