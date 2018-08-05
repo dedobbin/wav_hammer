@@ -367,8 +367,13 @@ void set_datasize(Raw_wave * wave, int dataSize)
 
 void set_info_chunk(Raw_wave * const wave, const uint8_t * const new_info_chunk_data, int new_info_chunk_size)
 {
-	if (wave->info_chunk->raw_data == NULL)
+	if (!wave->info_chunk) {
+		wave->info_chunk = malloc(sizeof(wave->info_chunk));
+	}
+	else if (wave->info_chunk->raw_data) {
 		free(wave->info_chunk->raw_data);
+		
+	}
 
 	wave->info_chunk->raw_data = malloc(new_info_chunk_size);
 	memcpy(wave->info_chunk->raw_data, new_info_chunk_data, new_info_chunk_size);
