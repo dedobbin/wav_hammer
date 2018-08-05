@@ -2,20 +2,37 @@
 #include "wave_samples.h"
 #include <dirent.h>
 
-void create_file_list(char * dstList[], int n, char * path)
+
+int random(int min, int max)
+{
+	int result  = (double)rand() / (RAND_MAX + 1) * (max - min) + min;
+	//printf("%d\t(%d) \n", result, num_samples(fileOne));
+	return result;
+}
+void create_file_list(char * dstList[], const int n, char * path)
 {
 	DIR *dir;
 	struct dirent *ent;
 	int i = 0;
 	if ((dir = opendir(path)) != NULL) {
 		while ((ent = readdir(dir)) != NULL) {
-			//+1 because need extra /
-			dstList[i] = malloc(strlen(path) + strlen(ent->d_name) + 1);
-			strcpy(dstList[i], path);
-			strcat(dstList[i], "/");
-			strcat(dstList[i], ent->d_name);
+			if (((strcmp(ent->d_name, ".", 1) == 0) && strlen(ent->d_name) == 1)
+				|| ((strcmp(ent->d_name, "..", 2) == 0) && strlen(ent->d_name) == 2)) {
+				continue;
+			}
+			else {
+				//+1 because need extra slash
+				dstList[i] = malloc(strlen(path) + strlen(ent->d_name) + 1);
+				strcpy(dstList[i], path);
+				strcat(dstList[i], "/");
+				strcat(dstList[i], ent->d_name);
+				i++;
+				if (i >= n) 
+					break;
+			}
 		}
 		closedir(dir);
+		return EXIT_SUCCESS;
 	}
 	else {
 		return EXIT_FAILURE;
@@ -24,18 +41,21 @@ void create_file_list(char * dstList[], int n, char * path)
 
 Raw_wave * merge_waves()
 {
-	char * list[5];
-	create_file_list(list, 5, "../../audio");
+	const listSize = 7;
+	char * list[7];
+	create_file_list(list, listSize, "../../audio");
 	Raw_wave * container = create_header();
-	//void insert_samples(Raw_wave * dst, Raw_wave * src, long amount, long dst_offset, bool overwrite);
-	Raw_wave * fileOne;
-	load_wave(&fileOne, list[0]);
 	
 	srand(time(NULL));
-	// (rand()%(max-min))+min;
-	int amount = (rand() % (num_samples(fileOne) - 0) + 0);
-	insert_samples(container, fileOne, num_samples(fileOne)/2, 0, false);
-	if(fileOne->info_chunk)
-		set_info_chunk(container, fileOne->info_chunk->raw_data, fileOne->info_chunk->size);
+
+	int i = 0;
+	for (i = 0; i < listSize -1 ; i++) {
+		Raw_wave * wave = NULL;
+		load_wave(&wave, list[i]);
+		int srcAmount = random(num_samples(wave) / 40, num_samples(wave) / 60);
+		int dstOffset = random(num_samples(container) / 60, num_samples(container));
+		insert_samples(container, wave, srcAmount, dstOffset, false);
+		destroy_wave(&wave);
+	}
 	return container;
 }

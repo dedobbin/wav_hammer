@@ -372,7 +372,6 @@ void set_info_chunk(Raw_wave * const wave, const uint8_t * const new_info_chunk_
 	}
 	else if (wave->info_chunk->raw_data) {
 		free(wave->info_chunk->raw_data);
-		
 	}
 
 	wave->info_chunk->raw_data = malloc(new_info_chunk_size);
