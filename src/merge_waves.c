@@ -9,7 +9,8 @@ int random(int min, int max)
 	//printf("%d\t(%d) \n", result, num_samples(fileOne));
 	return result;
 }
-void create_file_list(char * dstList[], const int n, char * path)
+
+int create_file_list(char * dstList[], const int n, char * path)
 {
 	DIR *dir;
 	struct dirent *ent;
@@ -32,18 +33,18 @@ void create_file_list(char * dstList[], const int n, char * path)
 			}
 		}
 		closedir(dir);
-		return EXIT_SUCCESS;
+		return i;
 	}
 	else {
-		return EXIT_FAILURE;
+		return -1;
 	}
 }
 
 Raw_wave * merge_waves()
 {
-	const listSize = 7;
-	char * list[7];
-	create_file_list(list, listSize, "../../audio");
+	int listSize = 100;
+	char * list[100];
+	listSize = create_file_list(list, listSize, "../../audio");
 	Raw_wave * container = create_header();
 	
 	srand(time(NULL));
@@ -52,8 +53,8 @@ Raw_wave * merge_waves()
 	for (i = 0; i < listSize -1 ; i++) {
 		Raw_wave * wave = NULL;
 		load_wave(&wave, list[i]);
-		int srcAmount = random(num_samples(wave) / 40, num_samples(wave) / 60);
-		int dstOffset = random(num_samples(container) / 60, num_samples(container));
+		int srcAmount = random(10000, 60000);
+		int dstOffset = random(10000, 60000);
 		insert_samples(container, wave, srcAmount, dstOffset, false);
 		destroy_wave(&wave);
 	}
