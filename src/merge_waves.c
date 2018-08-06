@@ -107,6 +107,7 @@ Raw_wave * merge_waves(char * path, int amount_min, int amount_max, int offset_m
 
 	srand(time(NULL));
 	int i = 0;
+	printf("Merging %d waves..\n", listSize);
 	for (i = 0; i < listSize; i++) {
 		Raw_wave * wave = NULL;
 		if (load_wave(&wave, list[i]) < 0)
@@ -116,5 +117,6 @@ Raw_wave * merge_waves(char * path, int amount_min, int amount_max, int offset_m
 		insert_samples(container, wave, srcAmount, srcOffset, num_samples(container), false);
 		destroy_wave(&wave);
 	}
+	printf("Done Merging\n", listSize);
 	return container;
 }
