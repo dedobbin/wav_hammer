@@ -6,7 +6,7 @@
 int random(int min, int max)
 {
 	if (max > RAND_MAX)
-		printf("random: Requested max value is higher than RAND_MAX..\n");
+		printf("merge_waves: Requested max value is higher than RAND_MAX..\n");
 
 	if (min < 0)
 		min = 0;
@@ -15,6 +15,34 @@ int random(int min, int max)
 	int result  = (double)rand() / (RAND_MAX + 1) * (max - min) + min;
 	//printf("%d\t(%d) \n", result, num_samples(fileOne));
 	return result;
+}
+
+void random_sort_list(char * list[], int list_size)
+{
+	int i;
+	srand(time(NULL));
+
+	for (i = 0; i < 100; i++) {
+		int src = random(0, list_size - 1);
+		int dst = random(0, list_size - 1);
+
+		char * tmp = malloc(strlen(list[dst]) + 1);
+		strcpy(tmp, list[dst]);
+
+		free(list[dst]);
+		list[dst] = malloc(strlen(list[src]) + 1);
+		strcpy(list[dst], list[src]);
+
+		//free(list + dst);
+		list[src] = malloc(strlen(tmp) + 1);
+		strcpy(list[src], tmp);
+
+		free(tmp);
+
+		printf("");
+		
+	}
+	printf("");
 }
 
 int create_file_list(char * dstList[], const int n, char * path)
@@ -29,8 +57,8 @@ int create_file_list(char * dstList[], const int n, char * path)
 				continue;
 			}
 			else {
-				//+1 because need extra slash
-				dstList[i] = malloc(strlen(path) + strlen(ent->d_name) + 1);
+				//+1 because need extra slash, +1 for \0
+				dstList[i] = malloc(strlen(path) + strlen(ent->d_name) + 2);
 				strcpy(dstList[i], path);
 				strcat(dstList[i], "/");
 				strcat(dstList[i], ent->d_name);
@@ -50,8 +78,9 @@ int create_file_list(char * dstList[], const int n, char * path)
 Raw_wave * merge_waves_autovalues(char * path)
 {
 	int listSize = MAX_INPUT_FILES;
-	char * list[MAX_INPUT_FILES];
+	char ** list = malloc(MAX_INPUT_FILES);
 	listSize = create_file_list(list, listSize, path);
+	random_sort_list(list, listSize);
 	Raw_wave * container = create_header();
 	
 	srand(time(NULL));
@@ -71,8 +100,9 @@ Raw_wave * merge_waves_autovalues(char * path)
 Raw_wave * merge_waves(char * path, int amount_min, int amount_max, int offset_min, int offset_max)
 {
 	int listSize = MAX_INPUT_FILES;
-	char * list[MAX_INPUT_FILES];
+	char ** list = malloc(MAX_INPUT_FILES);
 	listSize = create_file_list(list, listSize, path);
+	random_sort_list(list, listSize);
 	Raw_wave * container = create_header();
 
 	srand(time(NULL));
