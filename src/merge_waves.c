@@ -17,7 +17,7 @@ int random(int min, int max)
 	return result;
 }
 
-void random_sort_list(char * list, int list_size)
+void random_sort_list(char * list[], int list_size)
 {
 	int i;
 	for (i = 0; i < 100; i++) {
@@ -63,8 +63,9 @@ int create_file_list(char * dstList[], const int n, char * path)
 Raw_wave * merge_waves_autovalues(char * path)
 {
 	int listSize = MAX_INPUT_FILES;
-	char * list[MAX_INPUT_FILES];
+	char ** list = malloc(MAX_INPUT_FILES);
 	listSize = create_file_list(list, listSize, path);
+	random_sort_list(list, listSize);
 	Raw_wave * container = create_header();
 	
 	srand(time(NULL));
@@ -84,7 +85,7 @@ Raw_wave * merge_waves_autovalues(char * path)
 Raw_wave * merge_waves(char * path, int amount_min, int amount_max, int offset_min, int offset_max)
 {
 	int listSize = MAX_INPUT_FILES;
-	char * list[MAX_INPUT_FILES];
+	char ** list = malloc(MAX_INPUT_FILES);
 	listSize = create_file_list(list, listSize, path);
 	Raw_wave * container = create_header();
 
