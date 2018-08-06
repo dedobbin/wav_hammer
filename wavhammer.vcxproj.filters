@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\hamming.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\linked_list.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,12 +30,12 @@
     <ClCompile Include="src\merge_waves.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\gain.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\datatypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\hamming.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\raw_wave.h">
@@ -48,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\merge_waves.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

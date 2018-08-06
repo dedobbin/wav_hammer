@@ -5,7 +5,7 @@
 #endif
 #include <string.h>
 #include "raw_wave.h"
-#include "hamming.h"
+#include "gain.h"
 #include "datatypes.h"
 #include "merge_waves.h"
 
@@ -22,6 +22,20 @@ int main(int argc, char* argv[])
 	**/
 
 	int result = 0;
+
+	/**
+	Raw_wave * wave;
+	load_wave(&wave, "../../audio/1.wav");
+	
+	print_wave(wave, true);
+	printf("----------------------\n");
+	hamming_pointless_gain(wave);
+	print_wave(wave, true);
+
+	write_wave(wave, "../../audio/output.wav");
+	destroy_wave(&wave);
+	**/
+	
 	if (argc != 7) {
 		printf("No arguments given..\n");
 		printf("Commandline arguments:\n");
@@ -31,11 +45,13 @@ int main(int argc, char* argv[])
 		printf("Merging waves..\n");
 		Raw_wave * wave = merge_waves(argv[1], atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 		printf("Saving wave file to %s..\n", argv[2]);
+		hamming_pointless_gain(wave);
 		write_wave(wave, argv[2]);
 		destroy_wave(&wave);
 		printf("Edn\n");
 		result = 0;
 	}
+	getchar();
 	return result;
 
 }

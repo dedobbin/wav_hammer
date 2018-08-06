@@ -1,8 +1,8 @@
 #include <math.h>
 #include <stdio.h>
-#include "hamming.h"
+#include "gain.h"
 
-void gain(Raw_wave * wave, long amount)
+void hamming_gain(Raw_wave * wave, long amount)
 {
   int blockAlign = block_align(wave);
   int numSamples = num_samples(wave);
@@ -18,7 +18,7 @@ void gain(Raw_wave * wave, long amount)
   }
 }
 
-void pointless_gain(Raw_wave * wave)
+void hamming_pointless_gain(Raw_wave * wave)
 {
   int i = 0;
   for (i=0; i < datasize(wave); i++){
