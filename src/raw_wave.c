@@ -106,12 +106,18 @@ int write_wave(Raw_wave * wave, const char * const path)
 {
   FILE * f;
   f = fopen(path, "wb");
-  #ifdef __linux__ 
+#ifdef __linux__ 
   if (!f || access (path, W_OK)){
-    fprintf(stderr, "Could not open file '%s' for writing\n", path);
+    fprintf(stderr, "write_wave: Could not open file '%s' for writing\n", path);
     return -1;
   }
-  #endif
+#else
+  if (!f) {
+	  fprintf(stderr, "write_wave: Could not open file '%s' for writing\n", path);
+	  return -1;
+}
+#endif
+  
   fwrite(wave->riff_chunk, 1, RIFF_CHUNK_SIZE, f);
   fwrite(wave->fmt_chunk, 1, FMT_CHUNK_SIZE, f);
   fwrite(wave->data_chunk->raw_header_data, 1, DATA_CHUNK_HEADER_SIZE, f);

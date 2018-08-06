@@ -6,7 +6,10 @@
 int random(int min, int max)
 {
 	if (max > RAND_MAX)
-		printf("merge_waves: Requested max value is higher than RAND_MAX..\n");
+		printf("merge_wave: Requested random max value is higher than RAND_MAX..\n");
+
+	if (min > max)
+		printf("merge_wave: Requested random min value is higher than max..\n");
 
 	if (min < 0)
 		min = 0;
@@ -65,8 +68,7 @@ int create_file_list(char * dstList[], const int n, char * path)
 		}
 		closedir(dir);
 		return i;
-	}
-	else {
+	} else {
 		return -1;
 	}
 }
@@ -76,19 +78,21 @@ Raw_wave * merge_waves_autovalues(char * path)
 	int listSize = MAX_INPUT_FILES;
 	char ** list = malloc(MAX_INPUT_FILES);
 	listSize = create_file_list(list, listSize, path);
-	random_sort_list(list, listSize);
 	Raw_wave * container = create_header();
-	
-	srand(time(NULL));
-	int i = 0;
-	for (i = 0; i < listSize; i++) {
-		Raw_wave * wave = NULL;
-		if (load_wave(&wave, list[i]) < 0)
-			continue;
-		int srcAmount = random(10000, 60000);
-		int srcOffset = random(10000, num_samples(wave));
-		insert_samples(container, wave, srcAmount, srcOffset, num_samples(container), false);
-		destroy_wave(&wave);
+	// if return from create_file_list < 0, failed to create list(invalid directory?)
+	if (listSize > 0) {
+		random_sort_list(list, listSize);
+		srand(time(NULL));
+		int i = 0;
+		for (i = 0; i < listSize; i++) {
+			Raw_wave * wave = NULL;
+			if (load_wave(&wave, list[i]) < 0)
+				continue;
+			int srcAmount = random(10000, 60000);
+			int srcOffset = random(10000, num_samples(wave));
+			insert_samples(container, wave, srcAmount, srcOffset, num_samples(container), false);
+			destroy_wave(&wave);
+		}
 	}
 	return container;
 }
@@ -98,21 +102,24 @@ Raw_wave * merge_waves(char * path, int amount_min, int amount_max, int offset_m
 	int listSize = MAX_INPUT_FILES;
 	char ** list = malloc(MAX_INPUT_FILES);
 	listSize = create_file_list(list, listSize, path);
-	random_sort_list(list, listSize);
 	Raw_wave * container = create_header();
-
-	srand(time(NULL));
-	int i = 0;
-	printf("Merging %d waves..\n", listSize);
-	for (i = 0; i < listSize; i++) {
-		Raw_wave * wave = NULL;
-		if (load_wave(&wave, list[i]) < 0)
-			continue;
-		int srcAmount = random(amount_min, amount_max);
-		int srcOffset = random(offset_min, offset_max);
-		insert_samples(container, wave, srcAmount, srcOffset, num_samples(container), false);
-		destroy_wave(&wave);
+	// if return from create_file_list < 0, failed to create list(invalid directory?)
+	if (listSize > 0) {
+		random_sort_list(list, listSize);
+		srand(time(NULL));
+		int i = 0;
+		printf("merge_waves: Merging %d waves..\n", listSize);
+		for (i = 0; i < listSize; i++) {
+			Raw_wave * wave = NULL;
+			if (load_wave(&wave, list[i]) < 0)
+				continue;
+			int srcAmount = random(amount_min, amount_max);
+			int srcOffset = random(offset_min, offset_max);
+			insert_samples(container, wave, srcAmount, srcOffset, num_samples(container), false);
+			destroy_wave(&wave);
+		}
+	} else {
+		printf("merge_waves: Failed to merge waves: Couldn't create filelist\n");
 	}
-	printf("Done Merging\n", listSize);
 	return container;
 }
