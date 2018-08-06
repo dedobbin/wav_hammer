@@ -33,16 +33,12 @@ void random_sort_list(char * list[], int list_size)
 		list[dst] = malloc(strlen(list[src]) + 1);
 		strcpy(list[dst], list[src]);
 
-		//free(list + dst);
+		free(list[src]);
 		list[src] = malloc(strlen(tmp) + 1);
 		strcpy(list[src], tmp);
 
 		free(tmp);
-
-		printf("");
-		
 	}
-	printf("");
 }
 
 int create_file_list(char * dstList[], const int n, char * path)

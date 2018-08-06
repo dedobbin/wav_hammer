@@ -35,6 +35,7 @@ int main(int argc, char* argv[])
 		printf("Edn\n");
 		result = 0;
 	}
+	getchar();
 	return result;
 
 }
