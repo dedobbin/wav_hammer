@@ -17,6 +17,19 @@ int random(int min, int max)
 	return result;
 }
 
+void random_sort_list(char * list, int list_size)
+{
+	int i;
+	for (i = 0; i < 100; i++) {
+		int src = list[random(0, list_size - 1)];
+		int dst = list[random(0, list_size - 1)];
+		char tmp;
+		strcpy(&tmp, dst);
+		strcpy(dst, src);
+		strcpy(src, tmp);
+	}
+}
+
 int create_file_list(char * dstList[], const int n, char * path)
 {
 	DIR *dir;

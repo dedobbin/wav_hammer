@@ -11,16 +11,16 @@
 
 int main(int argc, char* argv[])
 {
-	/**
 	Raw_wave * wave = merge_waves_autovalues("../../audio");	
 	write_wave(wave, "../../output/output.wav");
 	destroy_wave(&wave);
-	**/
 
+	/**
 	Raw_wave * wave;
 	load_wave(&wave, "../../audio/1.wav");
 	print_wave(wave, false);
 	destroy_wave(&wave);
+	**/
 
 	/**
 	Raw_wave * container = create_header();
