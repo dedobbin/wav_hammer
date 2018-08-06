@@ -80,7 +80,7 @@ int load_wave(Raw_wave ** wave, const char* const path)
   unsigned dsize  = datasize(*wave);
   //Check if there are more bytes in the file, if so, it's an optional INFO chunk
   if (filesize - dsize != DATA_OFFSET){
-    printf("Datasize != filesize - data offset, should look for INFO chunk at end of file\n");
+    printf("load_wave: Datasize != filesize - data offset, should look for INFO chunk at end of file\n");
     memcpy(strbuffer, buffer + DATA_OFFSET + dsize, 4);
     strbuffer[5] = '\0';
     if (strcmp(strbuffer, "LIST") ==0){

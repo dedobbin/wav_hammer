@@ -6,7 +6,7 @@
 int random(int min, int max)
 {
 	if (max > RAND_MAX)
-		printf("random: Requested max value is higher than RAND_MAX..\n");
+		printf("merge_waves: Requested max value is higher than RAND_MAX..\n");
 
 	if (min < 0)
 		min = 0;
