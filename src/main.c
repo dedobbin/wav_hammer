@@ -30,12 +30,12 @@ int main(int argc, char* argv[])
 	} else {
 		printf("Merging waves..\n");
 		Raw_wave * wave = merge_waves(argv[1], atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+		printf("Saving wave file to %s..\n", argv[2]);
 		write_wave(wave, argv[2]);
 		destroy_wave(&wave);
 		printf("Edn\n");
 		result = 0;
 	}
-	getchar();
 	return result;
 
 }
