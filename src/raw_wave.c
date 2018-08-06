@@ -29,6 +29,10 @@ int load_wave(Raw_wave ** wave, const char* const path)
   }
   #endif
   
+  //Check if file is directory
+  if (!f)
+	  return -4;
+
   fseek(f, 0L, SEEK_END);
   long filesize = ftell(f);
   fseek(f, 0L, SEEK_SET);
@@ -241,8 +245,8 @@ void print_wave(Raw_wave * wave)
   printf("byterate: %d\n", byterate(wave));
   printf("bits per sample: %d\n", bits_per_sample(wave));
   printf("number of samples: %d\n", num_samples(wave));
-  printf("First 2 samples: %08lx %08lx \n", 
-    get_sample(wave, 0), get_sample(wave, 1));
+  printf("First 4 samples: %08lx %08lx %08lx %08lx\n", 
+    get_sample(wave, 0), get_sample(wave, 1), get_sample(wave, 2), get_sample(wave, 3));
 }
 
 unsigned chunk_size(const Raw_wave * wave)
@@ -352,16 +356,29 @@ unsigned num_samples(const Raw_wave * const wave)
 
 void set_num_channels(Raw_wave * wave, int numChannels)
 {
-  memcpy(wave->fmt_chunk + 10, &numChannels, 2);
+	memcpy(wave->fmt_chunk + 10, &numChannels, 2);
 }
 
 void set_block_align(Raw_wave * wave, int blockAlign)
 {
-  memcpy(wave->fmt_chunk + 20, &blockAlign, 2);
+	memcpy(wave->fmt_chunk + 20, &blockAlign, 2);
 }
 
 void set_datasize(Raw_wave * wave, int dataSize)
 {
-  memcpy(wave->data_chunk->raw_header_data + 4, &dataSize, 4);
+	memcpy(wave->data_chunk->raw_header_data + 4, &dataSize, 4);
 }
 
+void set_info_chunk(Raw_wave * const wave, const uint8_t * const new_info_chunk_data, int new_info_chunk_size)
+{
+	if (!wave->info_chunk) {
+		wave->info_chunk = malloc(sizeof(wave->info_chunk));
+	}
+	else if (wave->info_chunk->raw_data) {
+		free(wave->info_chunk->raw_data);
+	}
+
+	wave->info_chunk->raw_data = malloc(new_info_chunk_size);
+	memcpy(wave->info_chunk->raw_data, new_info_chunk_data, new_info_chunk_size);
+	wave->info_chunk->size = new_info_chunk_size;
+}
