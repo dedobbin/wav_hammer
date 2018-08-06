@@ -29,6 +29,10 @@ int load_wave(Raw_wave ** wave, const char* const path)
   }
   #endif
   
+  //Check if file is directory
+  if (!f)
+	  return -4;
+
   fseek(f, 0L, SEEK_END);
   long filesize = ftell(f);
   fseek(f, 0L, SEEK_SET);

@@ -12,8 +12,8 @@
 int main(int argc, char* argv[])
 {
 
-	Raw_wave * wave = merge_waves();	
-	write_wave(wave, "../../audio/output.wav");
+	Raw_wave * wave = merge_waves_autovalues("../../audio");	
+	write_wave(wave, "../../output/output.wav");
 
 	/**
 	Raw_wave * container = create_header();

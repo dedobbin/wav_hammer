@@ -6,6 +6,7 @@
 
 #define MAX_INPUT_FILES 100
 
-Raw_wave * merge_waves();
+Raw_wave * merge_waves_autovalues(char * path);
+Raw_wave * merge_waves(char * path, int amount_min, int amount_max, int offset_min, int offset_max);
 
 #endif
