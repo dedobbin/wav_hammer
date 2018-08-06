@@ -20,14 +20,29 @@ int random(int min, int max)
 void random_sort_list(char * list[], int list_size)
 {
 	int i;
+	srand(time(NULL));
+
 	for (i = 0; i < 100; i++) {
-		int src = list[random(0, list_size - 1)];
-		int dst = list[random(0, list_size - 1)];
-		char tmp;
-		strcpy(&tmp, dst);
-		strcpy(dst, src);
-		strcpy(src, tmp);
+		int src = random(0, list_size - 1);
+		int dst = random(0, list_size - 1);
+
+		char * tmp = malloc(strlen(list[dst]) + 1);
+		strcpy(tmp, list[dst]);
+
+		free(list[dst]);
+		list[dst] = malloc(strlen(list[src]) + 1);
+		strcpy(list[dst], list[src]);
+
+		//free(list + dst);
+		list[src] = malloc(strlen(tmp) + 1);
+		strcpy(list[src], tmp);
+
+		free(tmp);
+
+		printf("");
+		
 	}
+	printf("");
 }
 
 int create_file_list(char * dstList[], const int n, char * path)
@@ -42,8 +57,8 @@ int create_file_list(char * dstList[], const int n, char * path)
 				continue;
 			}
 			else {
-				//+1 because need extra slash
-				dstList[i] = malloc(strlen(path) + strlen(ent->d_name) + 1);
+				//+1 because need extra slash, +1 for \0
+				dstList[i] = malloc(strlen(path) + strlen(ent->d_name) + 2);
 				strcpy(dstList[i], path);
 				strcat(dstList[i], "/");
 				strcat(dstList[i], ent->d_name);
@@ -87,6 +102,7 @@ Raw_wave * merge_waves(char * path, int amount_min, int amount_max, int offset_m
 	int listSize = MAX_INPUT_FILES;
 	char ** list = malloc(MAX_INPUT_FILES);
 	listSize = create_file_list(list, listSize, path);
+	random_sort_list(list, listSize);
 	Raw_wave * container = create_header();
 
 	srand(time(NULL));
