@@ -75,26 +75,7 @@ int create_file_list(char * dstList[], const int n, char * path)
 
 Raw_wave * merge_waves_autovalues(char * path)
 {
-	int listSize = MAX_INPUT_FILES;
-	char ** list = malloc(MAX_INPUT_FILES);
-	listSize = create_file_list(list, listSize, path);
-	Raw_wave * container = create_header();
-	// if return from create_file_list < 0, failed to create list(invalid directory?)
-	if (listSize > 0) {
-		random_sort_list(list, listSize);
-		srand(time(NULL));
-		int i = 0;
-		for (i = 0; i < listSize; i++) {
-			Raw_wave * wave = NULL;
-			if (load_wave(&wave, list[i]) < 0)
-				continue;
-			int srcAmount = random(10000, 60000);
-			int srcOffset = random(10000, num_samples(wave));
-			insert_samples(container, wave, srcAmount, srcOffset, num_samples(container), false);
-			destroy_wave(&wave);
-		}
-	}
-	return container;
+	merge_waves(path, 10000, 60000, 10000, 60000);
 }
 
 Raw_wave * merge_waves(char * path, int amount_min, int amount_max, int offset_min, int offset_max)
@@ -120,6 +101,15 @@ Raw_wave * merge_waves(char * path, int amount_min, int amount_max, int offset_m
 		}
 	} else {
 		printf("merge_waves: Failed to merge waves: Couldn't create filelist\n");
+	}
+	//cleanup list
+	if (listSize > 0) {
+		int i;
+		for (i = 0; i < listSize; i++) {
+			if (list[i])
+				free(list[i]);
+		}
+		free(list);
 	}
 	return container;
 }
