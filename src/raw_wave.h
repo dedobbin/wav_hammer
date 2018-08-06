@@ -1,6 +1,7 @@
 #ifndef RAW_WAVE_H_
 #define RAW_WAVE_H_
 
+#include "datatypes.h"
 #include <stdint.h>
 //Bytes 0-11 is riff chunk
 static const RIFF_CHUNK_SIZE = 12;
@@ -31,7 +32,7 @@ int load_wave(Raw_wave ** wave, const char* const path);
 int write_wave(Raw_wave * wave, const char* const path);
 void destroy_wave(Raw_wave ** wave);
 Raw_wave * create_header();
-void print_wave(Raw_wave * wave);
+void print_wave(Raw_wave * wave, bool verbose);
 
 //Seems to be ignored most of the time
 //ChunkSize is part of riff chunk: 4 + (8 + SubChunk1Size) + (8 + actual datasize)
