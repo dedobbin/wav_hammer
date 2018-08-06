@@ -211,42 +211,45 @@ Raw_wave * create_header()
 	return wave;
 }
 
-void print_wave(Raw_wave * wave)
+void print_wave(Raw_wave * wave, bool verbose)
 {
-  int i;
-  printf("riff data: ");
-  for (i = 0; i <RIFF_CHUNK_SIZE;++i){
-      printf("%X ", wave->riff_chunk[i] & 0xFF);
-  }
-  printf("\n");
 
-  printf("fmt data: ");
-  for (i = 0; i <FMT_CHUNK_SIZE;++i){
-      printf("%X ", wave->fmt_chunk[i] & 0xFF);
-  }
-  printf("\ndata header: ");
-  for (i = 0; i <DATA_CHUNK_HEADER_SIZE;++i){
-      printf("%X ", wave->data_chunk->raw_header_data[i] & 0xFF);
-  }
-  if (wave->info_chunk != NULL){
-    printf("\ninfo chunk size %d\nlast four bytes: ", wave->info_chunk->size);
-    for (i = wave->info_chunk->size-4; i < wave->info_chunk->size; ++i){
-      printf("%x ", wave->info_chunk->raw_data[i]);
-    }
-  }
-  printf("\n");
+	int i;
+	if (verbose) {
+		printf("riff data: ");
+		for (i = 0; i < RIFF_CHUNK_SIZE; ++i) {
+			printf("%X ", wave->riff_chunk[i] & 0xFF);
+		}
+		printf("\n");
 
-  printf("datasize: %dB\n", datasize(wave));
-  printf("format: %d\n", audio_format(wave));
-  printf("numChannels: %d\n", num_channels(wave));
-  printf("samplerate: %d\n", samplerate(wave));
-  printf("block_align: %d\n", block_align(wave));
-  printf("chunk_size: %d\n", chunk_size(wave));
-  printf("byterate: %d\n", byterate(wave));
-  printf("bits per sample: %d\n", bits_per_sample(wave));
-  printf("number of samples: %d\n", num_samples(wave));
-  printf("First 4 samples: %08lx %08lx %08lx %08lx\n", 
-    get_sample(wave, 0), get_sample(wave, 1), get_sample(wave, 2), get_sample(wave, 3));
+		printf("fmt data: ");
+		for (i = 0; i < FMT_CHUNK_SIZE; ++i) {
+			printf("%X ", wave->fmt_chunk[i] & 0xFF);
+		}
+		printf("\ndata header: ");
+		for (i = 0; i < DATA_CHUNK_HEADER_SIZE; ++i) {
+			printf("%X ", wave->data_chunk->raw_header_data[i] & 0xFF);
+		}
+		if (wave->info_chunk != NULL && wave->info_chunk->raw_data != NULL && wave->info_chunk->size > 0) {
+			printf("\ninfo chunk size %d\nlast four bytes: ", wave->info_chunk->size);
+			for (i = wave->info_chunk->size - 4; i < wave->info_chunk->size; ++i) {
+				printf("%x ", wave->info_chunk->raw_data[i]);
+			}
+		}
+		printf("\n");
+
+		printf("format: %d\n", audio_format(wave));
+		printf("numChannels: %d\n", num_channels(wave));
+		printf("samplerate: %d\n", samplerate(wave));
+		printf("block_align: %d\n", block_align(wave));
+		printf("chunk_size: %d\n", chunk_size(wave));
+	}
+	printf("datasize: %dB\n", datasize(wave));
+	printf("byterate: %d\n", byterate(wave));
+	printf("bits per sample: %d\n", bits_per_sample(wave));
+	printf("number of samples: %d\n", num_samples(wave));
+	printf("First 4 samples: %08lx %08lx %08lx %08lx\n", 
+	get_sample(wave, 0), get_sample(wave, 1), get_sample(wave, 2), get_sample(wave, 3));
 }
 
 unsigned chunk_size(const Raw_wave * wave)
