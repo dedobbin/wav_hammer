@@ -5,7 +5,7 @@
 #endif
 #include <string.h>
 #include "raw_wave.h"
-#include "gain.h"
+#include "distortion.h"
 #include "datatypes.h"
 #include "merge_waves.h"
 

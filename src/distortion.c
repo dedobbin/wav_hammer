@@ -1,6 +1,6 @@
 #include <math.h>
 #include <stdio.h>
-#include "gain.h"
+#include "distortion.h"
 
 void hamming_gain(Raw_wave * wave, long amount)
 {
