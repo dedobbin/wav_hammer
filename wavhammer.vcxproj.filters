@@ -30,7 +30,7 @@
     <ClCompile Include="src\merge_waves.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gain.c">
+    <ClCompile Include="src\distortion.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,7 +47,7 @@
     <ClInclude Include="src\merge_waves.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\gain.h">
+    <ClInclude Include="src\distortion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

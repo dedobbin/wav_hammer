@@ -100,7 +100,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\merge_waves.c" />
-    <ClCompile Include="src\gain.c" />
+    <ClCompile Include="src\distortion.c" />
     <ClCompile Include="src\linked_list.c" />
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\raw_wave.c" />
@@ -109,7 +109,7 @@
   <ItemGroup>
     <ClInclude Include="src\datatypes.h" />
     <ClInclude Include="src\merge_waves.h" />
-    <ClInclude Include="src\gain.h" />
+    <ClInclude Include="src\distortion.h" />
     <ClInclude Include="src\raw_wave.h" />
     <ClInclude Include="src\wave_samples.h" />
   </ItemGroup>
