@@ -3,7 +3,8 @@
 
 #include "raw_wave.h"
 
-void hamming_gain(Raw_wave * wave, long amount);
-void hamming_pointless_gain(Raw_wave * wave);
+void hamming_distortion(Raw_wave * wave, long amount);
+void hamming_pointless_distortion(Raw_wave * wave);
+void distortion(Raw_wave * wave, long amount);
 
 #endif

@@ -123,6 +123,14 @@ int main(int argc, char* argv[])
 
 	1: config file
 	**/
+
+	Raw_wave* w = NULL;
+	load_wave(&w, "../../audio/1.wav");
+	distortion(w, 100000);
+	write_wave(w, "../../output/output.wav");
+	destroy_wave(&w);
+	getchar();
+	return EXIT_SUCCESS;
 	
 	if (argc == 7) {
 		printf("Merging waves..\n");
