@@ -33,21 +33,6 @@ int main(int argc, char* argv[])
 	1: config file
 	**/
 
-	int result = 0;
-
-	/**
-	Raw_wave * wave;
-	load_wave(&wave, "../../audio/1.wav");
-	
-	print_wave(wave, true);
-	printf("----------------------\n");
-	hamming_pointless_gain(wave);
-	print_wave(wave, true);
-
-	write_wave(wave, "../../audio/output.wav");
-	destroy_wave(&wave);
-	**/
-
 	typedef struct Configs {
 		char * input_folder;
 		char * output_file;
@@ -83,6 +68,8 @@ int main(int argc, char* argv[])
 		char c;
 		char key_buffer[100];
 		do {
+
+			//Read until a complete config 'key' is in buffer
 			int offset = i;
 			do {
 				c = file_buffer[i];
@@ -93,73 +80,50 @@ int main(int argc, char* argv[])
 			
 			char value_buffer[100];
 
+			//Read until a complete config 'value' is in buffer
+			offset = i;
+			do {
+				c = file_buffer[i];
+				value_buffer[i - offset] = c;
+				i++;
+			} while (c != '\n' && c != '\0');
+
+#ifdef _WIN32
+			if (c == '\n') {
+				value_buffer[i - offset - 2] = '\0';//\n\r is also memcpy'd, just overwrite it
+			}
+			else {
+				value_buffer[i - offset - 1] = '\0';//\0 is also memcpy'd, just overwrite it
+			}
+#else
+			value_buffer[i - offset - 1] = '\0';//\n is also memcpy'd, just overwrite it
+#endif
+
+			//Check what config rule we are dealing with
 			if (strcmp(key_buffer, "input_folder") == 0) {
-				offset = i;
-				do {
-					c = file_buffer[i];
-					value_buffer[i - offset] = c;
-					i++;
-				} while (c != '\n' && c != '\0');
-				value_buffer[i - offset] = '\0';
 				configs->input_folder = malloc(strlen(value_buffer) + 1);
 				strcpy(configs->input_folder, value_buffer);
 
-
 			} else if (strcmp(key_buffer, "output_file") == 0) {
-				offset = i;
-				do {
-					c = file_buffer[i];
-					value_buffer[i - offset] = c;
-					i++;
-				} while (c != '\n' && c != '\0');
-				value_buffer[i - offset] = '\0';
 				configs->output_file = malloc(strlen(value_buffer) + 1);
 				strcpy(configs->output_file, value_buffer);
 
 			} else if (strcmp(key_buffer, "min_src_samples") == 0){
-				offset = i;
-				do {
-					c = file_buffer[i];
-					value_buffer[i - offset] = c;
-					i++;
-				} while (c != '\n' && c != '\0');
 				configs->min_src_samples = atoi(value_buffer);
 			
 			} else if (strcmp(key_buffer, "max_src_samples") == 0) {
-				offset = i;
-				do {
-					c = file_buffer[i];
-					value_buffer[i - offset] = c;
-					i++;
-				} while (c != '\n' && c != '\0');
+
 				configs->max_src_samples = atoi(value_buffer);
 			
 			} else if (strcmp(key_buffer, "min_src_offset") == 0) {
 				offset = i;
-				do {
-					c = file_buffer[i];
-					value_buffer[i - offset] = c;
-					i++;
-				} while (c != '\n' && c != '\0');
 				configs->min_src_offset = atoi(value_buffer);
+			
 			} else if (strcmp(key_buffer, "max_src_offset") == 0) {
-				offset = i;
-				do {
-					c = file_buffer[i];
-					value_buffer[i - offset] = c;
-					i++;
-				} while (c != '\n' && c != '\0');
 				configs->max_src_offset = atoi(value_buffer);
-
-
-			} else {
-				do {
-					c = file_buffer[i];
-					i++;
-				} while (c != '\n' && c != '\0');
-			}
-
+			} 
 		} while (c != '\0');
+
 		free(configs);
 		getchar();
 		return EXIT_SUCCES;
