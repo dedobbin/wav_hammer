@@ -9,8 +9,16 @@
 #include "datatypes.h"
 #include "merge_waves.h"
 
+#define MAX_CONFIG_FILE_SIZE 255
+#define EXIT_SUCCES 0
+#define ERROR_COULD_NOT_READ_FILE 1
+#define ERROR_NOT_ENOUGH_MEMORY 2
+#define ERROR_INVALID_CMD_ARGUMENTS 3
+
+
 int main(int argc, char* argv[])
 {
+
 	/**
 	commandline arguments: 
 	1: input folder
@@ -39,6 +47,15 @@ int main(int argc, char* argv[])
 	write_wave(wave, "../../audio/output.wav");
 	destroy_wave(&wave);
 	**/
+
+	typedef struct Configs {
+		char * input_folder;
+		char * output_file;
+		int min_src_samples;
+		int max_src_samples;
+		int min_src_offset;
+		int max_src_offset;
+	} Configs;
 	
 	if (argc == 7) {
 		printf("Merging waves..\n");
@@ -47,28 +64,112 @@ int main(int argc, char* argv[])
 		hamming_pointless_gain(wave);
 		write_wave(wave, argv[2]);
 		destroy_wave(&wave);
-		result = 0;
+		printf("Edn");
+		getchar();
+		return EXIT_SUCCES;
 	} else if (argc == 2) {
-		FILE *fp;
-		char * c = malloc(1000);
+		Configs * configs = malloc(sizeof(Configs));
+		FILE * f;
+		f = fopen("../../config.ini", "rb");
+		if (!f) return ERROR_COULD_NOT_READ_FILE;
+		fseek(f, 0L, SEEK_END);
+		long filesize = ftell(f);
+		fseek(f, 0L, SEEK_SET);
+		uint8_t * file_buffer = malloc(filesize + 1);
+		if (!file_buffer) return ERROR_NOT_ENOUGH_MEMORY;
+		fread(file_buffer, 1, filesize, f);
+		file_buffer[filesize] = '\0';
 		int i = 0;
-		if (fp = fopen(argv[1], "r") != NULL) {
+		char c;
+		char key_buffer[100];
+		do {
+			int offset = i;
 			do {
-				*(c + i) = fgetc(fp);
-			} while (*c != EOF);
-		}
+				c = file_buffer[i];
+				key_buffer[i-offset] = c;
+				i++;
+			} while (c != 61 && c!= '\0'); //61 is ascii code for '='
+			key_buffer[i - offset -1] = '\0'; //= is also memcpy'd, just overwrite it
+			
+			char value_buffer[100];
+
+			if (strcmp(key_buffer, "input_folder") == 0) {
+				offset = i;
+				do {
+					c = file_buffer[i];
+					value_buffer[i - offset] = c;
+					i++;
+				} while (c != '\n' && c != '\0');
+				value_buffer[i - offset] = '\0';
+				configs->input_folder = malloc(strlen(value_buffer) + 1);
+				strcpy(configs->input_folder, value_buffer);
+
+
+			} else if (strcmp(key_buffer, "output_file") == 0) {
+				offset = i;
+				do {
+					c = file_buffer[i];
+					value_buffer[i - offset] = c;
+					i++;
+				} while (c != '\n' && c != '\0');
+				value_buffer[i - offset] = '\0';
+				configs->output_file = malloc(strlen(value_buffer) + 1);
+				strcpy(configs->output_file, value_buffer);
+
+			} else if (strcmp(key_buffer, "min_src_samples") == 0){
+				offset = i;
+				do {
+					c = file_buffer[i];
+					value_buffer[i - offset] = c;
+					i++;
+				} while (c != '\n' && c != '\0');
+				configs->min_src_samples = atoi(value_buffer);
+			
+			} else if (strcmp(key_buffer, "max_src_samples") == 0) {
+				offset = i;
+				do {
+					c = file_buffer[i];
+					value_buffer[i - offset] = c;
+					i++;
+				} while (c != '\n' && c != '\0');
+				configs->max_src_samples = atoi(value_buffer);
+			
+			} else if (strcmp(key_buffer, "min_src_offset") == 0) {
+				offset = i;
+				do {
+					c = file_buffer[i];
+					value_buffer[i - offset] = c;
+					i++;
+				} while (c != '\n' && c != '\0');
+				configs->min_src_offset = atoi(value_buffer);
+			} else if (strcmp(key_buffer, "max_src_offset") == 0) {
+				offset = i;
+				do {
+					c = file_buffer[i];
+					value_buffer[i - offset] = c;
+					i++;
+				} while (c != '\n' && c != '\0');
+				configs->max_src_offset = atoi(value_buffer);
+
+
+			} else {
+				do {
+					c = file_buffer[i];
+					i++;
+				} while (c != '\n' && c != '\0');
+			}
+
+		} while (c != '\0');
+		free(configs);
+		getchar();
+		return EXIT_SUCCES;
 	} else {
 		printf("No arguments given..\n");
 		printf("Commandline arguments:\n");
 		printf("1:\tinput folder\n2: \toutput file path\n3: \tminimal amount or random samples from input file\n4: \tmaxium amount or random samples from input file\n5: \tminimal offset from input file\n6: \tmaxium offset from input file");
 		printf("\nOR\n\n");
 		printf("1: path to config file\n");
-		result = 1;
+		return ERROR_INVALID_CMD_ARGUMENTS;
 	}
-
-	getchar();
-	printf("Edn\n");
-	return result;
-
 }
 

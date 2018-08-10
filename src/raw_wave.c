@@ -23,15 +23,11 @@ int load_wave(Raw_wave ** wave, const char* const path)
     return -2;
   }
   #elif _WIN32
-  if ((_access(path, 0) == -1)){
-	  fprintf(stderr, "load_wave: File '%s' does not exist\n", path);
+  if (!f || (_access(path, 0) == -1)){
+	  fprintf(stderr, "load_wave: Could not open file '%s' for reading\n", path);
 	  return -2;
   }
   #endif
-  
-  //Check if file is directory
-  if (!f)
-	  return -4;
 
   fseek(f, 0L, SEEK_END);
   long filesize = ftell(f);
