@@ -1,4 +1,4 @@
-#ifdef __linux__ 
+#ifdef __unix
 #include <unistd.h>
 #elif _WIN32
 #include <io.h>
@@ -17,7 +17,7 @@ int load_wave(Raw_wave ** wave, const char* const path)
 {
   FILE * f;
   f = fopen(path, "rb");
-  #ifdef __linux__ 
+  #ifdef __unix
   if (!f || access(path, R_OK)){
     fprintf(stderr, "load_wave: Could not open file '%s' for reading\n", path);
     return -2;
@@ -104,7 +104,7 @@ int write_wave(Raw_wave * wave, const char * const path)
 {
   FILE * f;
   f = fopen(path, "wb");
-#ifdef __linux__ 
+#ifdef __unix 
   if (!f || access (path, W_OK)){
     fprintf(stderr, "write_wave: Could not open file '%s' for writing\n", path);
     return -1;
@@ -355,10 +355,10 @@ unsigned datasize(const Raw_wave * const wave)
 
 unsigned num_samples(const Raw_wave * const wave)
 {
-  int blockAlign = block_align(wave);
+  int bytesPerSample = bits_per_sample(wave) / 8;
   int size = datasize(wave);
-  assert((size % blockAlign) == 0);
-  return size / blockAlign;
+  //assert((size % blockAlign) == 0);
+  return size / bytesPerSample;
 }
 
 void set_num_channels(Raw_wave * wave, int numChannels)

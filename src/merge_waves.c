@@ -1,7 +1,6 @@
 #include "merge_waves.h"
 #include "wave_samples.h"
-#include <dirent.h>
-
+#include <dirent.h> 
 
 int random(int min, int max)
 {

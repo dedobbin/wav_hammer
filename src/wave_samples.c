@@ -8,9 +8,9 @@ long get_sample(Raw_wave * wave, int nSample)
   long result = 0;
   if (nSample <= num_samples(wave)){
     assert(sizeof(long) >= 4);
-    int blockAlign = block_align(wave);
-    char * ptr = wave->data_chunk->audiodata + nSample * blockAlign;
-    memcpy(&result, ptr, blockAlign); 
+    int bytesPerSample = bits_per_sample(wave) / 8;
+    char * ptr = wave->data_chunk->audiodata + nSample * bytesPerSample;
+    memcpy(&result, ptr, bytesPerSample);
   }
   return result;
 }
@@ -18,8 +18,8 @@ long get_sample(Raw_wave * wave, int nSample)
 void set_sample(Raw_wave * wave, int nSample, long value)
 {
   if (nSample <= num_samples(wave)){
-    int blockAlign = block_align(wave);
-    memcpy(wave->data_chunk->audiodata + nSample * blockAlign, &value, blockAlign);
+	  int bytesPerSample = bits_per_sample(wave) / 8;
+    memcpy(wave->data_chunk->audiodata + nSample * bytesPerSample, &value, bytesPerSample);
   }
 }
 
