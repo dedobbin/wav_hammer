@@ -14,6 +14,7 @@
 #define ERROR_COULD_NOT_READ_FILE 1
 #define ERROR_NOT_ENOUGH_MEMORY 2
 #define ERROR_INVALID_CMD_ARGUMENTS 3
+#define ERROR_INVALID_CONFIG_FILE 4
 
 typedef struct Configs {
 	char * input_folder;
@@ -71,8 +72,11 @@ int parse_config_file(Configs * configs, char * path)
 		value_buffer[i - offset - 1] = '\0';//\n is also memcpy'd, just overwrite it
 #endif
 
-											//Check what config rule we are dealing with
-		if (strcmp(key_buffer, "input_folder") == 0) {
+		//Check what config rule we are dealing with
+		if (strcmp(value_buffer, "")==0) {
+			return ERROR_INVALID_CONFIG_FILE;
+		}
+		else if (strcmp(key_buffer, "input_folder") == 0) {
 			configs->input_folder = malloc(strlen(value_buffer) + 1);
 			strcpy(configs->input_folder, value_buffer);
 		}
@@ -95,6 +99,7 @@ int parse_config_file(Configs * configs, char * path)
 			configs->max_src_offset = atoi(value_buffer);
 		}
 	} while (c != '\0');
+
 	return 0;
 }
 
