@@ -10,7 +10,7 @@
 #include "merge_waves.h"
 
 #define MAX_CONFIG_FILE_SIZE 255
-#define EXIT_SUCCES 0
+#define EXIT_SUCCESS 0
 #define ERROR_COULD_NOT_READ_FILE 1
 #define ERROR_NOT_ENOUGH_MEMORY 2
 #define ERROR_INVALID_CMD_ARGUMENTS 3
@@ -27,6 +27,8 @@ typedef struct Configs {
 
 int parse_config_file(Configs * configs, char * path)
 {
+	configs->input_folder = NULL;
+	configs->output_file = NULL;
 	FILE * f;
 	f = fopen("../../config.ini", "rb");
 	if (!f) return ERROR_COULD_NOT_READ_FILE;
@@ -74,6 +76,8 @@ int parse_config_file(Configs * configs, char * path)
 
 		//Check what config rule we are dealing with
 		if (strcmp(value_buffer, "")==0) {
+			if (configs->input_folder) free(configs->input_folder);
+			if (configs->output_file) free(configs->output_file);
 			return ERROR_INVALID_CONFIG_FILE;
 		}
 		else if (strcmp(key_buffer, "input_folder") == 0) {
@@ -119,7 +123,6 @@ int main(int argc, char* argv[])
 
 	1: config file
 	**/
-
 	
 	if (argc == 7) {
 		printf("Merging waves..\n");
@@ -129,7 +132,7 @@ int main(int argc, char* argv[])
 		destroy_wave(&wave);
 		printf("Edn");
 		getchar();
-		return EXIT_SUCCES;
+		return EXIT_SUCCESS;
 	} else if (argc == 2) {
 		Configs * configs = malloc(sizeof(Configs));
 		int result = parse_config_file(configs, argv[1]);
@@ -140,10 +143,12 @@ int main(int argc, char* argv[])
 
 		write_wave(wave, configs->output_file);
 		destroy_wave(&wave);
+		if (configs->input_folder) free(configs->input_folder);
+		if (configs->output_file) free(configs->output_file);
 		free(configs);
 		printf("Edn");
 		getchar();
-		return EXIT_SUCCES;
+		return EXIT_SUCCESS;
 	} else {
 		printf("No arguments given..\n");
 		printf("Commandline arguments:\n");
