@@ -66,12 +66,12 @@ int create_file_list(char * dstList[], const int n, char * path)
 	}
 }
 
-Raw_wave * merge_waves_autovalues(char * path)
+Raw_wave * merge_waves_random_autovalues(char * path)
 {
 	merge_waves(path, 10000, 60000, 10000, 60000);
 }
 
-Raw_wave * merge_waves(char * path, int amount_min, int amount_max, int offset_min, int offset_max)
+Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int offset_min, int offset_max)
 {
 	int listSize = MAX_INPUT_FILES;
 	char ** list = malloc(MAX_INPUT_FILES);

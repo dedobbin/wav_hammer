@@ -75,12 +75,7 @@ int parse_config_file(Configs * configs, char * path)
 #endif
 
 		//Check what config rule we are dealing with
-		if (strcmp(value_buffer, "")==0) {
-			if (configs->input_folder) free(configs->input_folder);
-			if (configs->output_file) free(configs->output_file);
-			return ERROR_INVALID_CONFIG_FILE;
-		}
-		else if (strcmp(key_buffer, "input_folder") == 0) {
+		if (strcmp(key_buffer, "input_folder") == 0) {
 			configs->input_folder = malloc(strlen(value_buffer) + 1);
 			strcpy(configs->input_folder, value_buffer);
 		}
@@ -102,6 +97,11 @@ int parse_config_file(Configs * configs, char * path)
 		else if (strcmp(key_buffer, "max_src_offset") == 0) {
 			configs->max_src_offset = atoi(value_buffer);
 		}
+		if (strcmp(configs->input_folder, "") == 0 || strcmp(configs->output_file, "") == 0) {
+			if (configs->input_folder) free(configs->input_folder);
+			if (configs->output_file) free(configs->output_file);
+			return ERROR_INVALID_CONFIG_FILE;
+		}
 	} while (c != '\0');
 
 	return 0;
@@ -109,7 +109,6 @@ int parse_config_file(Configs * configs, char * path)
 
 int main(int argc, char* argv[])
 {
-
 	/**
 	commandline arguments: 
 	1: input folder
