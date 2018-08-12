@@ -26,6 +26,24 @@ void hamming_pointless_distortion(Raw_wave * wave)
   }
 }
 
+void hamming_distortion2(Raw_wave * dst)
+{
+
+	int i = 0;
+	for (i = 0; i < datasize(dst); i++) {
+		dst->data_chunk->audiodata[i] *= 2;
+	}
+}
+
+void hamming_distortion3(Raw_wave * dst)
+{
+
+	int i = 0;
+	for (i = 0; i < datasize(dst) - 1; i++) {
+		dst->data_chunk->audiodata[i] |= dst->data_chunk->audiodata[i + 1];
+	}
+}
+
 void distortion(Raw_wave * wave, long amount)
 {
 
@@ -55,4 +73,12 @@ void distortion(Raw_wave * wave, long amount)
 		}
 	} 
 	printf("done hamming\n");
+}
+
+void hamming_kapot(Raw_wave * dst)
+{
+	int i = 0;
+	for (i = 0; i < datasize(dst) ; i++) {
+		dst->data_chunk->audiodata[i] |= dst->data_chunk->audiodata[random(0, i)];
+	}
 }

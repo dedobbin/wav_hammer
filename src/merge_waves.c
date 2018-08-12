@@ -1,17 +1,7 @@
 #include "merge_waves.h"
 #include "wave_samples.h"
+#include "utils.h"
 #include <dirent.h> 
-
-int random(int min, int max)
-{
-	if (min < 0)
-		min = 0;
-	if (max < min)
-		max = min;
-	int result  = (double)rand() / (RAND_MAX + 1) * (max - min) + min;
-	//printf("%d\t(%d) \n", result, num_samples(fileOne));
-	return result;
-}
 
 void random_sort_list(char * list[], int list_size)
 {

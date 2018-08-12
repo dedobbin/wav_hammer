@@ -121,14 +121,6 @@ int main(int argc, char* argv[])
 
 	1: config file
 	**/
-
-
-	Raw_wave * w;
-	w = create_header();
-	generate_sinewave(w);
-	write_wave(w, "../../output/output2.wav");
-	destroy_wave(&w);
-	return;
 	
 	if (argc == 7) {
 		printf("Merging waves..\n");
