@@ -73,9 +73,13 @@ int parse_config_file(Configs * configs, char * path)
 #else
 		value_buffer[i - offset - 1] = '\0';//\n is also memcpy'd, just overwrite it
 #endif
-
+		if (strcmp(key_buffer, "") == 0 || strcmp(value_buffer, "") == 0) {
+			if (configs->input_folder) free(configs->input_folder);
+			if (configs->output_file) free(configs->output_file);
+			return ERROR_INVALID_CONFIG_FILE;
+		}
 		//Check what config rule we are dealing with
-		if (strcmp(key_buffer, "input_folder") == 0) {
+		else if (strcmp(key_buffer, "input_folder") == 0) {
 			configs->input_folder = malloc(strlen(value_buffer) + 1);
 			strcpy(configs->input_folder, value_buffer);
 		}
@@ -97,11 +101,6 @@ int parse_config_file(Configs * configs, char * path)
 		else if (strcmp(key_buffer, "max_src_offset") == 0) {
 			configs->max_src_offset = atoi(value_buffer);
 		}
-		if (strcmp(configs->input_folder, "") == 0 || strcmp(configs->output_file, "") == 0) {
-			if (configs->input_folder) free(configs->input_folder);
-			if (configs->output_file) free(configs->output_file);
-			return ERROR_INVALID_CONFIG_FILE;
-		}
 	} while (c != '\0');
 
 	return 0;
@@ -122,10 +121,18 @@ int main(int argc, char* argv[])
 
 	1: config file
 	**/
+
+
+	Raw_wave * w;
+	w = create_header();
+	generate_sinewave(w);
+	write_wave(w, "../../output/output2.wav");
+	destroy_wave(&w);
+	return;
 	
 	if (argc == 7) {
 		printf("Merging waves..\n");
-		Raw_wave * wave = merge_waves(argv[1], atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+		Raw_wave * wave = merge_waves_random(argv[1], atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 		printf("Saving wave file to %s..\n", argv[2]);
 		write_wave(wave, argv[2]);
 		destroy_wave(&wave);
@@ -138,7 +145,7 @@ int main(int argc, char* argv[])
 		int result = parse_config_file(configs, argv[1]);
 		if (result != 0) return result;
 		printf("Merging waves..\n");
-		Raw_wave * wave = merge_waves(configs->input_folder, configs->min_src_samples, configs->max_src_samples, configs->min_src_offset, configs->max_src_offset);
+		Raw_wave * wave = merge_waves_random(configs->input_folder, configs->min_src_samples, configs->max_src_samples, configs->min_src_offset, configs->max_src_offset);
 		printf("Saving wave file to %s..\n", configs->output_file);
 
 		write_wave(wave, configs->output_file);

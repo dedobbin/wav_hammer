@@ -68,7 +68,7 @@ int create_file_list(char * dstList[], const int n, char * path)
 
 Raw_wave * merge_waves_random_autovalues(char * path)
 {
-	merge_waves(path, 10000, 60000, 10000, 60000);
+	merge_waves_random(path, 10000, 60000, 10000, 60000);
 }
 
 Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int offset_min, int offset_max)
