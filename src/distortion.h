@@ -12,8 +12,10 @@ void hamming_kapot(Raw_wave * dst);
 
 /* following functions are general weirdness */
 void hamming_distortion(Raw_wave * wave, long amount);
-void hamming_pointless_distortion(Raw_wave * wave);
-void hamming_distortion2(Raw_wave * dst);
-void hamming_distortion3(Raw_wave * dst);
+void hamming_punch_distortion(Raw_wave * dst);
 
+/* pointless functions don't take samplesize in consideration, work directly on raw_data */
+void hamming_pointless_distortion(Raw_wave * wave);
+void hamming_pointless_distortion2(Raw_wave * dst);
+void hamming_pointless_distortion3(Raw_wave * dst);
 #endif

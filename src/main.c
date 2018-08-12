@@ -122,13 +122,6 @@ int main(int argc, char* argv[])
 	1: config file
 	**/
 
-	Raw_wave * wave = NULL;
-	load_wave(&wave, "../../audio/1.wav");
-	distortion_multiply(wave, 4);
-	write_wave(wave, "../../output/1.wav");
-	destroy_wave(&wave);
-	return;
-
 	if (argc == 7) {
 		printf("Merging waves..\n");
 		Raw_wave * wave = merge_waves_random(argv[1], atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));

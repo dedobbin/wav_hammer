@@ -62,6 +62,30 @@ void distortion(Raw_wave * wave, long amount)
 	}
 }
 
+/* does something similair to normal distortion but because additional magic more 'punch' is added */
+void hamming_punch_distortion(Raw_wave * dst) {
+	if (bits_per_sample(dst) == 16) {
+		//-32768 to 32767
+		const MAX = 32767;
+		const MIN = -32768;
+		int i;
+		int numSamples = num_samples(dst);
+		for (i = 0; i < numSamples; ++i) {
+			long sample = get_sample(dst, i);
+			if (sample < MAX / 4)
+				set_sample(dst, i, MIN);
+			else if (sample > MAX / 4)
+				set_sample(dst, i, MAX);
+			long newSample = get_sample(dst, i);
+			if (newSample < sample)
+				set_sample(dst, i, dst);
+		}
+	} else {
+		printf("distortion: Not implemented for %d bits per sample\n", bits_per_sample(dst));
+	}
+}
+
+/* doesn't take samplesize in consideration, work directly on raw_data */
 void hamming_kapot(Raw_wave * dst)
 {
 	int i = 0;
@@ -70,6 +94,7 @@ void hamming_kapot(Raw_wave * dst)
 	}
 }
 
+/* Doesn't take overflow in account */
 void hamming_distortion(Raw_wave * wave, long amount)
 {
   int blockAlign = block_align(wave);
@@ -86,6 +111,7 @@ void hamming_distortion(Raw_wave * wave, long amount)
   }
 }
 
+/* doesn't take samplesize in consideration, work directly on raw_data */
 void hamming_pointless_distortion(Raw_wave * wave)
 {
   int i = 0;
@@ -94,18 +120,18 @@ void hamming_pointless_distortion(Raw_wave * wave)
   }
 }
 
-void hamming_distortion2(Raw_wave * dst)
+/* doesn't take samplesize in consideration, work directly on raw_data */
+void hamming_pointless_distortion2(Raw_wave * dst)
 {
-
 	int i = 0;
 	for (i = 0; i < datasize(dst); i++) {
 		dst->data_chunk->audiodata[i] *= 2;
 	}
 }
 
-void hamming_distortion3(Raw_wave * dst)
+/* doesn't take samplesize in consideration, work directly on raw_data */
+void hamming_pointless_distortion3(Raw_wave * dst)
 {
-
 	int i = 0;
 	for (i = 0; i < datasize(dst) - 1; i++) {
 		dst->data_chunk->audiodata[i] |= dst->data_chunk->audiodata[i + 1];
