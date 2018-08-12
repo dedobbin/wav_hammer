@@ -4,6 +4,7 @@
 #include "raw_wave.h"
 
 /* actual gain/distortion */
+void distortion_multiply(Raw_wave * wave, long amount);
 void distortion(Raw_wave * wave, long amount);
 
 /* turns audio into small crackles */

@@ -2,6 +2,36 @@
 #include <stdio.h>
 #include "distortion.h"
 
+/* sample will be multiplied by amount,  if value under- or overflows, it's set to min or max value */
+void distortion_multiply(Raw_wave * wave, long amount)
+{
+	if (bits_per_sample(wave) == 16) {
+		//-32768 to 32767
+		const MAX = 32767;
+		const MIN = -32768;
+
+		int i;
+		for (i = 0; i < num_samples(wave); i++) {
+			int16_t sample = get_sample(wave, i);
+			if (sample > 0) {
+				if (sample * amount < sample)
+					set_sample(wave, i, MAX);
+				else
+					set_sample(wave, i, sample * amount);
+			}
+			else if (sample < 0) {
+				if (sample * amount > sample)
+					set_sample(wave, i, MIN);
+				else
+					set_sample(wave, i, sample * amount);
+			}
+		}
+	}
+	else {
+		printf("distortion: Not implemented for %d bits per sample\n", bits_per_sample(wave));
+	}
+}
+
 /* amount will be added to every > 0 sample, and extracted from samples < 0, if value under- or overflows, it's set to min or max value*/
 void distortion(Raw_wave * wave, long amount)
 {

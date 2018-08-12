@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
 
 	Raw_wave * wave = NULL;
 	load_wave(&wave, "../../audio/1.wav");
-	hamming_whatever(wave, 10000000);
+	distortion_multiply(wave, 4);
 	write_wave(wave, "../../output/1.wav");
 	destroy_wave(&wave);
 	return;
