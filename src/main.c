@@ -134,6 +134,7 @@ int main(int argc, char* argv[])
 		getchar();
 		return EXIT_SUCCESS;
 	} else if (argc == 2) {
+		int i = 0;
 		Configs * configs = malloc(sizeof(Configs));
 		int result = parse_config_file(configs, argv[1]);
 		if (result != 0) return result;

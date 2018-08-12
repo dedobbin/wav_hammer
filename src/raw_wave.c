@@ -104,7 +104,7 @@ int write_wave(Raw_wave * wave, const char * const path)
 {
   FILE * f;
   f = fopen(path, "wb");
-#ifdef __unix 
+#ifdef __linux__ 
   if (!f || access (path, W_OK)){
     fprintf(stderr, "write_wave: Could not open file '%s' for writing\n", path);
     return -1;
@@ -356,9 +356,10 @@ unsigned datasize(const Raw_wave * const wave)
 unsigned num_samples(const Raw_wave * const wave)
 {
   int bytesPerSample = bits_per_sample(wave) / 8;
+  int numChannels = num_channels(wave);
   int size = datasize(wave);
   //assert((size % blockAlign) == 0);
-  return size / bytesPerSample;
+  return size / (bytesPerSample + numChannels);
 }
 
 void set_num_channels(Raw_wave * wave, int numChannels)

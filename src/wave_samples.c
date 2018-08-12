@@ -62,8 +62,6 @@ void insert_samples(Raw_wave * dst, Raw_wave * src, long src_amount, long src_of
 		if (dst_offset > num_samples(dst))
 			dst_offset = num_samples(dst);
 
-
-
 		//get samples of dst wave before dst_offset, they should be left intact
 		long dataChunkOneSize = bytesPerSample * numChannels * dst_offset;
 		long dataChunkTwoSize = bytesPerSample * numChannels * src_amount;
