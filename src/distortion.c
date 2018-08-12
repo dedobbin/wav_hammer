@@ -137,3 +137,11 @@ void hamming_pointless_distortion3(Raw_wave * dst)
 		dst->data_chunk->audiodata[i] |= dst->data_chunk->audiodata[i + 1];
 	}
 }
+
+char ** get_distortion_functions()
+{
+	void(*list[9]) = { distortion_multiply, distortion, hamming_kapot,hamming_distortion,
+		hamming_punch_distortion,  hamming_pointless_distortion, hamming_pointless_distortion2,
+		hamming_pointless_distortion3 };
+	return list;
+}
