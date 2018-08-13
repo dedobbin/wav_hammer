@@ -7,6 +7,7 @@ int random(int min, int max)
 		min = 0;
 	if (max < min)
 		max = min;
-	int result = (double)rand() / (RAND_MAX + 1) * (max - min) + min;
+	double random_value = (double)rand() / (RAND_MAX + 1);
+	int result = min + random_value * (max - min);
 	return result;
 }
