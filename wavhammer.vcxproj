@@ -103,6 +103,7 @@
     <ClCompile Include="src\distortion.c" />
     <ClCompile Include="src\linked_list.c" />
     <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\process_input.c" />
     <ClCompile Include="src\raw_wave.c" />
     <ClCompile Include="src\utils.c" />
     <ClCompile Include="src\wave_samples.c" />
@@ -111,6 +112,7 @@
     <ClInclude Include="src\datatypes.h" />
     <ClInclude Include="src\merge_waves.h" />
     <ClInclude Include="src\distortion.h" />
+    <ClInclude Include="src\process_input.h" />
     <ClInclude Include="src\raw_wave.h" />
     <ClInclude Include="src\utils.h" />
     <ClInclude Include="src\wave_samples.h" />
