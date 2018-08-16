@@ -179,17 +179,54 @@ int process_interactive_input()
 			Raw_wave * wave_two_segment = create_header();
 			insert_samples(wave_two_segment, wave_two, n_samples, src_offset, 0, false);
 
+			char arg_buffer[100];
+			printf("Mutate audio?\n0:\tNo\n1:\tdistortion(n)\n2:\thamming_kapot()\n3:\thamming_distortion(n)\n4:\thamming_punch_distortion()\n5:\thamming_pointless_distortion()\n6:\thamming_pointless_distortion2()\n7:\thamming_pointless_distortion3()\n");
+			scanf("%s", buffer);
+
+			switch (atoi(buffer)) {
+				case 0:
+					break;
+				case 1:
+					printf("Argument?\n");
+					scanf("%s", buffer);
+					distortion_multiply(wave_two_segment, atoi(buffer));
+					break;
+				case 2:
+					hamming_kapot(wave_two_segment);
+					break;
+				case 3:
+					printf("Argument?\n");
+					scanf("%s", buffer);
+					distortion_multiply(wave_two_segment, atoi(buffer));
+					break;
+				case 4:
+					hamming_punch_distortion(wave_two_segment);
+					break;
+				case 5:
+					hamming_pointless_distortion(wave_two_segment);
+					break;
+				case 6:
+					hamming_pointless_distortion2(wave_two_segment);
+					break;
+				case 7:
+					hamming_pointless_distortion3(wave_two_segment);
+					break;
+				default:
+					break;
+			}
+
 			int insert_point = 0;
 			if (num_samples(result) > 0) {
 				printf("Append to end of source file? y for yes, number for insert point\n");
 				scanf("%s", buffer);
-				if (buffer[0] >= 'A' && buffer <= 'z') {
+				if (buffer[0] >= 'A' && buffer[0] <= 'z') {
 					insert_point = num_samples(result);
 				} else {
 					insert_point = atoi(buffer);
 				}
 
 			}
+			//void insert_samples(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite);
 			insert_samples(result, wave_two_segment, num_samples(wave_two_segment), 0, insert_point, false);
 
 			printf("Add another file?\n");
