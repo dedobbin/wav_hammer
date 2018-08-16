@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 	if (argc > 1) {
 		process_commandline_arguments(argc, argv);
 	} else {
-		process_interactive_input();
+		interactive_input();
 	}
 }
 

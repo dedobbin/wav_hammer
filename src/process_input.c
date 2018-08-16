@@ -137,7 +137,7 @@ int process_commandline_arguments(int argc, char * argv[])
 	 }
 }
 
-int process_interactive_input()
+int interactive_input()
 {
 	printf("No arguments given..\n");
 	printf("Commandline arguments:\n");
@@ -152,6 +152,7 @@ int process_interactive_input()
 #define MAX_LEN_INPUT_STRING 255
 		printf("Interactive mode\n");
 		char buffer[MAX_LEN_INPUT_STRING];
+		char buffer_two[MAX_LEN_INPUT_STRING];
 
 		Raw_wave * result = create_header();
 		Raw_wave * wave_two = create_header();
@@ -162,17 +163,16 @@ int process_interactive_input()
 				scanf("%s", buffer);
 			} while (load_wave(&wave_two, buffer) < 0);
 
-			printf("Offset from source file? (non-number for no offset)\n");
-			scanf("%s", buffer);
+			printf("Offset from source file (non-number for no offset)?\n");
+			printf("and take how many samples (non-number for all)?\n");
+			scanf("%s %s", buffer, buffer_two);
 			int src_offset = atoi(buffer);
 
 			int n_samples = 0;
-			printf("Take all samples? y for yes, number for amount\n");
-			scanf("%s", buffer);
-			if (buffer[0] >= 'A' && buffer[0] <= 'z') {
+			if (buffer_two[0] >= 'A' && buffer_two[0] <= 'z') {
 				n_samples = num_samples(wave_two);
 			} else {
-				n_samples = atoi(buffer);
+				n_samples = atoi(buffer_two);
 			}
 
 			//Place segment in new container
@@ -224,9 +224,8 @@ int process_interactive_input()
 				} else {
 					insert_point = atoi(buffer);
 				}
-
 			}
-			//void insert_samples(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite);
+
 			insert_samples(result, wave_two_segment, num_samples(wave_two_segment), 0, insert_point, false);
 
 			printf("Add another file?\n");
