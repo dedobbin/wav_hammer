@@ -153,7 +153,7 @@ int process_interactive_input()
 		printf("Interactive mode\n");
 		char buffer[MAX_LEN_INPUT_STRING];
 
-		Raw_wave * container = create_header();
+		Raw_wave * result = create_header();
 		Raw_wave * wave_two = create_header();
 		
 		do {
@@ -162,26 +162,35 @@ int process_interactive_input()
 				scanf("%s", buffer);
 			} while (load_wave(&wave_two, buffer) < 0);
 
-			int src_amount = 0;
-			printf("Take all samples? y for yes, number for amount\n");
-			scanf("%s", buffer);
-			if (buffer[0] >= 'A' && buffer[0] <= 'z') {
-				src_amount = num_samples(wave_two);
-			} else {
-				src_amount = atoi(buffer);
-			}
-
 			printf("Offset from source file? (non-number for no offset)\n");
 			scanf("%s", buffer);
 			int src_offset = atoi(buffer);
 
-			printf("Append to end of source file? y for yes, number for offset\n");
+			int n_samples = 0;
+			printf("Take all samples? y for yes, number for amount\n");
 			scanf("%s", buffer);
-			if (buffer[0] >= 'A' && buffer <= 'z') {
-				insert_samples(container, wave_two, src_amount, src_offset, num_samples(container), false);
+			if (buffer[0] >= 'A' && buffer[0] <= 'z') {
+				n_samples = num_samples(wave_two);
 			} else {
-				insert_samples(container, wave_two, src_amount, src_offset, atoi(buffer), false);
+				n_samples = atoi(buffer);
 			}
+
+			//Place segment in new container
+			Raw_wave * wave_two_segment = create_header();
+			insert_samples(wave_two_segment, wave_two, n_samples, src_offset, 0, false);
+
+			int insert_point = 0;
+			if (num_samples(result) > 0) {
+				printf("Append to end of source file? y for yes, number for insert point\n");
+				scanf("%s", buffer);
+				if (buffer[0] >= 'A' && buffer <= 'z') {
+					insert_point = num_samples(result);
+				} else {
+					insert_point = atoi(buffer);
+				}
+
+			}
+			insert_samples(result, wave_two_segment, num_samples(wave_two_segment), 0, insert_point, false);
 
 			printf("Add another file?\n");
 			scanf("%s", buffer);
@@ -190,6 +199,6 @@ int process_interactive_input()
 		do {
 			printf("Output file?\n");
 			scanf("%s", buffer);
-		} while (write_wave(container, buffer) < 0);
+		} while (write_wave(result, buffer) < 0);
 	}
 }
