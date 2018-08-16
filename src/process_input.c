@@ -163,18 +163,19 @@ int process_interactive_input()
 			} while (load_wave(&wave_two, buffer) < 0);
 
 			int src_amount = 0;
-			printf("Take how many samples? anything else than number for all samples\n");
-			if (buffer[0] >= 'A' && buffer <= 'z') {
+			printf("Take all samples? y for yes, number for amount\n");
+			scanf("%s", buffer);
+			if (buffer[0] >= 'A' && buffer[0] <= 'z') {
 				src_amount = num_samples(wave_two);
 			} else {
-				src_amount = num_samples(atoi(buffer));
+				src_amount = atoi(buffer);
 			}
 
-			printf("Offset from source file?\n");
+			printf("Offset from source file? (non-number for no offset)\n");
 			scanf("%s", buffer);
 			int src_offset = atoi(buffer);
 
-			printf("Append to end of source file? y for yes, number for offset anything else for append\n");
+			printf("Append to end of source file? y for yes, number for offset\n");
 			scanf("%s", buffer);
 			if (buffer[0] >= 'A' && buffer <= 'z') {
 				insert_samples(container, wave_two, src_amount, src_offset, num_samples(container), false);
