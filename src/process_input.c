@@ -30,6 +30,11 @@ int parse_config_file(Configs * configs, char * path)
 {
 	configs->input_folder = NULL;
 	configs->output_file = NULL;
+	configs->min_src_samples = 0;
+	configs->max_src_samples = 0;
+	configs->min_src_offset = 0;
+	configs->max_src_offset = 0;
+
 	FILE * f;
 	f = fopen("../../config.ini", "rb");
 	if (!f) return ERROR_COULD_NOT_READ_FILE;
