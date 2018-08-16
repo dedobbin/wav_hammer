@@ -64,16 +64,16 @@ int parse_config_file(Configs * configs, char * path)
 			i++;
 		} while (c != '\n' && c != '\0');
 
-#ifdef _WIN32
+		#ifdef _WIN32
 		if (c == '\n') {
 			value_buffer[i - offset - 2] = '\0';//\n\r is also memcpy'd, just overwrite it
 		}
 		else {
 			value_buffer[i - offset - 1] = '\0';//\0 is also memcpy'd, just overwrite it
 		}
-#else
+		#else
 		value_buffer[i - offset - 1] = '\0';//\n is also memcpy'd, just overwrite it
-#endif
+		#endif
 		if (strcmp(key_buffer, "") == 0 || strcmp(value_buffer, "") == 0) {
 			if (configs->input_folder) free(configs->input_folder);
 			if (configs->output_file) free(configs->output_file);
@@ -155,13 +155,16 @@ int interactive_input()
 		char buffer_two[MAX_LEN_INPUT_STRING];
 
 		Raw_wave * result = create_header();
-		Raw_wave * wave_two = create_header();
+		Raw_wave * wave_two = NULL;
 		
 		do {
-			do {
-				printf("Take samples from what file?\n");
-				scanf("%s", buffer);
-			} while (load_wave(&wave_two, buffer) < 0);
+			//If a new wave was already loaded in previous iteration of do while loop, don't ask for new one
+			if (!wave_two){
+				do {
+					printf("Take samples from what file?\n");
+					scanf("%s", buffer);
+				} while (load_wave(&wave_two, buffer) < 0);
+			}
 
 			printf("Offset from source file (non-number for no offset)?\n");
 			printf("and take how many samples (non-number for all)?\n");
@@ -227,14 +230,22 @@ int interactive_input()
 			}
 
 			insert_samples(result, wave_two_segment, num_samples(wave_two_segment), 0, insert_point, false);
+			free(wave_two);
+			wave_two = NULL;
+			free(wave_two_segment);
+			wave_two_segment = NULL;
 
 			printf("Add another file?\n");
 			scanf("%s", buffer);
-		} while (buffer[0] == 'y');
+		} while (load_wave(&wave_two, buffer) > 0 || buffer[0] != 'n');
 
 		do {
 			printf("Output file?\n");
 			scanf("%s", buffer);
 		} while (write_wave(result, buffer) < 0);
+
+		free(result);
+		result = NULL;
+		return EXIT_SUCCESS;
 	}
 }
