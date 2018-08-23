@@ -10,32 +10,35 @@
 #include "datatypes.h"
 #include "merge_waves.h"
 
-#define MAX_CONFIG_FILE_SIZE 255
 #define EXIT_SUCCESS 0
 #define ERROR_COULD_NOT_READ_FILE 1
 #define ERROR_NOT_ENOUGH_MEMORY 2
 #define ERROR_INVALID_CMD_ARGUMENTS 3
 #define ERROR_INVALID_CONFIG_FILE 4
+#define MAX_RULES 255
 
-typedef struct Configs {
+typedef struct Config_rule {
 	char * input_folder;
+	char * input_file;
 	char * output_file;
 	int min_src_samples;
 	int max_src_samples;
 	int min_src_offset;
 	int max_src_offset;
-} Configs;
+	int entries;
+} Config_rule;
 
-int parse_config_file(Configs * configs, char * path)
+typedef struct Config {
+	Config_rule rules[MAX_RULES];
+	int count;
+} Config;
+
+int parse_config_file(Config * config, char * path)
 {
-	configs->input_folder = NULL;
-	configs->output_file = NULL;
-	configs->min_src_samples = 0;
-	configs->max_src_samples = 0;
-	configs->min_src_offset = 0;
-	configs->max_src_offset = 0;
-
+	//Index of last rule stored. none are stored so init with -1
+	config->count = -1;
 	FILE * f;
+
 	f = fopen("../../config.ini", "rb");
 	if (!f) return ERROR_COULD_NOT_READ_FILE;
 	fseek(f, 0L, SEEK_END);
@@ -49,7 +52,6 @@ int parse_config_file(Configs * configs, char * path)
 	char c;
 	char key_buffer[100];
 	do {
-
 		//Read until a complete config 'key' is in buffer
 		int offset = i;
 		do {
@@ -80,32 +82,46 @@ int parse_config_file(Configs * configs, char * path)
 		value_buffer[i - offset - 1] = '\0';//\n is also memcpy'd, just overwrite it
 		#endif
 		if (strcmp(key_buffer, "") == 0 || strcmp(value_buffer, "") == 0) {
-			if (configs->input_folder) free(configs->input_folder);
-			if (configs->output_file) free(configs->output_file);
+			if (config->rules[config->count].input_folder) free(config->rules[config->count].input_folder);
+			if (config->rules[config->count].output_file) free(config->rules[config->count].output_file);
 			return ERROR_INVALID_CONFIG_FILE;
 		}
 		//Check what config rule we are dealing with
 		else if (strcmp(key_buffer, "input_folder") == 0) {
-			configs->input_folder = malloc(strlen(value_buffer) + 1);
-			strcpy(configs->input_folder, value_buffer);
+			config->rules[config->count].input_folder = malloc(strlen(value_buffer) + 1);
+			strcpy(config->rules[config->count].input_folder, value_buffer);
+		} else if (strcmp(key_buffer, "input_file") == 0) {
+			config->rules[config->count].input_file = malloc(strlen(value_buffer) + 1);
+			strcpy(config->rules[config->count].input_file, value_buffer);
 		}
 		else if (strcmp(key_buffer, "output_file") == 0) {
-			configs->output_file = malloc(strlen(value_buffer) + 1);
-			strcpy(configs->output_file, value_buffer);
+			config->rules[config->count].output_file = malloc(strlen(value_buffer) + 1);
+			strcpy(config->rules[config->count].output_file, value_buffer);
 		}
 		else if (strcmp(key_buffer, "min_src_samples") == 0) {
-			configs->min_src_samples = atoi(value_buffer);
+			config->rules[config->count].min_src_samples = atoi(value_buffer);
 		}
 		else if (strcmp(key_buffer, "max_src_samples") == 0) {
 
-			configs->max_src_samples = atoi(value_buffer);
+			config->rules[config->count].max_src_samples = atoi(value_buffer);
 		}
 		else if (strcmp(key_buffer, "min_src_offset") == 0) {
 			offset = i;
-			configs->min_src_offset = atoi(value_buffer);
+			config->rules[config->count].min_src_offset = atoi(value_buffer);
 		}
 		else if (strcmp(key_buffer, "max_src_offset") == 0) {
-			configs->max_src_offset = atoi(value_buffer);
+			config->rules[config->count].max_src_offset = atoi(value_buffer);
+		}
+		else if (strcmp(key_buffer, "[") == 0) {
+			//Start of new ruleset
+			config->count++;
+			config->rules[config->count].input_folder = NULL;
+			config->rules[config->count].output_file = NULL;
+			config->rules[config->count].input_file = NULL;
+			config->rules[config->count].min_src_samples = 0;
+			config->rules[config->count].max_src_samples = 0;
+			config->rules[config->count].min_src_offset = 0;
+			config->rules[config->count].max_src_offset = 0;
 		}
 	} while (c != '\0');
 
@@ -125,18 +141,40 @@ int process_commandline_arguments(int argc, char * argv[])
 	}
 	 else if (argc == 2) {
 		 int i = 0;
-		 Configs * configs = malloc(sizeof(Configs));
-		 int result = parse_config_file(configs, argv[1]);
+		 Config * config = malloc(sizeof(Config));
+		 int result = parse_config_file(config, argv[1]);
 		 if (result != 0) return result;
-		 printf("Merging waves..\n");
-		 Raw_wave * wave = merge_waves_random(configs->input_folder, configs->min_src_samples, configs->max_src_samples, configs->min_src_offset, configs->max_src_offset);
-		 printf("Saving wave file to %s..\n", configs->output_file);
+		 
 
-		 write_wave(wave, configs->output_file);
-		 destroy_wave(&wave);
-		 if (configs->input_folder) free(configs->input_folder);
-		 if (configs->output_file) free(configs->output_file);
-		 free(configs);
+		 Raw_wave * final_output = create_header();
+		 for (i = 0; i < config->count+1; i++) {
+			 Raw_wave * subassembly = NULL;
+			 //If input file was given, take segment from that file according to other config rules
+			 if (config->rules[i].input_file) {
+				 printf("todo:cut segment from input file\n");
+			 }
+			//If input folder was given take all files from that folder and merge all waves according to other config rules
+			 else if (config->rules[i].input_folder) {
+				 printf("Merging waves from input folder..\n");
+				 Config_rule current_rule = config->rules[i];
+				 subassembly = merge_waves_random(current_rule.input_folder, current_rule.min_src_samples, current_rule.max_src_samples, current_rule.min_src_offset, current_rule.max_src_offset);
+			 }
+			 //	glue subassembly to final_output
+			 insert_samples(final_output, subassembly, num_samples(subassembly), 0, num_samples(subassembly), false);
+			 destroy_wave(&subassembly);
+
+			 //if rule contains output, write final product there
+			 if (config->rules[i].output_file) {
+				 printf("Saving wave file to %s..\n", config->rules[i].output_file);
+				 write_wave(final_output, config->rules[i].output_file);
+			 }
+			 //Config rule was parsed, clean it
+			 if (config->rules[i].input_folder) free(config->rules[i].input_folder);
+			 if (config->rules[i].output_file) free(config->rules[i].output_file);
+			 if (config->rules[i].output_file) free(config->rules[i].input_file);
+		 }
+		 destroy_wave(&final_output);
+		 free(config);
 		 printf("Edn");
 		 return EXIT_SUCCESS;
 	 }
