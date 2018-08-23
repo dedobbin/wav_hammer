@@ -18,14 +18,21 @@
 #define MAX_RULES 255
 
 typedef struct Config_rule {
+	//specific for folder input rule
 	char * input_folder;
-	char * input_file;
-	char * output_file;
-	int min_src_samples;
+	int min_src_samples; //min and max values are used to generate random number to cut up files in folder
 	int max_src_samples;
 	int min_src_offset;
 	int max_src_offset;
-	int entries;
+
+	//specific for single file input rule
+	char * input_file;
+	int src_amount;
+	int src_offset;
+
+	//any rule can contain output path to write result of previous rules to disk
+	char * output_file;
+
 } Config_rule;
 
 typedef struct Config {
@@ -122,6 +129,8 @@ int parse_config_file(Config * config, char * path)
 			config->rules[config->count].max_src_samples = 0;
 			config->rules[config->count].min_src_offset = 0;
 			config->rules[config->count].max_src_offset = 0;
+			config->rules[config->count].src_offset = 0;
+			config->rules[config->count].src_amount = 0;
 		}
 	} while (c != '\0');
 
@@ -151,7 +160,17 @@ int process_commandline_arguments(int argc, char * argv[])
 			 Raw_wave * subassembly = NULL;
 			 //If input file was given, take segment from that file according to other config rules
 			 if (config->rules[i].input_file) {
-				 printf("todo:cut segment from input file\n");
+				 Config_rule current_rule = config->rules[i];
+				 //loading wave from disk will store entire file, so use tmp //TODO: params from load_wave to load partial file?
+				 Raw_wave * tmp = NULL;
+				 load_wave(&tmp, current_rule.input_file);
+				 //if no configs are found, use default values
+				 int src_amount = current_rule.src_amount > 0 ? current_rule.src_amount : num_samples(tmp);
+				 int src_offset = current_rule.src_offset > 0 ? current_rule.src_offset : 0;
+				 //get segment of loaded wave
+				 subassembly = create_header();
+				 insert_samples(subassembly, tmp, src_amount, 0, num_samples(tmp), false);
+
 			 }
 			//If input folder was given take all files from that folder and merge all waves according to other config rules
 			 else if (config->rules[i].input_folder) {
