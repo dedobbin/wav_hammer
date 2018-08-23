@@ -119,6 +119,12 @@ int parse_config_file(Config * config, char * path)
 		else if (strcmp(key_buffer, "max_src_offset") == 0) {
 			config->rules[config->count].max_src_offset = atoi(value_buffer);
 		}
+		else if (strcmp(key_buffer, "src_amount") == 0) {
+			config->rules[config->count].src_amount = atoi(value_buffer);
+		}
+		else if (strcmp(key_buffer, "src_offset") == 0) {
+			config->rules[config->count].src_offset = atoi(value_buffer);
+		}
 		else if (strcmp(key_buffer, "[") == 0) {
 			//Start of new ruleset
 			config->count++;
@@ -169,7 +175,8 @@ int process_commandline_arguments(int argc, char * argv[])
 				 int src_offset = current_rule.src_offset > 0 ? current_rule.src_offset : 0;
 				 //get segment of loaded wave
 				 subassembly = create_header();
-				 insert_samples(subassembly, tmp, src_amount, 0, num_samples(tmp), false);
+				 //void insert_samples(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite)
+				 insert_samples(subassembly, tmp, src_amount, current_rule.src_amount, 0, false);
 
 			 }
 			//If input folder was given take all files from that folder and merge all waves according to other config rules
