@@ -165,8 +165,8 @@ int process_commandline_arguments(int argc, char * argv[])
 		 for (i = 0; i < config->count+1; i++) {
 			 Raw_wave * subassembly = NULL;
 			 //If input file was given, take segment from that file according to other config rules
-			 if (config->rules[i].input_file) {
-				 Config_rule current_rule = config->rules[i];
+			 Config_rule current_rule = config->rules[i];
+			 if (current_rule.input_file) {
 				 //loading wave from disk will store entire file, so use tmp //TODO: params from load_wave to load partial file?
 				 Raw_wave * tmp = NULL;
 				 load_wave(&tmp, current_rule.input_file);
@@ -178,9 +178,8 @@ int process_commandline_arguments(int argc, char * argv[])
 				 insert_samples(subassembly, tmp, src_amount, current_rule.src_amount, 0, false);
 			 }
 			//If input folder was given take all files from that folder and merge all waves according to other config rules
-			 else if (config->rules[i].input_folder) {
+			 else if (current_rule.input_folder) {
 				 printf("Merging waves from input folder..\n");
-				 Config_rule current_rule = config->rules[i];
 				 subassembly = merge_waves_random(current_rule.input_folder, current_rule.min_src_samples, current_rule.max_src_samples, current_rule.min_src_offset, current_rule.max_src_offset);
 			 }
 			 //	glue subassembly to final_output
@@ -188,9 +187,9 @@ int process_commandline_arguments(int argc, char * argv[])
 			 destroy_wave(&subassembly);
 
 			 //if rule contains output, write final product there
-			 if (config->rules[i].output_file) {
-				 printf("Saving wave file to %s..\n", config->rules[i].output_file);
-				 write_wave(final_output, config->rules[i].output_file);
+			 if (current_rule.output_file) {
+				 printf("Saving wave file to %s..\n", current_rule.output_file);
+				 write_wave(final_output, current_rule.output_file);
 			 }
 			 //Config rule was parsed, clean it
 			 if (config->rules[i].input_folder) free(config->rules[i].input_folder);
