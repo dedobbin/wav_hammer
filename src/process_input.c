@@ -175,9 +175,7 @@ int process_commandline_arguments(int argc, char * argv[])
 				 int src_offset = current_rule.src_offset > 0 ? current_rule.src_offset : 0;
 				 //get segment of loaded wave
 				 subassembly = create_header();
-				 //void insert_samples(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite)
 				 insert_samples(subassembly, tmp, src_amount, current_rule.src_amount, 0, false);
-
 			 }
 			//If input folder was given take all files from that folder and merge all waves according to other config rules
 			 else if (config->rules[i].input_folder) {
@@ -186,7 +184,7 @@ int process_commandline_arguments(int argc, char * argv[])
 				 subassembly = merge_waves_random(current_rule.input_folder, current_rule.min_src_samples, current_rule.max_src_samples, current_rule.min_src_offset, current_rule.max_src_offset);
 			 }
 			 //	glue subassembly to final_output
-			 insert_samples(final_output, subassembly, num_samples(subassembly), 0, num_samples(subassembly), false);
+			 insert_samples(final_output, subassembly, num_samples(subassembly), 0, num_samples(final_output), false);
 			 destroy_wave(&subassembly);
 
 			 //if rule contains output, write final product there
