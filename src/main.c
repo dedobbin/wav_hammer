@@ -21,5 +21,7 @@ int main(int argc, char* argv[])
 	} else {
 		interactive_input();
 	}
+	getchar();
+	return 0;
 }
 
