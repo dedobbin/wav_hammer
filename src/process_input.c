@@ -16,6 +16,7 @@
 #define ERROR_INVALID_CMD_ARGUMENTS 3
 #define ERROR_INVALID_CONFIG_FILE 4
 #define MAX_RULESETS 255
+#define MAX_STR_LEN 255
 
 typedef struct Config_ruleset {
 	//specific for folder input ruleset
@@ -43,7 +44,7 @@ typedef struct Config {
 
 void process_effect_rule(Raw_wave * target, char * rule)
 {
-	char effect_type[100] = { NULL };
+	char effect_type[MAX_STR_LEN] = { NULL };
 	int effect_param = 0;
 	//check if contains param
 	char* pos1 = strchr(rule, '(');
@@ -94,10 +95,14 @@ int parse_config_file(Config * config, char * path)
 	if (!file_buffer) return ERROR_NOT_ENOUGH_MEMORY;
 	fread(file_buffer, 1, filesize, f);
 	file_buffer[filesize] = '\0';
+	char key_buffer[MAX_STR_LEN];
+	char value_buffer[MAX_STR_LEN];
 	int i = 0;
 	char c;
-	char key_buffer[100];
 	do {
+		memset(key_buffer, 0, MAX_STR_LEN);
+		memset(value_buffer, 0, MAX_STR_LEN);
+
 		//Read until a complete config 'key' is in buffer
 		int offset = i;
 		do {
@@ -107,8 +112,6 @@ int parse_config_file(Config * config, char * path)
 		} while (c != 61 && c != '\0'); //61 is ascii code for '='
 		key_buffer[i - offset - 1] = '\0'; //= is also memcpy'd, just overwrite it
 
-		char value_buffer[100];
-
 		//Read until a complete config 'value' is in buffer
 		offset = i;
 		do {
@@ -116,6 +119,7 @@ int parse_config_file(Config * config, char * path)
 			value_buffer[i - offset] = c;
 			i++;
 		} while (c != '\n' && c != '\0');
+
 
 		#ifdef _WIN32
 		if (c == '\n') {
@@ -305,7 +309,7 @@ int interactive_input()
 			Raw_wave * wave_two_segment = create_header();
 			insert_samples(wave_two_segment, wave_two, n_samples, src_offset, 0, false);
 
-			char arg_buffer[100];
+			char arg_buffer[MAX_STR_LEN];
 			printf("Mutate audio?\n0:\tNo\n1:\tdistortion(n)\n2:\thamming_kapot()\n3:\thamming_distortion(n)\n4:\thamming_punch_distortion()\n5:\thamming_pointless_distortion()\n6:\thamming_pointless_distortion2()\n7:\thamming_pointless_distortion3()\n");
 			scanf("%s", buffer);
 
