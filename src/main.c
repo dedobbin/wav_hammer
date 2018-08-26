@@ -1,5 +1,4 @@
 #include "process_input.h"
-#include "raw_wave.h"
 int main(int argc, char* argv[])
 {
 	/**
@@ -15,9 +14,6 @@ int main(int argc, char* argv[])
 
 	1: config file
 	**/
-
-	//void insert_samples(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite);
-
 
 	if (argc > 1) {
 		process_commandline_arguments(argc, argv);
