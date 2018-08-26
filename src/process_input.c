@@ -111,6 +111,17 @@ int parse_config_file(Config * config, char * path)
 			i++;
 		} while (c != 61 && c != '\0'); //61 is ascii code for '='
 		key_buffer[i - offset - 1] = '\0'; //= is also memcpy'd, just overwrite it
+		
+		//If there was a space before key, strip it out TODO: clean up this code sometime 
+		#ifdef _WIN32
+		if (key_buffer[0] == '\r' && key_buffer[1] == '\n') {
+			strcpy(key_buffer, key_buffer+2);
+		}
+		#else
+		if (key_buffer[0] == '\n') {
+			strcpy(key_buffer, key_buffer +1);
+		}
+		#endif
 
 		//Read until a complete config 'value' is in buffer
 		offset = i;
