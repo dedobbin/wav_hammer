@@ -287,10 +287,9 @@ int interactive_input()
 	if (result != 'i')
 		return EXIT_SUCCESS;
 	else {
-#define MAX_LEN_INPUT_STRING 255
 		printf("Interactive mode\n");
-		char buffer[MAX_LEN_INPUT_STRING];
-		char buffer_two[MAX_LEN_INPUT_STRING];
+		char buffer[MAX_STR_LEN];
+		char buffer_two[MAX_STR_LEN];
 
 		Raw_wave * result = create_header();
 		Raw_wave * wave_two = NULL;
