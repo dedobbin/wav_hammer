@@ -45,8 +45,7 @@ void insert_samples(Raw_wave * dst, Raw_wave * src, long src_amount, long src_of
     if (!overwrite) {
 		//conversion from n_samples to n_bytes: datasize = bytes per samples * number of channels * n samples
 		int bytesPerSample = bits_per_sample(src) / 8;
-		int numChannels = num_channels(src);
-		int srcOffsetInSamples = bytesPerSample * numChannels * src_offset;
+		int srcOffsetInSamples = bytesPerSample * src_offset;
 
 		if (num_channels(src) != num_channels(dst)) {
 			printf("insert_samples: Trying to insert %d-channel data to %d-channel data, aborting\n", num_channels(src), num_channels(dst));
@@ -63,9 +62,9 @@ void insert_samples(Raw_wave * dst, Raw_wave * src, long src_amount, long src_of
 			dst_offset = num_samples(dst);
 
 		//get samples of dst wave before dst_offset, they should be left intact
-		long dataChunkOneSize = bytesPerSample * numChannels * dst_offset;
-		long dataChunkTwoSize = bytesPerSample * numChannels * src_amount;
-		long dataChunkThreeSize = bytesPerSample * numChannels * (num_samples(dst) - dst_offset);
+		long dataChunkOneSize = bytesPerSample * dst_offset;
+		long dataChunkTwoSize = bytesPerSample * src_amount;
+		long dataChunkThreeSize = bytesPerSample * (num_samples(dst) - dst_offset);
 		long combinedDataChunksize = dataChunkOneSize + dataChunkTwoSize + dataChunkThreeSize;
 		uint8_t *  combinedDataChunk = malloc(combinedDataChunksize);
 
@@ -74,7 +73,7 @@ void insert_samples(Raw_wave * dst, Raw_wave * src, long src_amount, long src_of
 		//get amount of samples from src to insert
 		memcpy(combinedDataChunk + dataChunkOneSize, src->data_chunk->audiodata + srcOffsetInSamples, dataChunkTwoSize);
 		//get tail part of original dst wave, they should stay intact
-		long offsetInBytes = dst->data_chunk->audiodata + bits_per_sample(dst) / 8 * num_channels(dst) * dst_offset;
+		long offsetInBytes = dst->data_chunk->audiodata + bits_per_sample(dst) / 8 * dst_offset;
 		memcpy(combinedDataChunk + dataChunkOneSize + dataChunkTwoSize, offsetInBytes, dataChunkThreeSize);
 
         if (dst->data_chunk->audiodata)

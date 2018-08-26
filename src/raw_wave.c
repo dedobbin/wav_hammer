@@ -357,7 +357,7 @@ unsigned num_samples(const Raw_wave * const wave)
   int numChannels = num_channels(wave);
   int size = datasize(wave);
   //assert((size % blockAlign) == 0);
-  return size / (bytesPerSample + numChannels);
+  return size / bytesPerSample;
 }
 
 void set_num_channels(Raw_wave * wave, int numChannels)
