@@ -57,6 +57,8 @@ void process_effect_rule(Raw_wave * target, char * rule)
 			}
 			else if (strcmp(effect_type, "hamming_distortion") == 0) {
 				hamming_distortion(target, effect_param);
+			} else {
+				printf("process_effect_rule: invalid effect rule: %s\n", rule);
 			}
 		}
 	}
@@ -71,11 +73,13 @@ void process_effect_rule(Raw_wave * target, char * rule)
 		else if (strcmp(rule, "hamming_pointless_distortion") == 0) {
 			hamming_pointless_distortion(target);
 		}
-		else if (strcmp(rule, "hamming_pointess_distortion2") == 0) {
+		else if (strcmp(rule, "hamming_pointless_distortion2") == 0) {
 			hamming_pointless_distortion2(target);
 		}
-		else if (strcmp(rule, "hamming_pointess_distortion3") == 0) {
+		else if (strcmp(rule, "hamming_pointless_distortion3") == 0) {
 			hamming_pointless_distortion3(target);
+		}else {
+			printf("process_effect_rule: invalid effect rule: %s\n", rule);
 		}
 	}
 }
