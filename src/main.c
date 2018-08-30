@@ -1,8 +1,11 @@
+#include "wave_samples.h"
 #include "process_input.h"
+
 int main(int argc, char* argv[])
 {
 	/**
-	commandline arguments: 
+	commandline arguments: 		src_offset	0	long
+
 	1: input folder
 	2: output file path
 	3: minimal amount or random samples from input file

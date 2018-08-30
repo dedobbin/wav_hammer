@@ -5,6 +5,7 @@
 #endif
 #include <string.h>
 #include "process_input.h"
+#include "wave_samples.h"
 #include "raw_wave.h"
 #include "distortion.h"
 #include "datatypes.h"
@@ -242,7 +243,7 @@ int process_commandline_arguments(int argc, char * argv[])
 
 				 //get segment of loaded wave
 				 subassembly = create_header();
-				 insert_samples(subassembly, tmp, src_amount, current_ruleset.src_amount, 0, false);
+				 insert_samples(.dst = subassembly, .src = tmp, .src_amount = current_ruleset.src_amount);
 
 				 //Check if need to apply effect
 				 if (current_ruleset.effect) {
@@ -259,7 +260,7 @@ int process_commandline_arguments(int argc, char * argv[])
 				 }
 			 }
 			 //	glue subassembly to final_output
-			 insert_samples(final_output, subassembly, num_samples(subassembly), 0, num_samples(final_output), false);
+			 insert_samples(.dst = final_output, .src = subassembly, .src_amount = num_samples(subassembly));
 			 destroy_wave(&subassembly);
 
 			 //if rule contains output, write final product there
@@ -321,7 +322,7 @@ int interactive_input()
 
 			//Place segment in new container
 			Raw_wave * wave_two_segment = create_header();
-			insert_samples(wave_two_segment, wave_two, n_samples, src_offset, 0, false);
+			insert_samples(.dst = wave_two_segment, .src = wave_two, .src_amount = n_samples, .src_offset = src_offset);
 
 			char arg_buffer[MAX_STR_LEN];
 			printf("Mutate audio?\n0:\tNo\n1:\tdistortion(n)\n2:\thamming_kapot()\n3:\thamming_distortion(n)\n4:\thamming_punch_distortion()\n5:\thamming_pointless_distortion()\n6:\thamming_pointless_distortion2()\n7:\thamming_pointless_distortion3()\n");
@@ -370,7 +371,7 @@ int interactive_input()
 				}
 			}
 
-			insert_samples(result, wave_two_segment, num_samples(wave_two_segment), 0, insert_point, false);
+			insert_samples(.dst = result, .src = wave_two_segment, .dst_offset = insert_point);
 			free(wave_two);
 			wave_two = NULL;
 			free(wave_two_segment);

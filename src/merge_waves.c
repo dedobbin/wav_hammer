@@ -79,7 +79,7 @@ Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int o
 				continue;
 			int srcAmount = random(amount_min, amount_max);
 			int srcOffset = random(offset_min, offset_max);
-			insert_samples(container, wave, srcAmount, srcOffset, num_samples(container), false);
+			insert_samples(.dst = container, .src = wave, .src_amount = srcAmount, .src_offset = srcOffset);
 			destroy_wave(&wave);
 		}
 	} else {
