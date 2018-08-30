@@ -40,6 +40,7 @@ void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num)
   }
 }
 
+// Core logic of insert_samples(), called by insert_samples_VAR
 void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite)
 {
     if (!overwrite) {
@@ -95,6 +96,8 @@ void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long s
     }
 }
 
+// Called by 'calling' insert_samples(), which is #defind in wave_samples.h
+// Checks if input params are set, if not use defaults
 void insert_samples_VAR(insert_samples_args in)
 {
 	if (in.src == NULL || in.dst == NULL)
@@ -105,6 +108,5 @@ void insert_samples_VAR(insert_samples_args in)
 	in.src_offset = in.src_offset > 0 ? in.src_amount : 0;
 	in. dst_offset = in.dst_offset > 0 ? in.dst_offset : num_samples(in.dst);
 	//overwrite should 'default' to 0, which is false, which is good default
-	//void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite);
 	insert_samples_BASE(in.dst, in.src, in.src_amount, in.src_offset, in.dst_offset, in.overwrite);
 }

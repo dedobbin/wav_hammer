@@ -1,5 +1,6 @@
-#include "process_input.h"
 #include "wave_samples.h"
+#include "process_input.h"
+
 int main(int argc, char* argv[])
 {
 	/**
@@ -17,15 +18,6 @@ int main(int argc, char* argv[])
 	1: config file
 	**/
 
-	Raw_wave * one = NULL;
-	load_wave(&one, "../../audio/1.wav");
-
-	Raw_wave * two = create_header();
-	insert_samples(.dst = two, .src = one);
-	write_wave(two, "../../output/var.wav");
-
-	getchar();
-	return 0;
 	if (argc > 1) {
 		process_commandline_arguments(argc, argv);
 	} else {

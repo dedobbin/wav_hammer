@@ -14,6 +14,7 @@ typedef struct {
 } insert_samples_args;
 
 
+//When user 'calls' insert_samples(), params are used to populate struct, which is passed to insert_samples_VAR
 #define insert_samples(...)insert_samples_VAR((insert_samples_args){__VA_ARGS__})
 long get_sample(Raw_wave * wave, int nSample);
 void set_sample(Raw_wave * wave, int nSample, long value);
