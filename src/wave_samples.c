@@ -40,7 +40,7 @@ void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num)
   }
 }
 
-void insert_samples(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite)
+void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite)
 {
     if (!overwrite) {
 		//conversion from n_samples to n_bytes: datasize = bytes per samples * number of channels * n samples
@@ -93,4 +93,18 @@ void insert_samples(Raw_wave * dst, Raw_wave * src, long src_amount, long src_of
         }
         return 1;
     }
+}
+
+void insert_samples_VAR(insert_samples_args in)
+{
+	if (in.src == NULL || in.dst == NULL)
+		return;
+	
+	//Check if values, otherwise use defaults
+	in.src_amount = in.src_amount > 0 ? in.src_amount: num_samples(in.src);
+	in.src_offset = in.src_offset > 0 ? in.src_amount : 0;
+	in. dst_offset = in.dst_offset > 0 ? in.dst_offset : num_samples(in.dst);
+	//overwrite should 'default' to 0, which is false, which is good default
+	//void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite);
+	insert_samples_BASE(in.dst, in.src, in.src_amount, in.src_offset, in.dst_offset, in.overwrite);
 }

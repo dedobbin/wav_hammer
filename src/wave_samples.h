@@ -4,9 +4,19 @@
 #include "raw_wave.h"
 #include "datatypes.h"
 
+typedef struct {
+	Raw_wave * dst;
+	Raw_wave * src;
+	long src_amount;
+	long src_offset;
+	long dst_offset;
+	bool overwrite;
+} insert_samples_args;
+
+
+#define insert_samples(...)insert_samples_VAR((insert_samples_args){__VA_ARGS__})
 long get_sample(Raw_wave * wave, int nSample);
 void set_sample(Raw_wave * wave, int nSample, long value);
-void insert_samples(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite);
 void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num);
 
 #endif

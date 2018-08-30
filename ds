@@ -1,0 +1,33 @@
+[1mdiff --git a/src/main.c b/src/main.c[m
+[1mindex a999083..65e0931 100644[m
+[1m--- a/src/main.c[m
+[1m+++ b/src/main.c[m
+[36m@@ -1,4 +1,5 @@[m
+ #include "process_input.h"[m
+[32m+[m[32m#include "wave_samples.h"[m
+ int main(int argc, char* argv[])[m
+ {[m
+ 	/**[m
+[36m@@ -14,6 +15,10 @@[m [mint main(int argc, char* argv[])[m
+ [m
+ 	1: config file[m
+ 	**/[m
+[32m+[m	[32mint t = insert_samples_var();[m
+[32m+[m	[32mprintf("%d", t);[m
+[32m+[m	[32mgetchar();[m
+[32m+[m	[32mreturn 0;[m
+ [m
+ 	if (argc > 1) {[m
+ 		process_commandline_arguments(argc, argv);[m
+[1mdiff --git a/src/wave_samples.c b/src/wave_samples.c[m
+[1mindex 323f1ea..04734f3 100644[m
+[1m--- a/src/wave_samples.c[m
+[1m+++ b/src/wave_samples.c[m
+[36m@@ -3,6 +3,7 @@[m
+ #include <string.h>[m
+ #include "wave_samples.h"[m
+ [m
+[32m+[m
+ long get_sample(Raw_wave * wave, int nSample)[m
+ {[m
+   long result = 0;[m
