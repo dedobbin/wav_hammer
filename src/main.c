@@ -12,10 +12,12 @@ int main(int argc, char* argv[])
 	4: maxium amount or random samples from input file
 	5: minimal offset from input file
 	6: maxium offset from input file
+	7: percentage of skipping a random file from folder
 
 	OR 
 
-	1: config file
+	1: 
+ file
 	**/
 
 	if (argc > 1) {

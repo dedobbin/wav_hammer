@@ -39,9 +39,6 @@
     <ClCompile Include="src\process_input.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\loop.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\datatypes.h">
@@ -63,9 +60,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\process_input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\loop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -22,10 +22,11 @@
 typedef struct Config_ruleset {
 	//specific for folder input ruleset
 	char * input_folder;
-	int min_src_samples; //min and max values are used to generate random number to cut up files in folder
-	int max_src_samples;
-	int min_src_offset;
-	int max_src_offset;
+	long min_src_samples; //min and max values are used to generate random number to cut up files in folder
+	long max_src_samples;
+	long min_src_offset;
+	long max_src_offset;
+	int perc_skip;
 
 	//specific for single file input ruleset
 	char * input_file;
@@ -169,23 +170,26 @@ int parse_config_file(Config * config, char * path)
 			strcpy(config->rulesets[config->count].effect, value_buffer);
 		}
 		else if (strcmp(key_buffer, "min_src_samples") == 0) {
-			config->rulesets[config->count].min_src_samples = atoi(value_buffer);
+			config->rulesets[config->count].min_src_samples = atol(value_buffer);
 		}
 		else if (strcmp(key_buffer, "max_src_samples") == 0) {
-			config->rulesets[config->count].max_src_samples = atoi(value_buffer);
+			config->rulesets[config->count].max_src_samples = atol(value_buffer);
 		}
 		else if (strcmp(key_buffer, "min_src_offset") == 0) {
 			offset = i;
-			config->rulesets[config->count].min_src_offset = atoi(value_buffer);
+			config->rulesets[config->count].min_src_offset = atol(value_buffer);
 		}
 		else if (strcmp(key_buffer, "max_src_offset") == 0) {
-			config->rulesets[config->count].max_src_offset = atoi(value_buffer);
+			config->rulesets[config->count].max_src_offset = atol(value_buffer);
 		}
 		else if (strcmp(key_buffer, "src_amount") == 0) {
 			config->rulesets[config->count].src_amount = atoi(value_buffer);
 		}
 		else if (strcmp(key_buffer, "src_offset") == 0) {
 			config->rulesets[config->count].src_offset = atoi(value_buffer);
+		}
+		else if (strcmp(key_buffer, "perc_skip") == 0) {
+			config->rulesets[config->count].perc_skip = atoi(value_buffer);
 		}
 		else if (strcmp(key_buffer, "[") == 0) {
 			//Start of new ruleset
@@ -200,6 +204,7 @@ int parse_config_file(Config * config, char * path)
 			config->rulesets[config->count].max_src_offset = 0;
 			config->rulesets[config->count].src_offset = 0;
 			config->rulesets[config->count].src_amount = 0;
+			config->rulesets[config->count].perc_skip = 0;
 		}
 	} while (c != '\0');
 	printf("parse_config_file: Found %d rules\n", config->count+1);
@@ -210,7 +215,7 @@ int process_commandline_arguments(int argc, char * argv[])
 {
 	if (argv == 7){
 		printf("Merging waves..\n");
-		Raw_wave * wave = merge_waves_random(argv[1], atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+		Raw_wave * wave = merge_waves_random(argv[1], atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]), atoi(argv[7]));
 		printf("Saving wave file to %s..\n", argv[2]);
 		write_wave(wave, argv[2]);
 		destroy_wave(&wave);
@@ -254,7 +259,7 @@ int process_commandline_arguments(int argc, char * argv[])
 			//If input folder was given take all files from that folder and merge all waves according to other config rules
 			 else if (current_ruleset.input_folder) {
 				 printf("Merging waves from input folder..\n");
-				 subassembly = merge_waves_random(current_ruleset.input_folder, current_ruleset.min_src_samples, current_ruleset.max_src_samples, current_ruleset.min_src_offset, current_ruleset.max_src_offset);
+				 subassembly = merge_waves_random(current_ruleset.input_folder, current_ruleset.min_src_samples, current_ruleset.max_src_samples, current_ruleset.min_src_offset, current_ruleset.max_src_offset, current_ruleset.perc_skip);
 				 if (current_ruleset.effect) {
 					 process_effect_rule(subassembly, current_ruleset.effect);
 				 }
@@ -284,7 +289,7 @@ int interactive_input()
 {
 	printf("No arguments given..\n");
 	printf("Commandline arguments:\n");
-	printf("1:\tinput folder\n2: \toutput file path\n3: \tminimal amount or random samples from input file\n4: \tmaxium amount or random samples from input file\n5: \tminimal offset from input file\n6: \tmaxium offset from input file");
+	printf("1:\tinput folder\n2: \toutput file path\n3: \tminimal amount or random samples from input file\n4: \tmaxium amount or random samples from input file\n5: \tminimal offset from input file\n6: \tmaxium offset from input file\n7: \tpercentage chance that random file will be skipped");
 	printf("\n\nOR\n\n");
 	printf("1: path to config file\n");
 	printf("\nType i and press enter for interactive mode, or just press enter to exit\n");

@@ -58,10 +58,10 @@ int create_file_list(char * dstList[], const int n, char * path)
 
 Raw_wave * merge_waves_random_autovalues(char * path)
 {
-	merge_waves_random(path, 10000, 60000, 10000, 60000);
+	merge_waves_random(path, 10000, 60000, 10000, 60000, 30);
 }
 
-Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int offset_min, int offset_max)
+Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int offset_min, int offset_max, int perc_random_skip)
 {
 	int listSize = MAX_INPUT_FILES;
 	char ** list = malloc(MAX_INPUT_FILES);
@@ -74,6 +74,10 @@ Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int o
 		int i = 0;
 		printf("merge_waves: Merging %d waves..\n", listSize);
 		for (i = 0; i < listSize; i++) {
+			if (perc_random_skip > 0 && random(1, 100) < perc_random_skip) {
+				printf("skip %d\n", i);
+				continue;
+			}
 			Raw_wave * wave = NULL;
 			if (load_wave(&wave, list[i]) < 0)
 				continue;
