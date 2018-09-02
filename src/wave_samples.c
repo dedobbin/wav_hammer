@@ -105,8 +105,10 @@ void insert_samples_VAR(insert_samples_args in)
 	
 	//Check if values, otherwise use defaults
 	in.src_amount = in.src_amount > 0 ? in.src_amount: num_samples(in.src);
-	in.src_offset = in.src_offset > 0 ? in.src_amount : 0;
+	in.src_offset = in.src_offset > 0 ? in.src_offset : 0;
 	in. dst_offset = in.dst_offset > 0 ? in.dst_offset : num_samples(in.dst);
 	//overwrite should 'default' to 0, which is false, which is good default
+	//void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite)
+
 	insert_samples_BASE(in.dst, in.src, in.src_amount, in.src_offset, in.dst_offset, in.overwrite);
 }

@@ -16,7 +16,7 @@
 #define ERROR_NOT_ENOUGH_MEMORY 2
 #define ERROR_INVALID_CMD_ARGUMENTS 3
 #define ERROR_INVALID_CONFIG_FILE 4
-#define MAX_RULESETS 255
+#define MAX_RULESETS 1000
 #define MAX_STR_LEN 255
 
 typedef struct Config_ruleset {
@@ -202,7 +202,7 @@ int parse_config_file(Config * config, char * path)
 			config->rulesets[config->count].src_amount = 0;
 		}
 	} while (c != '\0');
-
+	printf("parse_config_file: Found %d rules\n", config->count+1);
 	return 0;
 }
 

@@ -99,6 +99,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\loop.c" />
     <ClCompile Include="src\merge_waves.c" />
     <ClCompile Include="src\distortion.c" />
     <ClCompile Include="src\linked_list.c" />
@@ -110,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\datatypes.h" />
+    <ClInclude Include="src\loop.h" />
     <ClInclude Include="src\merge_waves.h" />
     <ClInclude Include="src\distortion.h" />
     <ClInclude Include="src\process_input.h" />
