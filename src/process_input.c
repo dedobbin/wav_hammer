@@ -27,6 +27,7 @@ typedef struct Config_ruleset {
 	long min_src_offset;
 	long max_src_offset;
 	int perc_skip;
+	int times;
 
 	//specific for single file input ruleset
 	char * input_file;
@@ -191,6 +192,9 @@ int parse_config_file(Config * config, char * path)
 		else if (strcmp(key_buffer, "perc_skip") == 0) {
 			config->rulesets[config->count].perc_skip = atoi(value_buffer);
 		}
+		else if (strcmp(key_buffer, "times") == 0) {
+			config->rulesets[config->count].times = atoi(value_buffer);
+		}
 		else if (strcmp(key_buffer, "[") == 0) {
 			//Start of new ruleset
 			config->count++;
@@ -205,9 +209,10 @@ int parse_config_file(Config * config, char * path)
 			config->rulesets[config->count].src_offset = 0;
 			config->rulesets[config->count].src_amount = 0;
 			config->rulesets[config->count].perc_skip = 0;
+			config->rulesets[config->count].times = 0;
 		}
 	} while (c != '\0');
-	printf("parse_config_file: Found %d rules\n", config->count+1);
+	printf("parse_config_file: Found %d rulesets\n", config->count+1);
 	return 0;
 }
 
@@ -215,7 +220,7 @@ int process_commandline_arguments(int argc, char * argv[])
 {
 	if (argv == 7){
 		printf("Merging waves..\n");
-		Raw_wave * wave = merge_waves_random(argv[1], atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]), atoi(argv[7]));
+		Raw_wave * wave = merge_waves_random(argv[1], atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]), atoi(argv[7]), 0);
 		printf("Saving wave file to %s..\n", argv[2]);
 		write_wave(wave, argv[2]);
 		destroy_wave(&wave);
@@ -235,6 +240,7 @@ int process_commandline_arguments(int argc, char * argv[])
 
 		 Raw_wave * final_output = create_header();
 		 for (i = 0; i < config->count+1; i++) {
+			 printf("Ruleset %d..\n", i + 1);
 			 Raw_wave * subassembly = NULL;
 			 //If input file was given, take segment from that file according to other config rules
 			 Config_ruleset current_ruleset = config->rulesets[i];
@@ -259,7 +265,11 @@ int process_commandline_arguments(int argc, char * argv[])
 			//If input folder was given take all files from that folder and merge all waves according to other config rules
 			 else if (current_ruleset.input_folder) {
 				 printf("Merging waves from input folder..\n");
-				 subassembly = merge_waves_random(current_ruleset.input_folder, current_ruleset.min_src_samples, current_ruleset.max_src_samples, current_ruleset.min_src_offset, current_ruleset.max_src_offset, current_ruleset.perc_skip);
+				 subassembly = merge_waves_random(
+					 current_ruleset.input_folder, current_ruleset.min_src_samples, 
+					 current_ruleset.max_src_samples, current_ruleset.min_src_offset, 
+					 current_ruleset.max_src_offset, current_ruleset.perc_skip, current_ruleset.times
+				 );
 				 if (current_ruleset.effect) {
 					 process_effect_rule(subassembly, current_ruleset.effect);
 				 }

@@ -4,9 +4,10 @@
 #include "raw_wave.h"
 #include <stdio.h>
 
-#define MAX_INPUT_FILES 100
+#define MAX_INPUT_FILES 10000
 
 Raw_wave * merge_waves_random_autovalues(char * path);
-Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int offset_min, int offset_max);
+/* times means how many times files from folder will be read to put in dstList[] */
+Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int offset_min, int offset_max, int perc_random_skip, int times);
 
 #endif
