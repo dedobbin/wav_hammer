@@ -90,7 +90,7 @@ void hamming_kapot(Raw_wave * dst)
 {
 	int i = 0;
 	for (i = 0; i < datasize(dst); i++) {
-		dst->data_chunk->audiodata[i] |= dst->data_chunk->audiodata[random(0, i)];
+		dst->data_chunk->audiodata[i] |= dst->data_chunk->audiodata[my_random(0, i)];
 	}
 }
 
