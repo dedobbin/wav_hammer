@@ -1,1 +1,1 @@
-int random(int min, int max);
+int my_random(int min, int max);

@@ -9,8 +9,8 @@ void random_sort_list(char * list[], int list_size)
 	srand(time(NULL));
 
 	for (i = 0; i < 100; i++) {
-		int src = random(0, list_size - 1);
-		int dst = random(0, list_size - 1);
+		int src = my_random(0, list_size - 1);
+		int dst = my_random(0, list_size - 1);
 
 		char * tmp = malloc(strlen(list[dst]) + 1);
 		strcpy(tmp, list[dst]);
@@ -64,7 +64,7 @@ Raw_wave * merge_waves_random_autovalues(char * path)
 	merge_waves_random(path, 10000, 60000, 10000, 60000, 30, 1);
 }
 
-Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int offset_min, int offset_max, int perc_random_skip, int times)
+Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int offset_min, int offset_max, int perc_skip, int times)
 {
 	int listSize = MAX_INPUT_FILES;
 	char ** list = malloc(MAX_INPUT_FILES);
@@ -77,14 +77,15 @@ Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int o
 		int i = 0;
 		printf("merge_waves: Merging %d waves..\n", listSize);
 		for (i = 0; i < listSize; i++) {
-			if (perc_random_skip > 0 && random(1, 100) < perc_random_skip) {
+			if (perc_skip > 0 && my_random(1, 100) < perc_skip) {
+				printf("skip %d\n", i);
 				continue;
 			}
 			Raw_wave * wave = NULL;
 			if (load_wave(&wave, list[i]) < 0)
 				continue;
-			int srcAmount = random(amount_min, amount_max);
-			int srcOffset = random(offset_min, offset_max);
+			int srcAmount = my_random(amount_min, amount_max);
+			int srcOffset = my_random(offset_min, offset_max);
 			insert_samples(.dst = container, .src = wave, .src_amount = srcAmount, .src_offset = srcOffset);
 			destroy_wave(&wave);
 		}
