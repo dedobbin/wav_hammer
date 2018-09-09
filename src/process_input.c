@@ -50,7 +50,7 @@ typedef struct Config {
 
 void process_effect_rule(Raw_wave * target, char * rule)
 {
-	char effect_type[MAX_STR_LEN] = { NULL };
+	char effect_type[MAX_STR_LEN];
 	int effect_param = 0;
 	//check if contains param
 	char* pos1 = strchr(rule, '(');
