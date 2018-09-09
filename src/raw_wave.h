@@ -4,11 +4,11 @@
 #include "datatypes.h"
 #include <stdint.h>
 //Bytes 0-11 is riff chunk
-static const RIFF_CHUNK_SIZE = 12;
+static const int RIFF_CHUNK_SIZE = 12;
 //Bytes 12-35 is fmt chunk 
-static const FMT_CHUNK_SIZE = 24;
+static const int FMT_CHUNK_SIZE = 24;
 //Size of data chunk is dynamic, header size is static
-static const DATA_CHUNK_HEADER_SIZE = 8;
+static const int DATA_CHUNK_HEADER_SIZE = 8;
 
 
 typedef struct Data_chunk{

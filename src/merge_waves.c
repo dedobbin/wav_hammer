@@ -1,7 +1,10 @@
 #include "merge_waves.h"
 #include "wave_samples.h"
 #include "utils.h"
+#include <stdlib.h>
 #include <dirent.h> 
+#include <string.h>
+#include <time.h>
 
 void random_sort_list(char * list[], int list_size)
 {
@@ -37,8 +40,8 @@ int create_file_list(char * dstList[], const int n, char * path, int times)
 	for (j = 0; j < times; j++) {
 		if ((dir = opendir(path)) != NULL) {
 			while ((ent = readdir(dir)) != NULL) {
-				if (((strcmp(ent->d_name, ".", 1) == 0) && strlen(ent->d_name) == 1)
-					|| ((strcmp(ent->d_name, "..", 2) == 0) && strlen(ent->d_name) == 2)) {
+				if (((strcmp(ent->d_name, ".") == 0) && strlen(ent->d_name) == 1)
+					|| ((strcmp(ent->d_name, "..") == 0) && strlen(ent->d_name) == 2)) {
 					continue;
 				} else {
 					//+1 because need extra slash, +1 for \0

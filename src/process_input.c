@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #ifdef __linux__ 
 #include <unistd.h>
 #elif _WIN32
@@ -223,7 +224,7 @@ int parse_config_file(Config * config, char * path)
 
 int process_commandline_arguments(int argc, char * argv[])
 {
-	if (argv == 7){
+	if (argc == 7){
 		printf("Merging waves..\n");
 		Raw_wave * wave = merge_waves_random(argv[1], atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]), atoi(argv[7]), 0);
 		printf("Saving wave file to %s..\n", argv[2]);

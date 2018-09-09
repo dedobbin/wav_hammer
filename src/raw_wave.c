@@ -8,9 +8,10 @@
 #include <string.h>
 #include <assert.h>
 #include "raw_wave.h"
+#include "wave_samples.h"
 
-static const DATA_CHUNK_OFFSET = 36;
-static const DATA_OFFSET = 44;
+static const int DATA_CHUNK_OFFSET = 36;
+static const int DATA_OFFSET = 44;
 
 //TODO: should just return ptr?
 int load_wave(Raw_wave ** wave, const char* const path)

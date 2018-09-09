@@ -291,7 +291,7 @@ void llist_merge(Linked_list ** listOne, Linked_list ** listTwo, int n)
 Linked_list * llist_copy(Linked_list ** src)
 {
   if (!src || !(*src) || !(*src)->head)
-    return;
+    return NULL;
 
   Linked_list * dst = llist_create();
   Node * node = (*src)->tail;
@@ -312,7 +312,7 @@ void llist_print(Linked_list ** list)
     printf("size: %d\n", (*list)->size);
     Node * node = (*list)->tail;
     while (node){
-      printf("\[%ld\] ", node->data);
+      printf("[%ld]", node->data);
       node = node->next;
     }
     printf("\n");
@@ -330,7 +330,7 @@ void llist_print_backwards(Linked_list ** list)
     printf("size: %d\n", (*list)->size);
     Node * node = (*list)->head;
     while(node){ 
-      printf("\[%ld\] ", node->data);
+      printf("[%ld]", node->data);
       node = node->prev;
     }
   printf("\n");

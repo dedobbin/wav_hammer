@@ -1,14 +1,16 @@
 #include <math.h>
 #include <stdio.h>
 #include "distortion.h"
+#include "utils.h"
+#include "wave_samples.h"
 
 /* sample will be multiplied by amount,  if value under- or overflows, it's set to min or max value */
 void distortion_multiply(Raw_wave * wave, long amount)
 {
 	if (bits_per_sample(wave) == 16) {
 		//-32768 to 32767
-		const MAX = 32767;
-		const MIN = -32768;
+		const int MAX = 32767;
+		const int MIN = -32768;
 
 		int i;
 		for (i = 0; i < num_samples(wave); i++) {
@@ -37,8 +39,8 @@ void distortion(Raw_wave * wave, long amount)
 {
 	if (bits_per_sample(wave) == 16) {
 		//-32768 to 32767
-		const MAX = 32767;
-		const MIN = -32768;
+		const int MAX = 32767;
+		const int MIN = -32768;
 
 		int i;
 		for (i = 0; i < num_samples(wave); i++) {
@@ -66,8 +68,8 @@ void distortion(Raw_wave * wave, long amount)
 void hamming_punch_distortion(Raw_wave * dst) {
 	if (bits_per_sample(dst) == 16) {
 		//-32768 to 32767
-		const MAX = 32767;
-		const MIN = -32768;
+		const int MAX = 32767;
+		const int MIN = -32768;
 		int i;
 		int numSamples = num_samples(dst);
 		for (i = 0; i < numSamples; ++i) {

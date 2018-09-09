@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <malloc.h>
 #include "wave_samples.h"
 
 long get_sample(Raw_wave * wave, int nSample)
@@ -26,7 +27,7 @@ void set_sample(Raw_wave * wave, int nSample, long value)
 void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num)
 {
   if (!result || !wave)
-    return -1;
+    return;
   
   int limit = 0;
   if (num >= num_samples(wave))
@@ -50,11 +51,11 @@ void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long s
 
 		if (num_channels(src) != num_channels(dst)) {
 			printf("insert_samples: Trying to insert %d-channel data to %d-channel data, aborting\n", num_channels(src), num_channels(dst));
-			return -2;
+			return;
 		}
 
 		if (src_offset >= num_samples(src))
-			return -3;
+			return;
 
 		if (src_amount + src_offset > num_samples(src))
 			src_amount = num_samples(src) - src_offset;
@@ -91,13 +92,13 @@ void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long s
     } else {
         if (src_amount + dst_offset > num_samples(dst)) {
             printf("insert_samples: too much samples to insert in destination wave, aborting\n");
-            return -1;
+            return;
         }
         long i;
         for (i = 0; i < src_amount; i++) {
             set_sample(dst, i + dst_offset, get_sample(src, i));
         }
-        return 1;
+        return;
     }
 }
 
