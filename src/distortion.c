@@ -80,7 +80,8 @@ void hamming_punch_distortion(Raw_wave * dst) {
 				set_sample(dst, i, MAX);
 			long newSample = get_sample(dst, i);
 			if (newSample < sample)
-				set_sample(dst, i, dst);
+				set_sample(dst, i, sample);
+				//set_sample(dst, i, dst);
 		}
 	} else {
 		printf("distortion: Not implemented for %d bits per sample\n", bits_per_sample(dst));
