@@ -29,6 +29,8 @@ void random_sort_list(char * list[], int list_size)
 
 int create_file_list(char * dstList[], const int n, char * path, int times)
 {
+	if (times < 1) times = 1;
+
 	DIR *dir;
 	struct dirent *ent;
 	int i = 0, j = 0;

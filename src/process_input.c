@@ -38,6 +38,8 @@ typedef struct Config_ruleset {
 	char * effect;
 	char * output_file;
 
+	char * mode;
+
 } Config_ruleset;
 
 typedef struct Config {
@@ -149,55 +151,13 @@ int parse_config_file(Config * config, char * path)
 		#else
 		value_buffer[i - offset - 1] = '\0';//\n is also memcpy'd, just overwrite it
 		#endif
-		if (strcmp(key_buffer, "") == 0 || strcmp(value_buffer, "") == 0) {
-			if (config->rulesets[config->count].input_folder) free(config->rulesets[config->count].input_folder);
-			if (config->rulesets[config->count].output_file) free(config->rulesets[config->count].output_file);
-			return ERROR_INVALID_CONFIG_FILE;
-		}
-		//Check what config rule we are dealing with
-		else if (strcmp(key_buffer, "input_folder") == 0) {
-			config->rulesets[config->count].input_folder = malloc(strlen(value_buffer) + 1);
-			strcpy(config->rulesets[config->count].input_folder, value_buffer);
-		} else if (strcmp(key_buffer, "input_file") == 0) {
-			config->rulesets[config->count].input_file = malloc(strlen(value_buffer) + 1);
-			strcpy(config->rulesets[config->count].input_file, value_buffer);
-		}
-		else if (strcmp(key_buffer, "output_file") == 0) {
-			config->rulesets[config->count].output_file = malloc(strlen(value_buffer) + 1);
-			strcpy(config->rulesets[config->count].output_file, value_buffer);
-		}
-		else if (strcmp(key_buffer, "effect") == 0) {
-			config->rulesets[config->count].effect = malloc(strlen(value_buffer) + 1);
-			strcpy(config->rulesets[config->count].effect, value_buffer);
-		}
-		else if (strcmp(key_buffer, "min_src_samples") == 0) {
-			config->rulesets[config->count].min_src_samples = atol(value_buffer);
-		}
-		else if (strcmp(key_buffer, "max_src_samples") == 0) {
-			config->rulesets[config->count].max_src_samples = atol(value_buffer);
-		}
-		else if (strcmp(key_buffer, "min_src_offset") == 0) {
-			offset = i;
-			config->rulesets[config->count].min_src_offset = atol(value_buffer);
-		}
-		else if (strcmp(key_buffer, "max_src_offset") == 0) {
-			config->rulesets[config->count].max_src_offset = atol(value_buffer);
-		}
-		else if (strcmp(key_buffer, "src_amount") == 0) {
-			config->rulesets[config->count].src_amount = atoi(value_buffer);
-		}
-		else if (strcmp(key_buffer, "src_offset") == 0) {
-			config->rulesets[config->count].src_offset = atoi(value_buffer);
-		}
-		else if (strcmp(key_buffer, "perc_skip") == 0) {
-			config->rulesets[config->count].perc_skip = atoi(value_buffer);
-		}
-		else if (strcmp(key_buffer, "times") == 0) {
-			config->rulesets[config->count].times = atoi(value_buffer);
-		}
-		else if (strcmp(key_buffer, "[") == 0) {
+		if (strcmp(key_buffer, "[") == 0) {
 			//Start of new ruleset
 			config->count++;
+
+			config->rulesets[config->count].mode = malloc(strlen(value_buffer) + 1);
+			strcpy(config->rulesets[config->count].mode, value_buffer);
+
 			config->rulesets[config->count].input_folder = NULL;
 			config->rulesets[config->count].output_file = NULL;
 			config->rulesets[config->count].input_file = NULL;
@@ -210,8 +170,53 @@ int parse_config_file(Config * config, char * path)
 			config->rulesets[config->count].src_amount = 0;
 			config->rulesets[config->count].perc_skip = 0;
 			config->rulesets[config->count].times = 0;
+		}else if (strcmp(key_buffer, "") == 0 || strcmp(value_buffer, "") == 0) {
+			if (config->rulesets[config->count].input_folder) free(config->rulesets[config->count].input_folder);
+			if (config->rulesets[config->count].output_file) free(config->rulesets[config->count].output_file);
+			return ERROR_INVALID_CONFIG_FILE;
+		}
+		else if (strcmp(config->rulesets[config->count].mode, "single_file") == 0) {
+			if (strcmp(key_buffer, "effect") == 0) {
+				config->rulesets[config->count].effect = malloc(strlen(value_buffer) + 1);
+				strcpy(config->rulesets[config->count].effect, value_buffer);
+			} else if (strcmp(key_buffer, "input_file") == 0) {
+				config->rulesets[config->count].input_file = malloc(strlen(value_buffer) + 1);
+				strcpy(config->rulesets[config->count].input_file, value_buffer);
+			} else if (strcmp(key_buffer, "src_amount") == 0) {
+				config->rulesets[config->count].src_amount = atoi(value_buffer);
+			} else if (strcmp(key_buffer, "src_offset") == 0) {
+				config->rulesets[config->count].src_offset = atoi(value_buffer);
+			}
+		}
+		else if (strcmp(config->rulesets[config->count].mode, "folder_random") == 0) {
+			if (strcmp(key_buffer, "input_folder") == 0) {
+				config->rulesets[config->count].input_folder = malloc(strlen(value_buffer) + 1);
+				strcpy(config->rulesets[config->count].input_folder, value_buffer);
+			} else if (strcmp(key_buffer, "min_src_samples") == 0) {
+				config->rulesets[config->count].min_src_samples = atol(value_buffer);
+			} else if (strcmp(key_buffer, "max_src_samples") == 0) {
+				config->rulesets[config->count].max_src_samples = atol(value_buffer);
+			} else if (strcmp(key_buffer, "min_src_offset") == 0) {
+				config->rulesets[config->count].min_src_offset = atol(value_buffer);
+			} else if (strcmp(key_buffer, "max_src_offset") == 0) {
+				config->rulesets[config->count].max_src_offset = atol(value_buffer);
+			} else if (strcmp(key_buffer, "perc_skip") == 0) {
+				config->rulesets[config->count].perc_skip = atoi(value_buffer);
+			} else if (strcmp(key_buffer, "times") == 0) {
+				config->rulesets[config->count].times = atoi(value_buffer);
+			} else if (strcmp(key_buffer, "effect") == 0) {
+				config->rulesets[config->count].effect = malloc(strlen(value_buffer) + 1);
+				strcpy(config->rulesets[config->count].effect, value_buffer);
+			} 
+		}
+		else if (strcmp(config->rulesets[config->count].mode, "output") == 0) {
+			if (strcmp(key_buffer, "output_file") == 0) {
+				config->rulesets[config->count].output_file = malloc(strlen(value_buffer) + 1);
+				strcpy(config->rulesets[config->count].output_file, value_buffer);
+			}
 		}
 	} while (c != '\0');
+
 	printf("parse_config_file: Found %d rulesets\n", config->count+1);
 	return 0;
 }
@@ -239,12 +244,18 @@ int process_commandline_arguments(int argc, char * argv[])
 		 };
 
 		 Raw_wave * final_output = create_header();
-		 for (i = 0; i < config->count+1; i++) {
-			 printf("Ruleset %d..\n", i + 1);
-			 Raw_wave * subassembly = NULL;
-			 //If input file was given, take segment from that file according to other config rules
+		 for (i = 0; i < config->count + 1; i++) {
 			 Config_ruleset current_ruleset = config->rulesets[i];
-			 if (current_ruleset.input_file) {
+			 printf("Processing ruleset %d: %s mode..\n", i + 1, current_ruleset.mode);
+			 Raw_wave * subassembly = NULL;
+			 
+			 if (strcmp(current_ruleset.mode, "single_file") == 0) {
+				 //process singe_file ruleset
+				 if (current_ruleset.src_amount == 0) {
+					 printf("single_file ruleset using 0 src samples, skipping..\n");
+					 continue;
+				 }
+
 				 //loading wave from disk will store entire file, so use tmp //TODO: params from load_wave to load partial file?
 				 Raw_wave * tmp = NULL;
 				 load_wave(&tmp, current_ruleset.input_file);
@@ -254,39 +265,46 @@ int process_commandline_arguments(int argc, char * argv[])
 
 				 //get segment of loaded wave
 				 subassembly = create_header();
-				 insert_samples(.dst = subassembly, .src = tmp, .src_amount = current_ruleset.src_amount);
+				 insert_samples(.dst = subassembly, .src = tmp, .src_amount = current_ruleset.src_amount, .src_offset = current_ruleset.src_offset);
 
 				 //Check if need to apply effect
 				 if (current_ruleset.effect) {
 					 process_effect_rule(subassembly, current_ruleset.effect);
 				 }
+				 //glue subassembly to final_output, unless it's output rule, there is no new data then
+				 insert_samples(.dst = final_output, .src = subassembly, .src_amount = num_samples(subassembly));
+				 destroy_wave(&subassembly);
 
 			 }
-			//If input folder was given take all files from that folder and merge all waves according to other config rules
-			 else if (current_ruleset.input_folder) {
+
+			 else if (strcmp(current_ruleset.mode, "folder_random") == 0) {
+				 //process folder_random mode ruleset
 				 printf("Merging waves from input folder..\n");
 				 subassembly = merge_waves_random(
-					 current_ruleset.input_folder, current_ruleset.min_src_samples, 
-					 current_ruleset.max_src_samples, current_ruleset.min_src_offset, 
+					 current_ruleset.input_folder, current_ruleset.min_src_samples,
+					 current_ruleset.max_src_samples, current_ruleset.min_src_offset,
 					 current_ruleset.max_src_offset, current_ruleset.perc_skip, current_ruleset.times
 				 );
 				 if (current_ruleset.effect) {
 					 process_effect_rule(subassembly, current_ruleset.effect);
 				 }
+				 //glue subassembly to final_output, unless it's output rule, there is no new data then
+				 insert_samples(.dst = final_output, .src = subassembly, .src_amount = num_samples(subassembly));
+				 destroy_wave(&subassembly);
 			 }
-			 //	glue subassembly to final_output
-			 insert_samples(.dst = final_output, .src = subassembly, .src_amount = num_samples(subassembly));
-			 destroy_wave(&subassembly);
-
-			 //if rule contains output, write final product there
-			 if (current_ruleset.output_file) {
+	
+			else if (strcmp(current_ruleset.mode, "output") == 0) {
+				 //process output mode ruleset
 				 printf("Saving wave file to %s..\n", current_ruleset.output_file);
 				 write_wave(final_output, current_ruleset.output_file);
-			 }
+			 } 
+
 			 //Config rule was parsed, clean it
 			 if (config->rulesets[i].input_folder) free(config->rulesets[i].input_folder);
 			 if (config->rulesets[i].output_file) free(config->rulesets[i].output_file);
 			 if (config->rulesets[i].output_file) free(config->rulesets[i].input_file);
+			 if (config->rulesets[i].effect) free(config->rulesets[i].effect);
+			 if (config->rulesets[i].mode) free(config->rulesets[i].mode);
 		 }
 		 destroy_wave(&final_output);
 		 free(config);
