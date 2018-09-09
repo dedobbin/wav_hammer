@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "utils.h"
 
-int random(int min, int max)
+int my_random(int min, int max)
 {
 	if (min < 0)
 		min = 0;
