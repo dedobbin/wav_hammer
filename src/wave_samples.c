@@ -80,7 +80,7 @@ void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long s
 		//get amount of samples from src to insert
 		memcpy(combinedDataChunk + dataChunkOneSize, src->data_chunk->audiodata + srcOffsetInSamples, dataChunkTwoSize);
 		//get tail part of original dst wave, they should stay intact
-		long offsetInBytes = dst->data_chunk->audiodata + bits_per_sample(dst) / 8 * dst_offset;
+		uint8_t * offsetInBytes = dst->data_chunk->audiodata + bits_per_sample(dst) / 8 * dst_offset;
 		memcpy(combinedDataChunk + dataChunkOneSize + dataChunkTwoSize, offsetInBytes, dataChunkThreeSize);
 
         if (dst->data_chunk->audiodata)
