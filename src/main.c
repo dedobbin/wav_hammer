@@ -1,5 +1,4 @@
 #include "stdio.h"
-#include "wave_samples.h"
 #include "process_input.h"
 
 int main(int argc, char* argv[])
