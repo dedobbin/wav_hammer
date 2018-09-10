@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdlib.h>
 #include "process_input.h"
 #include "wave_samples.h"
 #include "raw_wave.h"
