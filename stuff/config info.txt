@@ -1,0 +1,11 @@
+Lines without '{key}{equals}{value}' are ignored, can be used for comments etc.
+
+Lines with {opening square bracket} as key define what 'mode' the ruleset is connected to (single_file, rolder_random or single_file)
+
+Min and max arguments (for folder_random mode) are used to generate a new random value for each file in folder
+
+In folder_random mode, 'times' is how many times all files in folder are used
+
+Some effects need argument(s), enclose in parentheses and use space before
+like: 'effect=hamming_distortion (2)' 
+
