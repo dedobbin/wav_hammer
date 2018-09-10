@@ -1,10 +1,13 @@
-all:		wavhammer clean
+all:		exe clean
 
-wavhammer:	linked_list.o wave_samples.o raw_wave.o distortion.o merge_waves.o utils.o process_input.o 
-		gcc main.c linked_list.o wave_samples.o raw_wave.o distortion.o merge_waves.o utils.o process_input.o -o ../wavhammer.exe -lm
+exe:		lib
+		gcc main.c lib_wav_hammer.a -o ../wavehammer.exe -lm
+
+lib:		linked_list.o wave_samples.o raw_wave.o distortion.o merge_waves.o utils.o process_input.o
+		ar rcs lib_wavhammer.a linked_list.o wave_samples.o raw_wave.o distortion.o merge_waves.o utils.o process_input.o
 
 linked_list.o:
-		gcc linked_list.c -c
+		gcc  linked_list.c -c
 
 wave_samples.o:
 		gcc wave_samples.c -c
