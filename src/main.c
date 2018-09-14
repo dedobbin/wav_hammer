@@ -274,7 +274,7 @@ int main(int argc, char* argv[])
 			return result;
 		};
 
-		Raw_wave * final_output = create_header(44800, 16);
+		Raw_wave * final_output = create_header(44800, 16, 2);
 		for (i = 0; i < config->count + 1; i++) {
 			Config_ruleset current_ruleset = config->rulesets[i];
 			printf("Processing ruleset %d: %s mode..\n", i + 1, current_ruleset.mode);
@@ -295,7 +295,7 @@ int main(int argc, char* argv[])
 				int src_offset = current_ruleset.src_offset > 0 ? current_ruleset.src_offset : 0;
 
 				//get segment of loaded wave
-				subassembly = create_header(44800, 16);
+				subassembly = create_header(44800, 16, 2);
 				insert_samples(.dst = subassembly, .src = tmp, .src_amount = current_ruleset.src_amount, .src_offset = current_ruleset.src_offset);
 
 				//Check if need to apply effect

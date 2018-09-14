@@ -166,7 +166,7 @@ void destroy_wave(Raw_wave ** wave)
   *wave = NULL;
 }
 
-Raw_wave * create_header(int samplerate, int bitsPerSample)
+Raw_wave * create_header(int samplerate, int bitsPerSample, int numChannels)
 {
 	int subchunk1Size = 16;	//16 for pcm
 	//ChunkSize is part of riff chunk: 4 + (8 + SubChunk1Size) + (8 + actual datasize)
@@ -174,7 +174,7 @@ Raw_wave * create_header(int samplerate, int bitsPerSample)
 	//So should be 36 for pcm if there is no data.
 	int ChunkSize = 36;
 	int audioFormat = 1;	//1 for pcm 
-	int numChannels = 2;
+	//int numChannels = 2;
 	//int samplerate = 44100;
 	//int bitsPerSample = 16;
 	int blockAlign = numChannels * bitsPerSample / 8;
