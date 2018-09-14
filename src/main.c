@@ -22,8 +22,8 @@ typedef struct Config_ruleset {
 	
 	//rules for folder_random mode
 	char * input_folder;
-	long min_src_samples; //min and max values are used to generate random number to cut up files in folder
-	long max_src_samples;
+	long min_src_amount; //min and max values are used to generate random number to cut up files in folder
+	long max_src_amount;
 	long min_src_offset;
 	long max_src_offset;
 	int perc_skip;
@@ -167,8 +167,8 @@ int parse_config_file(Config * config, char * path)
 			config->rulesets[config->count].output_file = NULL;
 			config->rulesets[config->count].input_file = NULL;
 			config->rulesets[config->count].effect = NULL;
-			config->rulesets[config->count].min_src_samples = 0;
-			config->rulesets[config->count].max_src_samples = 0;
+			config->rulesets[config->count].min_src_amount = 0;
+			config->rulesets[config->count].max_src_amount = 0;
 			config->rulesets[config->count].min_src_offset = 0;
 			config->rulesets[config->count].max_src_offset = 0;
 			config->rulesets[config->count].src_offset = 0;
@@ -209,11 +209,11 @@ int parse_config_file(Config * config, char * path)
 				config->rulesets[config->count].input_folder = malloc(strlen(value_buffer) + 1);
 				strcpy(config->rulesets[config->count].input_folder, value_buffer);
 			}
-			else if (strcmp(key_buffer, "min_src_samples") == 0) {
-				config->rulesets[config->count].min_src_samples = atol(value_buffer);
+			else if (strcmp(key_buffer, "min_src_amount") == 0) {
+				config->rulesets[config->count].min_src_amount = atol(value_buffer);
 			}
-			else if (strcmp(key_buffer, "max_src_samples") == 0) {
-				config->rulesets[config->count].max_src_samples = atol(value_buffer);
+			else if (strcmp(key_buffer, "max_src_amount") == 0) {
+				config->rulesets[config->count].max_src_amount = atol(value_buffer);
 			}
 			else if (strcmp(key_buffer, "min_src_offset") == 0) {
 				config->rulesets[config->count].min_src_offset = atol(value_buffer);
@@ -312,8 +312,8 @@ int main(int argc, char* argv[])
 				//process folder_random mode ruleset
 				printf("Merging waves from input folder..\n");
 				subassembly = merge_waves_random(
-					current_ruleset.input_folder, current_ruleset.min_src_samples,
-					current_ruleset.max_src_samples, current_ruleset.min_src_offset,
+					current_ruleset.input_folder, current_ruleset.min_src_amount,
+					current_ruleset.max_src_amount, current_ruleset.min_src_offset,
 					current_ruleset.max_src_offset, current_ruleset.perc_skip, current_ruleset.times
 				);
 				if (current_ruleset.effect) {
