@@ -17,7 +17,10 @@
 #define MAX_STR_LEN 255
 
 typedef struct Config_ruleset {
-	//specific for folder input ruleset
+	
+	char * mode;
+	
+	//rules for folder_random mode
 	char * input_folder;
 	long min_src_samples; //min and max values are used to generate random number to cut up files in folder
 	long max_src_samples;
@@ -26,16 +29,18 @@ typedef struct Config_ruleset {
 	int perc_skip;
 	int times;
 
-	//specific for single file input ruleset
+	//rules for single_file mode
 	char * input_file;
 	int src_amount;
 	int src_offset;
 
-	//any ruleset can contain 
-	char * effect;
+	//rules for output mode
 	char * output_file;
+	int bits_per_sample;
+	int samplerate;
 
-	char * mode;
+	//multiple modes can contain
+	char * effect;
 
 } Config_ruleset;
 
@@ -169,12 +174,15 @@ int parse_config_file(Config * config, char * path)
 			config->rulesets[config->count].src_amount = 0;
 			config->rulesets[config->count].perc_skip = 0;
 			config->rulesets[config->count].times = 0;
+			config->rulesets[config->count].samplerate = 0;
+			config->rulesets[config->count].bits_per_sample = 0;
 		}
 		else if (strcmp(key_buffer, "") == 0 || strcmp(value_buffer, "") == 0) {
 			if (config->rulesets[config->count].input_folder) free(config->rulesets[config->count].input_folder);
 			if (config->rulesets[config->count].output_file) free(config->rulesets[config->count].output_file);
 			return ERROR_INVALID_CONFIG_FILE;
 		}
+		//single file mode
 		else if (strcmp(config->rulesets[config->count].mode, "single_file") == 0) {
 			if (strcmp(key_buffer, "effect") == 0) {
 				config->rulesets[config->count].effect = malloc(strlen(value_buffer) + 1);
@@ -189,8 +197,11 @@ int parse_config_file(Config * config, char * path)
 			}
 			else if (strcmp(key_buffer, "src_offset") == 0) {
 				config->rulesets[config->count].src_offset = atoi(value_buffer);
+			} else {
+				printf("Invalid rule: %s\n", key_buffer);
 			}
 		}
+		//folder random mode
 		else if (strcmp(config->rulesets[config->count].mode, "folder_random") == 0) {
 			if (strcmp(key_buffer, "input_folder") == 0) {
 				config->rulesets[config->count].input_folder = malloc(strlen(value_buffer) + 1);
@@ -217,13 +228,27 @@ int parse_config_file(Config * config, char * path)
 			else if (strcmp(key_buffer, "effect") == 0) {
 				config->rulesets[config->count].effect = malloc(strlen(value_buffer) + 1);
 				strcpy(config->rulesets[config->count].effect, value_buffer);
+			} else {
+				printf("Invalid rule: %s\n", key_buffer);
 			}
 		}
+		//output mode
 		else if (strcmp(config->rulesets[config->count].mode, "output") == 0) {
 			if (strcmp(key_buffer, "output_file") == 0) {
 				config->rulesets[config->count].output_file = malloc(strlen(value_buffer) + 1);
 				strcpy(config->rulesets[config->count].output_file, value_buffer);
 			}
+			else if (strcmp(key_buffer, "bits_per_sample") == 0) {
+				config->rulesets[config->count].bits_per_sample = atoi(value_buffer);
+			}
+			else if (strcmp(key_buffer, "samplerate") == 0) {
+				config->rulesets[config->count].samplerate = atoi(value_buffer);
+			} else {
+				printf("Invalid rule: %s\n", key_buffer);
+			}
+		} 
+		else {
+			printf("Invalid mode: %s\n", key_buffer);
 		}
 	} while (c != '\0');
 
@@ -244,7 +269,7 @@ int main(int argc, char* argv[])
 			return result;
 		};
 
-		Raw_wave * final_output = create_header();
+		Raw_wave * final_output = create_header(44100, 16);
 		for (i = 0; i < config->count + 1; i++) {
 			Config_ruleset current_ruleset = config->rulesets[i];
 			printf("Processing ruleset %d: %s mode..\n", i + 1, current_ruleset.mode);
@@ -265,7 +290,7 @@ int main(int argc, char* argv[])
 				int src_offset = current_ruleset.src_offset > 0 ? current_ruleset.src_offset : 0;
 
 				//get segment of loaded wave
-				subassembly = create_header();
+				subassembly = create_header(44100, 16);
 				insert_samples(.dst = subassembly, .src = tmp, .src_amount = current_ruleset.src_amount, .src_offset = current_ruleset.src_offset);
 
 				//Check if need to apply effect
@@ -296,7 +321,11 @@ int main(int argc, char* argv[])
 
 			else if (strcmp(current_ruleset.mode, "output") == 0) {
 				//process output mode ruleset
-				printf("Saving wave file to %s..\n", current_ruleset.output_file);
+				if (current_ruleset.bits_per_sample)
+					set_bits_per_sample(final_output, current_ruleset.bits_per_sample);
+				if (current_ruleset.samplerate)
+					set_samplerate(final_output, current_ruleset.samplerate);
+				printf("Saving wave file to %s (Samplerate: %d, %d bits per sample)..\n", current_ruleset.output_file, samplerate(final_output), bits_per_sample(final_output));
 				write_wave(final_output, current_ruleset.output_file);
 			}
 

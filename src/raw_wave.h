@@ -31,7 +31,7 @@ typedef struct Raw_wave{
 int load_wave(Raw_wave ** wave, const char* const path);
 int write_wave(Raw_wave * wave, const char* const path);
 void destroy_wave(Raw_wave ** wave);
-Raw_wave * create_header();
+Raw_wave * create_header(int samplerate, int bitsPerSample);
 void print_wave(Raw_wave * wave, bool verbose);
 
 //Seems to be ignored most of the time
@@ -52,4 +52,6 @@ void set_num_channels(Raw_wave * wave, int numChannels);
 void set_block_align(Raw_wave * wave, int blockAlign);
 void set_datasize(Raw_wave * wave, int dataSize);
 void set_info_chunk(Raw_wave * const wave, const uint8_t * const new_info_chunk_data, int new_info_chunk_size);
+void set_samplerate(Raw_wave * wave, int samplerate);
+void set_bits_per_sample(Raw_wave * wave, int bitsPerSample);
 #endif

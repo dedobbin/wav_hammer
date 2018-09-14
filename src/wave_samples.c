@@ -44,6 +44,15 @@ void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num)
 // Core logic of insert_samples(), called by insert_samples_VAR
 void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite)
 {
+	if (samplerate(dst) != samplerate(src)) {
+		printf("insert_samples: destination file samplerate: %d - source file samplerate: %d..\n" , samplerate(src), samplerate(dst));
+		//set_samplerate(dst, samplerate(src));
+	}
+	if (bits_per_sample(dst) != bits_per_sample(src)) {
+		printf("insert_samples: destination file bits per sample: %d - source file bits per sample: %d..\n", bits_per_sample(src), bits_per_sample(dst));
+	}
+
+	//non-overwrite moe
     if (!overwrite) {
 		//conversion from n_samples to n_bytes: datasize = bytes per samples * number of channels * n samples
 		int bytesPerSample = bits_per_sample(src) / 8;
@@ -51,6 +60,10 @@ void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long s
 
 		if (num_channels(src) != num_channels(dst)) {
 			printf("insert_samples: Trying to insert %d-channel data to %d-channel data, aborting\n", num_channels(src), num_channels(dst));
+			return;
+		}
+		if (bits_per_sample(src) != bits_per_sample(dst)) {
+			printf("insert_samples: destination file bits per sample: %d - source file bits per sample: %d, aborting\n", bits_per_sample(src), bits_per_sample(dst));
 			return;
 		}
 
@@ -88,7 +101,7 @@ void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long s
         dst->data_chunk->audiodata = combinedDataChunk;
 
 		set_datasize(dst, combinedDataChunksize);
-
+	//overwrite mode
     } else {
         if (src_amount + dst_offset > num_samples(dst)) {
             printf("insert_samples: too much samples to insert in destination wave, aborting\n");
