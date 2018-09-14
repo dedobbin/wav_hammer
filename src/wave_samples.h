@@ -11,6 +11,7 @@ typedef struct {
 	long src_offset;
 	long dst_offset;
 	bool overwrite;
+	bool force_src_sample_rate;
 } insert_samples_args;
 
 
