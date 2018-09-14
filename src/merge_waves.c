@@ -73,6 +73,7 @@ Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int o
 	char ** list = malloc(MAX_INPUT_FILES);
 	listSize = create_file_list(list, listSize, path, times);
 	Raw_wave * container = create_header(44800, 16);
+
 	// if return from create_file_list < 0, failed to create list(invalid directory?)
 	if (listSize > 0) {
 		random_sort_list(list, listSize);
