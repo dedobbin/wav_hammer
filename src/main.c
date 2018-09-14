@@ -38,6 +38,7 @@ typedef struct Config_ruleset {
 	char * output_file;
 	int bits_per_sample;
 	int samplerate;
+	int num_channels;
 
 	//multiple modes can contain
 	char * effect;
@@ -176,6 +177,7 @@ int parse_config_file(Config * config, char * path)
 			config->rulesets[config->count].times = 0;
 			config->rulesets[config->count].samplerate = 0;
 			config->rulesets[config->count].bits_per_sample = 0;
+			config->rulesets[config->count].num_channels = 0;
 		}
 		else if (strcmp(key_buffer, "") == 0 || strcmp(value_buffer, "") == 0) {
 			if (config->rulesets[config->count].input_folder) free(config->rulesets[config->count].input_folder);
@@ -243,6 +245,9 @@ int parse_config_file(Config * config, char * path)
 			}
 			else if (strcmp(key_buffer, "samplerate") == 0) {
 				config->rulesets[config->count].samplerate = atoi(value_buffer);
+			} 
+			else if (strcmp(key_buffer, "num_channels") == 0) {
+				config->rulesets[config->count].num_channels = atoi(value_buffer);
 			} else {
 				printf("Invalid rule: %s\n", key_buffer);
 			}
@@ -269,7 +274,7 @@ int main(int argc, char* argv[])
 			return result;
 		};
 
-		Raw_wave * final_output = create_header(44100, 16);
+		Raw_wave * final_output = create_header(44800, 16);
 		for (i = 0; i < config->count + 1; i++) {
 			Config_ruleset current_ruleset = config->rulesets[i];
 			printf("Processing ruleset %d: %s mode..\n", i + 1, current_ruleset.mode);
@@ -290,7 +295,7 @@ int main(int argc, char* argv[])
 				int src_offset = current_ruleset.src_offset > 0 ? current_ruleset.src_offset : 0;
 
 				//get segment of loaded wave
-				subassembly = create_header(44100, 16);
+				subassembly = create_header(44800, 16);
 				insert_samples(.dst = subassembly, .src = tmp, .src_amount = current_ruleset.src_amount, .src_offset = current_ruleset.src_offset);
 
 				//Check if need to apply effect
@@ -325,7 +330,9 @@ int main(int argc, char* argv[])
 					set_bits_per_sample(final_output, current_ruleset.bits_per_sample);
 				if (current_ruleset.samplerate)
 					set_samplerate(final_output, current_ruleset.samplerate);
-				printf("Saving wave file to %s (Samplerate: %d, %d bits per sample)..\n", current_ruleset.output_file, samplerate(final_output), bits_per_sample(final_output));
+				if (current_ruleset.num_channels)
+					set_num_channels(final_output, current_ruleset.num_channels);
+				printf("Saving wave file to %s (Samplerate: %d, %d bits per sample, %d channel(s))..\n", current_ruleset.output_file, samplerate(final_output), bits_per_sample(final_output), num_channels(final_output));
 				write_wave(final_output, current_ruleset.output_file);
 			}
 
