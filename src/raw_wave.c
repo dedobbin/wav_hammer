@@ -1,4 +1,4 @@
-#ifdef __unix
+#if defined(__unix) || defined(__CYGWIN__)
 #include <unistd.h>
 #elif _WIN32
 #include <io.h>
@@ -18,7 +18,7 @@ int load_wave(Raw_wave ** wave, const char* const path)
 {
   FILE * f;
   f = fopen(path, "rb");
-  #ifdef __unix
+  #if defined(__unix) || defined(__CYGWIN__)
   if (!f || access(path, R_OK)){
     return -2;
   }

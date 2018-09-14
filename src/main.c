@@ -127,13 +127,13 @@ int parse_config_file(Config * config, char * path)
 		key_buffer[i - offset - 1] = '\0'; //= is also memcpy'd, just overwrite it
 
 										   //If there was a space before key, strip it out TODO: clean up this code sometime 
-#ifdef _WIN32
-		if (key_buffer[0] == '\r' && key_buffer[1] == '\n') {
-			strcpy(key_buffer, key_buffer + 2);
-		}
-#else
+#if defined(__unix) || defined(__CYGWIN__)
 		if (key_buffer[0] == '\n') {
 			strcpy(key_buffer, key_buffer + 1);
+		}
+#elif  _WIN32
+		if (key_buffer[0] == '\r' && key_buffer[1] == '\n') {
+			strcpy(key_buffer, key_buffer + 2);
 		}
 #endif
 
@@ -146,15 +146,15 @@ int parse_config_file(Config * config, char * path)
 		} while (c != '\n' && c != '\0');
 
 
-#ifdef _WIN32
+#if defined(__unix) || defined(__CYGWIN__)
+		value_buffer[i - offset - 1] = '\0';//\n is also memcpy'd, just overwrite it
+#elif  _WIN32
 		if (c == '\n') {
 			value_buffer[i - offset - 2] = '\0';//\n\r is also memcpy'd, just overwrite it
 		}
 		else {
 			value_buffer[i - offset - 1] = '\0';//\0 is also memcpy'd, just overwrite it
 		}
-#else
-		value_buffer[i - offset - 1] = '\0';//\n is also memcpy'd, just overwrite it
 #endif
 		if (strcmp(key_buffer, "[") == 0) {
 			//Start of new ruleset
