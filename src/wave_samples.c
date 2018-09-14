@@ -42,11 +42,12 @@ void extract_samples_llist(Linked_list * result, Raw_wave * wave, int num)
 }
 
 // Core logic of insert_samples(), called by insert_samples_VAR
-void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite)
+void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool force_src_sample_rate, bool overwrite)
 {
 	if (samplerate(dst) != samplerate(src)) {
 		printf("insert_samples: destination file samplerate: %d - source file samplerate: %d..\n" , samplerate(src), samplerate(dst));
-		//set_samplerate(dst, samplerate(src));
+		if (force_src_sample_rate)
+			set_samplerate(dst, samplerate(src));
 	}
 	if (bits_per_sample(dst) != bits_per_sample(src)) {
 		printf("insert_samples: destination file bits per sample: %d - source file bits per sample: %d..\n", bits_per_sample(src), bits_per_sample(dst));
@@ -125,9 +126,9 @@ void insert_samples_VAR(insert_samples_args in)
 	//Check if values, otherwise use defaults
 	in.src_amount = in.src_amount < 0 ? 0 : in.src_amount;
 	in.src_offset = in.src_offset > 0 ? in.src_offset : 0;
-	in. dst_offset = in.dst_offset > 0 ? in.dst_offset : num_samples(in.dst);
+	in.dst_offset = in.dst_offset > 0 ? in.dst_offset : num_samples(in.dst);
 	//overwrite should 'default' to 0, which is false, which is good default
-	//void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool overwrite)
+	//void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long src_offset, long dst_offset, bool force_src_sample_rate, bool overwrite)
 
-	insert_samples_BASE(in.dst, in.src, in.src_amount, in.src_offset, in.dst_offset, in.overwrite);
+	insert_samples_BASE(in.dst, in.src, in.src_amount, in.src_offset, in.dst_offset, in.force_src_sample_rate, in.overwrite);
 }
