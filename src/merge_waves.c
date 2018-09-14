@@ -88,7 +88,7 @@ Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int o
 			Raw_wave * wave = NULL;
 			if (load_wave(&wave, list[i]) < 0)
 				continue;
-			int srcAmount = my_random(amount_min, amount_max);
+			int srcAmount = my_random(amount_min, amount_max <= 0 ? num_samples(wave) : amount_max);
 			int srcOffset = my_random(offset_min, offset_max);
 			insert_samples(.dst = container, .src = wave, .src_amount = srcAmount, .src_offset = srcOffset);
 			destroy_wave(&wave);

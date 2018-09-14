@@ -8,4 +8,3 @@ In folder_random mode, 'times' is how many times all files in folder are used
 
 Some effects need argument(s), enclose in parentheses and use space before
 like: 'effect=hamming_distortion (2)' 
-
