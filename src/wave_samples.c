@@ -84,11 +84,6 @@ void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long s
 		long combinedDataChunksize = dataChunkOneSize + dataChunkTwoSize + dataChunkThreeSize;
 		uint8_t *  combinedDataChunk = malloc(combinedDataChunksize);
 
-		if (combinedDataChunk == NULL) {
-			printf("no memory??\n");
-			return;
-		}
-
 		//samples from src before dst_offset should be left intact
         memcpy(combinedDataChunk, dst->data_chunk->audiodata, dataChunkOneSize);
 		//get amount of samples from src to insert
