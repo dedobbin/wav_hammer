@@ -93,9 +93,10 @@ void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long s
 		memcpy(combinedDataChunk + dataChunkOneSize + dataChunkTwoSize, offsetInBytes, dataChunkThreeSize);
 
 		free(offsetInBytes);
-        if (dst->data_chunk->audiodata) free(dst->data_chunk->audiodata);
-
+        
+		if (dst->data_chunk->audiodata) free(dst->data_chunk->audiodata);
         dst->data_chunk->audiodata = combinedDataChunk;
+
 		set_datasize(dst, combinedDataChunksize);
 	//overwrite mode
     } else {
