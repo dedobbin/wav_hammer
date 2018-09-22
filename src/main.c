@@ -282,11 +282,6 @@ int main(int argc, char* argv[])
 
 			if (strcmp(current_ruleset.mode, "single_file") == 0) {
 				//process singe_file ruleset
-				if (current_ruleset.src_amount == 0) {
-					printf("single_file ruleset using 0 src samples, skipping..\n");
-					continue;
-				}
-
 				//loading wave from disk will store entire file, so use tmp //TODO: params from load_wave to load partial file?
 				Raw_wave * tmp = NULL;
 				load_wave(&tmp, current_ruleset.input_file);
