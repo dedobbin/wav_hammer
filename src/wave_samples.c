@@ -97,10 +97,10 @@ void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long s
 		uint8_t * offsetInBytes = dst->data_chunk->audiodata + bits_per_sample(dst) / 8 * dst_offset;
 		memcpy(combinedDataChunk + dataChunkOneSize + dataChunkTwoSize, offsetInBytes, dataChunkThreeSize);
 
-        if (dst->data_chunk->audiodata)
-			free(dst->data_chunk->audiodata);
-        dst->data_chunk->audiodata = combinedDataChunk;
+		free(offsetInBytes);
+        if (dst->data_chunk->audiodata) free(dst->data_chunk->audiodata);
 
+        dst->data_chunk->audiodata = combinedDataChunk;
 		set_datasize(dst, combinedDataChunksize);
 	//overwrite mode
     } else {
@@ -112,8 +112,8 @@ void insert_samples_BASE(Raw_wave * dst, Raw_wave * src, long src_amount, long s
         for (i = 0; i < src_amount; i++) {
             set_sample(dst, i + dst_offset, get_sample(src, i));
         }
-        return;
     }
+	return;
 }
 
 // Called by 'calling' insert_samples(), which is #defind in wave_samples.h
@@ -124,7 +124,10 @@ void insert_samples_VAR(insert_samples_args in)
 		return;
 	
 	//Check if values, otherwise use defaults
-	in.src_amount = in.src_amount < 0 ? 0 : in.src_amount;
+	if (in.src_amount <= 0) {
+		printf("insert_samples: inserting 0 samples, pointless, default to all samples instead\n");
+		in.src_amount = num_samples(in.src);
+	}
 	in.src_offset = in.src_offset > 0 ? in.src_offset : 0;
 	in.dst_offset = in.dst_offset > 0 ? in.dst_offset : num_samples(in.dst);
 	//overwrite should 'default' to 0, which is false, which is good default
