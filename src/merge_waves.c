@@ -62,12 +62,12 @@ int create_file_list(char * dstList[], const int n, char * path, int times)
 	return i;
 }
 
-Raw_wave * merge_waves_random_autovalues(char * path)
+Raw_wave * glue_waves_random_autovalues(char * path)
 {
-	merge_waves_random(path, 10000, 60000, 10000, 60000, 30, 1);
+	glue_waves_random(path, 10000, 60000, 10000, 60000, 30, 1);
 }
 
-Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int offset_min, int offset_max, int perc_skip, int times)
+Raw_wave * glue_waves_random(char * path, int amount_min, int amount_max, int offset_min, int offset_max, int perc_skip, int times)
 {
 	int listSize = MAX_INPUT_FILES;
 	char ** list = malloc(MAX_INPUT_FILES);
@@ -79,7 +79,7 @@ Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int o
 		random_sort_list(list, listSize);
 		srand(time(NULL));
 		int i = 0;
-		printf("merge_waves: Merging %d waves..\n", listSize);
+		printf("glue_waves: Merging %d waves..\n", listSize);
 		for (i = 0; i < listSize; i++) {
 			if (perc_skip > 0 && my_random(1, 100) < perc_skip) {
 				printf("skip %d\n", i);
@@ -94,7 +94,7 @@ Raw_wave * merge_waves_random(char * path, int amount_min, int amount_max, int o
 			destroy_wave(&wave);
 		}
 	} else {
-		printf("merge_waves: Failed to merge waves: Couldn't create filelist\n");
+		printf("glue_waves: Failed to glue waves: Couldn't create filelist\n");
 	}
 	//cleanup list
 	if (listSize > 0) {

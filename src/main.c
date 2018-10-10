@@ -306,7 +306,7 @@ int main(int argc, char* argv[])
 			else if (strcmp(current_ruleset.mode, "folder_random") == 0) {
 				//process folder_random mode ruleset
 				printf("Merging waves from input folder..\n");
-				subassembly = merge_waves_random(
+				subassembly = glue_waves_random(
 					current_ruleset.input_folder, current_ruleset.min_src_amount,
 					current_ruleset.max_src_amount, current_ruleset.min_src_offset,
 					current_ruleset.max_src_offset, current_ruleset.perc_skip, current_ruleset.times
