@@ -107,3 +107,14 @@ Raw_wave * glue_waves_random(char * path, int amount_min, int amount_max, int of
 	}
 	return container;
 }
+
+void merge_waves(Raw_wave * wave_one, Raw_wave * wave_two) 
+{
+	long total_samples = num_samples(wave_one) > num_samples(wave_two) ? num_samples(wave_two) : num_samples(wave_one);
+	int i = 0;
+
+	for (i = 0; i < total_samples; i++) {
+		long new_sample = ( get_sample(wave_one, i) / 4 + get_sample(wave_two, i) / 4 )/ 2;
+		set_sample(wave_one, i, new_sample);
+	}
+}
