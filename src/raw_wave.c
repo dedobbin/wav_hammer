@@ -128,6 +128,8 @@ int write_wave(Raw_wave * wave, const char * const path)
 
 void destroy_wave(Raw_wave ** wave)
 {
+  if (*wave == NULL)
+		return;
   if ((*wave)->riff_chunk != NULL){
     if ((*wave)->riff_chunk != NULL){
       free ((*wave)->riff_chunk);

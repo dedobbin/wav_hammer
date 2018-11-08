@@ -129,3 +129,17 @@ void insert_samples_VAR(insert_samples_args in)
 
 	insert_samples_BASE(in.dst, in.src, in.src_amount, in.src_offset, in.dst_offset, in.force_src_sample_rate, in.overwrite);
 }
+
+void remove_channel(Raw_wave * input, int channel) {
+	if (input == NULL)
+		return;
+	int numChannels = num_channels(input);
+	if (numChannels != 2)
+		printf("remove_channel: input is %d channels, only tested for 2 channels\n", numChannels);
+	int i;
+	for (i = 0; i < num_samples(input); i++) {
+		if (i % 2 == channel)
+			set_sample(input, i, 0);
+
+	}
+}
