@@ -7,7 +7,6 @@
 #include "datatypes.h"
 #include "merge_waves.h"
 
-
 #define EXIT_SUCCESS 0
 #define ERROR_COULD_NOT_READ_FILE 1
 #define ERROR_NOT_ENOUGH_MEMORY 2
@@ -100,7 +99,7 @@ int parse_config_file(Config * config, char * path)
 	config->count = -1;
 	FILE * f;
 
-	f = fopen("../../config.ini", "rb");
+	f = fopen(path, "rb");
 	if (!f) return ERROR_COULD_NOT_READ_FILE;
 	fseek(f, 0L, SEEK_END);
 	long filesize = ftell(f);
@@ -270,6 +269,8 @@ int main(int argc, char* argv[])
 		if (result != 0) {
 			if (result == ERROR_INVALID_CONFIG_FILE) {
 				printf("Invalid config file, cannot parse\n");
+			} else if (result == ERROR_COULD_NOT_READ_FILE){
+				printf("Could not open config file\n");
 			}
 			return result;
 		};

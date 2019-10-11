@@ -40,8 +40,9 @@ int create_file_list(char * dstList[], const int n, char * path, int times)
 	for (j = 0; j < times; j++) {
 		if ((dir = opendir(path)) != NULL) {
 			while ((ent = readdir(dir)) != NULL) {
-				if (((strcmp(ent->d_name, ".") == 0) && strlen(ent->d_name) == 1)
-					|| ((strcmp(ent->d_name, "..") == 0) && strlen(ent->d_name) == 2)) {
+				// if (((strcmp(ent->d_name, ".") == 0) && strlen(ent->d_name) == 1)
+				// 	|| ((strcmp(ent->d_name, "..") == 0) && strlen(ent->d_name) == 2)) {
+					if  (ent->d_type == 4){//directory
 					continue;
 				} else {
 					//+1 because need extra slash, +1 for \0
@@ -81,6 +82,7 @@ Raw_wave * glue_waves_random(char * path, int amount_min, int amount_max, int of
 		int i = 0;
 		printf("glue_waves: Merging %d waves..\n", listSize);
 		for (i = 0; i < listSize; i++) {
+
 			if (perc_skip > 0 && my_random(1, 100) < perc_skip) {
 				printf("skip %d\n", i);
 				continue;

@@ -1,0 +1,25 @@
+{
+	"version": "0.2.0",
+    "configurations": [{
+            "name": "GCC GDB",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/wavhammer.exe",	//insert wat er uit je make komt rollen
+            "args": ["/home/dozer/home2/code/wavhammer/src/config.ini"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+			"miDebuggerPath": "/usr/bin/gdb",
+			"preLaunchTask": "maketask",	//custom make task
+            "setupCommands": [
+              {
+                "description": "Enable pretty-printing for gdb and add better child debugging",
+                "text": "-enable-pretty-printing -gdb-set detach-on-fork off",
+                "ignoreFailures": true
+              }
+            ]
+        }
+    ]
+}

@@ -1,31 +1,31 @@
 all:		exe clean
 
-exe:		lib
-		gcc main.c lib_wav_hammer.a -o ../wavehammer.exe -lm
+exe:		wavhammer.a main.c
+		gcc main.c wavhammer.a -o ../wavhammer.exe -lm -g
 
-lib:		linked_list.o wave_samples.o raw_wave.o distortion.o merge_waves.o utils.o process_input.o
-		ar rcs lib_wavhammer.a linked_list.o wave_samples.o raw_wave.o distortion.o merge_waves.o utils.o process_input.o
+wavhammer.a:		linked_list.o wave_samples.o raw_wave.o distortion.o merge_waves.o utils.o process_input.o
+		ar rcs wavhammer.a linked_list.o wave_samples.o raw_wave.o distortion.o merge_waves.o utils.o process_input.o
 
 linked_list.o:
-		gcc  linked_list.c -c
+		gcc  linked_list.c -c -g
 
 wave_samples.o:
-		gcc wave_samples.c -c
+		gcc wave_samples.c -c -g
 
 raw_wave.o:
-		gcc raw_wave.c -c
+		gcc raw_wave.c -c -g
 
 distortion.o:	
-		gcc distortion.c -c
+		gcc distortion.c -c -g
 
 merge_waves.o:
-		gcc merge_waves.c -c
+		gcc merge_waves.c -c -g
 
 utils.o:
-		gcc utils.c -c
+		gcc utils.c -c -g
 
 process_input.o:
-		gcc process_input.c -c
+		gcc process_input.c -c -g
 
 clean:		
 		rm *.o
