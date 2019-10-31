@@ -8,3 +8,4 @@ audio/*
 *.swp
 .vs
 Debug
+.directory
