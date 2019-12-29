@@ -1,3 +1,4 @@
+*.so
 *.o
 *.a
 audio/*
@@ -9,3 +10,6 @@ audio/*
 .vs
 Debug
 .directory
+wav_hammer
+wave_hammer
+*.out

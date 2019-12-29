@@ -1,34 +1,49 @@
-all:		exe clean
+install: install_lib install_bin clean
 
-exe:		wavhammer.a main.c
-		gcc main.c wavhammer.a -o ../wavhammer.exe -lm -g
+install_lib: lib
+	cp libwav_hammer.so /usr/local/lib/; 	\
+	cp raw_wave.h wave_samples.h wh_distortion.h wh_datatypes.h merge_waves.h /usr/local/include/;	\
+	ldconfig
 
-wavhammer.a:		linked_list.o wave_samples.o raw_wave.o distortion.o merge_waves.o utils.o process_input.o
-		ar rcs wavhammer.a linked_list.o wave_samples.o raw_wave.o distortion.o merge_waves.o utils.o process_input.o
+install_bin: bin
+	cp wav_hammer /usr/local/bin/; 	\
 
-linked_list.o:
-		gcc  linked_list.c -c -g
+bin:	main.o
+	gcc main.o -o wav_hammer -lwav_hammer
 
-wave_samples.o:
-		gcc wave_samples.c -c -g
+main.o: main.c
+	gcc  main.c -c -g
 
-raw_wave.o:
-		gcc raw_wave.c -c -g
+lib:	wh_linked_list.o wave_samples.o raw_wave.o wh_distortion.o merge_waves.o wh_linked_list.o wh_utils.o
+	gcc -shared wh_linked_list.o wave_samples.o raw_wave.o wh_distortion.o merge_waves.o wh_utils.o -o libwav_hammer.so -lm
 
-distortion.o:	
-		gcc distortion.c -c -g
+wh_linked_list.o: wh_linked_list.c
+	gcc  wh_linked_list.c -c -g -fPIC
 
-merge_waves.o:
-		gcc merge_waves.c -c -g
+wave_samples.o: wave_samples.c raw_wave.c
+		gcc wave_samples.c -c -g -fPIC
 
-utils.o:
-		gcc utils.c -c -g
+raw_wave.o:	raw_wave.c wave_samples.c
+	gcc raw_wave.c -c -g -fPIC
 
-process_input.o:
-		gcc process_input.c -c -g
+wh_distortion.o: wh_distortion.c wave_samples.c wh_utils.c raw_wave.c
+	gcc wh_distortion.c -c -g -fPIC
 
-clean:		
-		rm *.o
+merge_waves.o: merge_waves.c wave_samples.c wh_utils.c
+	gcc merge_waves.c -c -g -fPIC
 
-stfu:		
-		gcc *.c -o ../wavhammer.exe -lm -w -g
+wh_utils.o: wh_utils.c
+	gcc wh_utils.c -c -g -fPIC
+
+clean:
+	rm *.o *.so wav_hammer
+
+uninstall:
+	rm /usr/local/bin/wavhammer
+	rm /usr/local/lib/libwav_hammer.so; \
+	rm  /usr/local/include/raw_wave.h; \
+	rm  /usr/local/include/wave_samples.h; \
+	rm  /usr/local/include/merge_waves.h; \
+	rm  /usr/local/include/wh_distortion.h; \
+	rm  /usr/local/include/wh_datatypes.h; \
+

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "datatypes.h"
+#include "wh_datatypes.h"
 
 /////////////////// private functions /////////////////////////////////
 

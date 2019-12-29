@@ -1,6 +1,6 @@
 #include "merge_waves.h"
 #include "wave_samples.h"
-#include "utils.h"
+#include "wh_utils.h"
 #include <stdlib.h>
 #include <dirent.h> 
 #include <string.h>

@@ -1,0 +1,10 @@
+{
+	"files.associations": {
+		"wave_samples.h": "c",
+		"raw_wave.h": "c",
+		"wh_datatypes.h": "c",
+		"wh_distortion.h": "c",
+		"distortion.h": "c",
+		"stdlib.h": "c"
+	}
+}

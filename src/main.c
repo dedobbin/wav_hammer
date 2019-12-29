@@ -1,11 +1,10 @@
 #include <string.h>
 #include <stdlib.h>
-#include "process_input.h"
-#include "wave_samples.h"
-#include "raw_wave.h"
-#include "distortion.h"
-#include "datatypes.h"
-#include "merge_waves.h"
+#include <wave_samples.h>
+#include <raw_wave.h>
+#include <wh_distortion.h>
+#include <wh_datatypes.h>
+#include <merge_waves.h>
 
 #define EXIT_SUCCESS 0
 #define ERROR_COULD_NOT_READ_FILE 1

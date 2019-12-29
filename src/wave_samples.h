@@ -2,7 +2,7 @@
 #define WAVE_SAMPLES_H
 
 #include "raw_wave.h"
-#include "datatypes.h"
+#include "wh_datatypes.h"
 
 typedef struct {
 	Raw_wave * dst;
