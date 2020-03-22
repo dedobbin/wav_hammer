@@ -2,7 +2,7 @@ install: install_lib install_bin clean
 
 install_lib: lib
 	cp libwav_hammer.so /usr/local/lib/; 	\
-	cp raw_wave.h wave_samples.h wh_distortion.h wh_datatypes.h merge_waves.h /usr/local/include/;	\
+	cp wav_hammer.h raw_wave.h wave_samples.h wh_distortion.h wh_datatypes.h merge_waves.h /usr/local/include/;	\
 	ldconfig
 
 install_bin: bin
@@ -38,8 +38,10 @@ wh_utils.o: wh_utils.c
 clean:
 	rm *.o *.so wav_hammer
 
-uninstall:
-	rm /usr/local/bin/wavhammer
+uninstall_bin:
+	rm /usr/local/bin/wav_hammer
+
+uninstall_lib:
 	rm /usr/local/lib/libwav_hammer.so; \
 	rm  /usr/local/include/raw_wave.h; \
 	rm  /usr/local/include/wave_samples.h; \
