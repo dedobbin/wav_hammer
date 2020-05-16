@@ -1,7 +1,7 @@
 #ifndef RAW_WAVE_H_
 #define RAW_WAVE_H_
 
-#include "wh_datatypes.h"
+#include "datatypes.h"
 #include <stdint.h>
 //Bytes 0-11 is riff chunk
 static const int RIFF_CHUNK_SIZE = 12;

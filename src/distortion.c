@@ -1,7 +1,7 @@
 #include <math.h>
 #include <stdio.h>
-#include "wh_distortion.h"
-#include "wh_utils.h"
+#include "distortion.h"
+#include "utils.h"
 #include "wave_samples.h"
 
 /* sample will be multiplied by amount,  if value under- or overflows, it's set to min or max value */
