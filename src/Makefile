@@ -1,3 +1,5 @@
+all: bin lib
+
 install: install_lib install_bin clean
 
 install_lib: lib
