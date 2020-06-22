@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 	// Insert random samples
 	int max = pow(2, bits_per_sample(cpy));
 	for (int i = 0; i < num_samples(cpy); i++){
-		set_sample(cpy, i, rand() % max);	//TODO: dont hardcore for 16bits per sample
+		set_sample(cpy, i, rand() % max);
 	}
 
 	printf("-------%d\n", max);
