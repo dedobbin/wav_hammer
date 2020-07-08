@@ -1,6 +1,7 @@
 
 # wav_hammer
-Software for manipulating Waveform Audio File Format files.
+Software for manipulating Waveform Audio File Format files.  
+Cutting/glueing parts, altering indivual samples, changing bitdepth etc.
 ## Usage
 ### Library example
 ```
