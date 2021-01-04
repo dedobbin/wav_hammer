@@ -57,7 +57,7 @@ sudo make install_bin
 ```
 ## Build on Windows
 Currently untested on windows,
-You will atleast need a dirent.h`
+You will atleast need a `dirent.h`   
 For example:
 https://web.archive.org/web/20170428133315/http://www.softagalleria.net/dirent.php
 
